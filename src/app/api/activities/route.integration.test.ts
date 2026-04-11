@@ -19,8 +19,8 @@ import { signToken } from "@/lib/auth/jwt";
 import { deleteActivity } from "@/lib/db/queries/activities";
 import { createFormat, deleteFormat } from "@/lib/db/queries/formats";
 import { createGoal, deleteGoal } from "@/lib/db/queries/goals";
+import { DELETE, GET as GET_BY_ID, OPTIONS, PUT } from "./[id]/route";
 import { GET, POST } from "./route";
-import { GET as GET_BY_ID, PUT, DELETE, OPTIONS } from "./[id]/route";
 import { GET as GET_TAGS } from "./tags/route";
 
 const TEST_PREFIX = `test-api-act-${Date.now()}`;
@@ -29,7 +29,8 @@ const formatIds: string[] = [];
 const activityIds: string[] = [];
 
 process.env.JWT_SECRET = "integration-test-secret-at-least-32chars!!";
-process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://cpd:cpd_dev_password@localhost:5432/cpd_portal";
+process.env.DATABASE_URL =
+	process.env.DATABASE_URL || "postgresql://cpd:cpd_dev_password@localhost:5432/cpd_portal";
 
 let goalId: string;
 let formatId: string;
@@ -111,7 +112,9 @@ describe("activities API routes", () => {
 		});
 
 		it("filters by goalId", async () => {
-			const req = new Request(`http://localhost/api/activities?goalId=${goalId}`, { method: "GET" });
+			const req = new Request(`http://localhost/api/activities?goalId=${goalId}`, {
+				method: "GET",
+			});
 			const res = await GET(req);
 			const data = await res.json();
 
@@ -247,7 +250,9 @@ describe("activities API routes", () => {
 			const createRes = await POST(createReq as any, { params: Promise.resolve({}) } as any);
 			const created = await createRes.json();
 
-			const req = new Request(`http://localhost/api/activities/${created.id}`, { method: "DELETE" });
+			const req = new Request(`http://localhost/api/activities/${created.id}`, {
+				method: "DELETE",
+			});
 			const res = await DELETE(req as any, makeContext(created.id) as any);
 			const data = await res.json();
 

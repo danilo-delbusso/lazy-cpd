@@ -1,5 +1,5 @@
-import { renderHook, act } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { act, renderHook } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock the zustand store to avoid localStorage issues
 let mockConfirmModal: {
@@ -11,7 +11,12 @@ let mockConfirmModal: {
 } | null = null;
 
 const mockRequestConfirm = vi.fn(
-	(options: { title: string; description?: string; confirmLabel?: string; variant?: "primary" | "danger" }) =>
+	(options: {
+		title: string;
+		description?: string;
+		confirmLabel?: string;
+		variant?: "primary" | "danger";
+	}) =>
 		new Promise<boolean>((resolve) => {
 			mockConfirmModal = { ...options, resolve };
 		}),

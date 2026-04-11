@@ -29,7 +29,7 @@ describe("MCP format tools", () => {
 
 	it("list_formats returns formats array", async () => {
 		registerFormatTools(mockServer as never);
-		const result = await handlers.get("list_formats")!({});
+		const result = await handlers.get("list_formats")?.({});
 		expect(isError(result)).toBe(false);
 		const data = parseContent(result) as unknown[];
 		expect(Array.isArray(data)).toBe(true);

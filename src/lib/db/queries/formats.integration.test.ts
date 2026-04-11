@@ -2,6 +2,7 @@ vi.mock("server-only", () => ({}));
 
 import { createId } from "@paralleldrive/cuid2";
 import { afterAll, describe, expect, it } from "vitest";
+import { createActivity, deleteActivity } from "./activities";
 import {
 	createFormat,
 	deleteFormat,
@@ -11,7 +12,6 @@ import {
 	updateFormat,
 } from "./formats";
 import { createGoal, deleteGoal } from "./goals";
-import { createActivity, deleteActivity } from "./activities";
 
 const TEST_PREFIX = `test-fmt-${Date.now()}`;
 const formatIds: string[] = [];
@@ -54,7 +54,7 @@ describe("formats queries", () => {
 	it("getFormatById returns the created format", async () => {
 		const format = await getFormatById(formatIds[0]);
 		expect(format).toBeDefined();
-		expect(format!.id).toBe(formatIds[0]);
+		expect(format?.id).toBe(formatIds[0]);
 	});
 
 	it("getFormatById returns undefined for non-existent id", async () => {
@@ -67,7 +67,7 @@ describe("formats queries", () => {
 		const testFormat = formats.find((f) => f.id === formatIds[0]);
 
 		expect(testFormat).toBeDefined();
-		expect(testFormat!.activityCount).toBe(0);
+		expect(testFormat?.activityCount).toBe(0);
 	});
 
 	it("createFormat rejects duplicate slug", async () => {
@@ -89,8 +89,8 @@ describe("formats queries", () => {
 		});
 
 		expect(updated).toBeDefined();
-		expect(updated!.name).toBe(`${TEST_PREFIX} Workshop Updated`);
-		expect(updated!.color).toBe("#0000ff");
+		expect(updated?.name).toBe(`${TEST_PREFIX} Workshop Updated`);
+		expect(updated?.color).toBe("#0000ff");
 	});
 
 	it("updateFormat returns undefined for non-existent id", async () => {

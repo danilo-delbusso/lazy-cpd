@@ -19,8 +19,8 @@ import { signToken } from "@/lib/auth/jwt";
 import { createActivity, deleteActivity } from "@/lib/db/queries/activities";
 import { deleteFormat } from "@/lib/db/queries/formats";
 import { createGoal, deleteGoal } from "@/lib/db/queries/goals";
+import { DELETE, PUT } from "./[id]/route";
 import { GET, POST } from "./route";
-import { PUT, DELETE } from "./[id]/route";
 
 const TEST_PREFIX = `test-api-fmt-${Date.now()}`;
 const formatIds: string[] = [];
@@ -28,7 +28,8 @@ const goalIds: string[] = [];
 const activityIds: string[] = [];
 
 process.env.JWT_SECRET = "integration-test-secret-at-least-32chars!!";
-process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://cpd:cpd_dev_password@localhost:5432/cpd_portal";
+process.env.DATABASE_URL =
+	process.env.DATABASE_URL || "postgresql://cpd:cpd_dev_password@localhost:5432/cpd_portal";
 
 async function setAuthCookie() {
 	const token = await signToken({ role: "admin" });

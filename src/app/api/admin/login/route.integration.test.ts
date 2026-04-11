@@ -17,6 +17,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { POST } from "./route";
 
 process.env.JWT_SECRET = "integration-test-secret-at-least-32chars!!";
+// @ts-expect-error — NODE_ENV is readonly in types but writable at runtime for tests
 process.env.NODE_ENV = "test";
 
 describe("admin login route", () => {

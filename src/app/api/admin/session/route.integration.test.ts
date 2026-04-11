@@ -15,7 +15,7 @@ vi.mock("next/headers", () => ({
 
 import { beforeEach, describe, expect, it } from "vitest";
 import { signToken } from "@/lib/auth/jwt";
-import { GET, DELETE } from "./route";
+import { DELETE, GET } from "./route";
 
 process.env.JWT_SECRET = "integration-test-secret-at-least-32chars!!";
 

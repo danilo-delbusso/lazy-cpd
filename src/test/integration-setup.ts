@@ -9,7 +9,11 @@ const client = postgres(connectionString, { max: 1 });
 export const testDb = drizzle(client, { schema });
 
 /** Clean up test data — call in afterEach/afterAll */
-export async function cleanTestData(ids: { goalIds?: string[]; formatIds?: string[]; activityIds?: string[] }) {
+export async function cleanTestData(ids: {
+	goalIds?: string[];
+	formatIds?: string[];
+	activityIds?: string[];
+}) {
 	if (ids.activityIds?.length) {
 		await testDb.delete(schema.activities).where(
 			// biome-ignore lint/suspicious/noExplicitAny: test utility

@@ -2,6 +2,8 @@ vi.mock("server-only", () => ({}));
 
 import { createId } from "@paralleldrive/cuid2";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { createActivity, deleteActivity } from "./activities";
+import { createFormat, deleteFormat } from "./formats";
 import {
 	createGoal,
 	deleteGoal,
@@ -10,8 +12,6 @@ import {
 	getGoalWithActivities,
 	updateGoal,
 } from "./goals";
-import { createActivity, deleteActivity } from "./activities";
-import { createFormat, deleteFormat } from "./formats";
 
 const TEST_PREFIX = `test-goal-${Date.now()}`;
 const goalIds: string[] = [];
@@ -70,8 +70,8 @@ describe("goals queries", () => {
 		const goal = await getGoalById(id);
 
 		expect(goal).toBeDefined();
-		expect(goal!.id).toBe(id);
-		expect(goal!.title).toBe(`${TEST_PREFIX} Goal A`);
+		expect(goal?.id).toBe(id);
+		expect(goal?.title).toBe(`${TEST_PREFIX} Goal A`);
 	});
 
 	it("getGoalById returns undefined for non-existent id", async () => {
@@ -84,11 +84,11 @@ describe("goals queries", () => {
 		const testGoal = goals.find((g) => g.id === goalIds[0]);
 
 		expect(testGoal).toBeDefined();
-		expect(testGoal!.totalActivities).toBe(0);
-		expect(testGoal!.upcomingCount).toBe(0);
-		expect(testGoal!.completedCount).toBe(0);
-		expect(testGoal!.firstDate).toBeNull();
-		expect(testGoal!.lastDate).toBeNull();
+		expect(testGoal?.totalActivities).toBe(0);
+		expect(testGoal?.upcomingCount).toBe(0);
+		expect(testGoal?.completedCount).toBe(0);
+		expect(testGoal?.firstDate).toBeNull();
+		expect(testGoal?.lastDate).toBeNull();
 	});
 
 	it("getAllGoals includes activity stats after adding activities", async () => {
@@ -109,18 +109,18 @@ describe("goals queries", () => {
 		const testGoal = goals.find((g) => g.id === goalIds[0]);
 
 		expect(testGoal).toBeDefined();
-		expect(testGoal!.totalActivities).toBe(1);
-		expect(testGoal!.completedCount).toBe(1);
+		expect(testGoal?.totalActivities).toBe(1);
+		expect(testGoal?.completedCount).toBe(1);
 	});
 
 	it("getGoalWithActivities returns goal with nested activities and format", async () => {
 		const result = await getGoalWithActivities(goalIds[0]);
 
 		expect(result).toBeDefined();
-		expect(result!.id).toBe(goalIds[0]);
-		expect(result!.activities).toHaveLength(1);
-		expect(result!.activities[0].format).toBeDefined();
-		expect(result!.activities[0].format.id).toBe(formatId);
+		expect(result?.id).toBe(goalIds[0]);
+		expect(result?.activities).toHaveLength(1);
+		expect(result?.activities[0].format).toBeDefined();
+		expect(result?.activities[0].format.id).toBe(formatId);
 	});
 
 	it("getGoalWithActivities returns undefined for non-existent id", async () => {
@@ -136,8 +136,8 @@ describe("goals queries", () => {
 		});
 
 		expect(updated).toBeDefined();
-		expect(updated!.title).toBe(`${TEST_PREFIX} Goal A Updated`);
-		expect(updated!.status).toBe("completed");
+		expect(updated?.title).toBe(`${TEST_PREFIX} Goal A Updated`);
+		expect(updated?.status).toBe("completed");
 	});
 
 	it("updateGoal returns undefined for non-existent id", async () => {

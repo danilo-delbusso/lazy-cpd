@@ -52,7 +52,7 @@ describe("MCP search tools", () => {
 	});
 
 	it("searches goals by text", async () => {
-		const result = await handlers.get("search")!({
+		const result = await handlers.get("search")?.({
 			query: TEST_PREFIX,
 			scope: "goals",
 		});
@@ -63,7 +63,7 @@ describe("MCP search tools", () => {
 	});
 
 	it("searches with scope 'all'", async () => {
-		const result = await handlers.get("search")!({
+		const result = await handlers.get("search")?.({
 			query: TEST_PREFIX,
 			scope: "all",
 		});
@@ -74,7 +74,7 @@ describe("MCP search tools", () => {
 	});
 
 	it("returns empty results for non-matching query", async () => {
-		const result = await handlers.get("search")!({
+		const result = await handlers.get("search")?.({
 			query: "zzz-no-match-ever-12345",
 			scope: "goals",
 		});
@@ -84,7 +84,7 @@ describe("MCP search tools", () => {
 	});
 
 	it("escapes SQL wildcards in query", async () => {
-		const result = await handlers.get("search")!({
+		const result = await handlers.get("search")?.({
 			query: "100%_match",
 			scope: "goals",
 		});

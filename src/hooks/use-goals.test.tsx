@@ -1,8 +1,8 @@
-import { renderHook, waitFor, act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { useGoals, useGoal, useCreateGoal, useUpdateGoal, useDeleteGoal } from "./use-goals";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useCreateGoal, useDeleteGoal, useGoal, useGoals, useUpdateGoal } from "./use-goals";
 
 vi.mock("@/lib/utils/toasts", () => ({
 	toastSuccess: vi.fn(),
@@ -139,10 +139,7 @@ describe("useUpdateGoal", () => {
 
 		await act(() => result.current.mutateAsync({ id: "g1", title: "Updated" } as any));
 
-		expect(fetch).toHaveBeenCalledWith(
-			"/api/goals/g1",
-			expect.objectContaining({ method: "PUT" }),
-		);
+		expect(fetch).toHaveBeenCalledWith("/api/goals/g1", expect.objectContaining({ method: "PUT" }));
 	});
 });
 

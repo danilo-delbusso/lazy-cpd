@@ -14,12 +14,11 @@ vi.mock("next/headers", () => ({
 	}),
 }));
 
-import { createId } from "@paralleldrive/cuid2";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { signToken } from "@/lib/auth/jwt";
 import { deleteGoal } from "@/lib/db/queries/goals";
+import { DELETE, GET as GET_BY_ID, PUT } from "./[id]/route";
 import { GET, POST } from "./route";
-import { GET as GET_BY_ID, PUT, DELETE } from "./[id]/route";
 import { GET as GET_TAGS } from "./tags/route";
 
 const TEST_PREFIX = `test-api-goal-${Date.now()}`;
@@ -27,7 +26,8 @@ const goalIds: string[] = [];
 
 // Set required env vars
 process.env.JWT_SECRET = "integration-test-secret-at-least-32chars!!";
-process.env.DATABASE_URL = process.env.DATABASE_URL || "postgresql://cpd:cpd_dev_password@localhost:5432/cpd_portal";
+process.env.DATABASE_URL =
+	process.env.DATABASE_URL || "postgresql://cpd:cpd_dev_password@localhost:5432/cpd_portal";
 
 async function setAuthCookie() {
 	const token = await signToken({ role: "admin" });
@@ -59,7 +59,7 @@ describe("goals API routes", () => {
 
 	describe("GET /api/goals", () => {
 		it("returns a list of goals", async () => {
-			const req = new Request("http://localhost/api/goals", { method: "GET" });
+			const _req = new Request("http://localhost/api/goals", { method: "GET" });
 			const res = await GET();
 			const data = await res.json();
 

@@ -1,7 +1,7 @@
 vi.mock("server-only", () => ({}));
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { GET, DELETE, POST } from "./route";
+import { DELETE, GET, POST } from "./route";
 
 const ORIGINAL_TOKEN = process.env.CPD_MCP_TOKEN;
 

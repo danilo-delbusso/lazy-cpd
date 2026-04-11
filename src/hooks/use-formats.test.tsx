@@ -1,8 +1,8 @@
-import { renderHook, waitFor, act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { useFormats, useCreateFormat, useUpdateFormat, useDeleteFormat } from "./use-formats";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useCreateFormat, useDeleteFormat, useFormats, useUpdateFormat } from "./use-formats";
 
 vi.mock("@/lib/utils/toasts", () => ({
 	toastSuccess: vi.fn(),
@@ -64,10 +64,7 @@ describe("useCreateFormat", () => {
 
 		await act(() => result.current.mutateAsync({ name: "Seminar", color: "#00f" }));
 
-		expect(fetch).toHaveBeenCalledWith(
-			"/api/formats",
-			expect.objectContaining({ method: "POST" }),
-		);
+		expect(fetch).toHaveBeenCalledWith("/api/formats", expect.objectContaining({ method: "POST" }));
 	});
 
 	it("throws with server error message on failure", async () => {
@@ -118,7 +115,10 @@ describe("useDeleteFormat", () => {
 
 		await act(() => result.current.mutateAsync("1"));
 
-		expect(fetch).toHaveBeenCalledWith("/api/formats/1", expect.objectContaining({ method: "DELETE" }));
+		expect(fetch).toHaveBeenCalledWith(
+			"/api/formats/1",
+			expect.objectContaining({ method: "DELETE" }),
+		);
 	});
 
 	it("throws with server error on failure", async () => {

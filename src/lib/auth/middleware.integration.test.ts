@@ -25,7 +25,7 @@ describe("withAuth middleware", () => {
 		mockCookieStore.clear();
 	});
 
-	const dummyHandler = async (request: NextRequest) => {
+	const dummyHandler = async (_request: NextRequest) => {
 		return NextResponse.json({ ok: true });
 	};
 

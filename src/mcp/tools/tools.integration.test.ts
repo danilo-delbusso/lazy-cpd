@@ -2,8 +2,14 @@ vi.mock("server-only", () => ({}));
 
 import { createId } from "@paralleldrive/cuid2";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createActivity, deleteActivity } from "@/lib/db/queries/activities";
-import { createFormat, deleteFormat } from "@/lib/db/queries/formats";
+import {
+	createActivity,
+	deleteActivity,
+	getActivityById,
+	getAllActivities,
+	updateActivity,
+} from "@/lib/db/queries/activities";
+import { createFormat, deleteFormat, getAllFormats } from "@/lib/db/queries/formats";
 import {
 	createGoal,
 	deleteGoal,
@@ -11,12 +17,6 @@ import {
 	getGoalWithActivities,
 	updateGoal,
 } from "@/lib/db/queries/goals";
-import {
-	getAllActivities,
-	getActivityById,
-	updateActivity,
-} from "@/lib/db/queries/activities";
-import { getAllFormats } from "@/lib/db/queries/formats";
 
 /**
  * MCP tools are thin wrappers around the DB query functions.
@@ -79,8 +79,8 @@ describe("MCP tool backing queries", () => {
 		it("get_goal: getGoalWithActivities returns goal with activities", async () => {
 			const goal = await getGoalWithActivities(goalId);
 			expect(goal).toBeDefined();
-			expect(goal!.id).toBe(goalId);
-			expect(goal!.activities).toBeDefined();
+			expect(goal?.id).toBe(goalId);
+			expect(goal?.activities).toBeDefined();
 		});
 
 		it("get_goal: returns undefined for non-existent id", async () => {
@@ -109,9 +109,9 @@ describe("MCP tool backing queries", () => {
 			const goal = await updateGoal(goalId, updates);
 
 			expect(goal).toBeDefined();
-			expect(goal!.title).toBe(updates.title);
+			expect(goal?.title).toBe(updates.title);
 			// Status should remain unchanged
-			expect(goal!.status).toBe("open");
+			expect(goal?.status).toBe("open");
 		});
 
 		it("update_goal: returns undefined for non-existent id", async () => {
@@ -164,10 +164,7 @@ describe("MCP tool backing queries", () => {
 		});
 
 		it("list_activities: with filters and pagination", async () => {
-			const result = await getAllActivities(
-				{ goalId, status: "upcoming" },
-				{ page: 1, limit: 10 },
-			);
+			const result = await getAllActivities({ goalId, status: "upcoming" }, { page: 1, limit: 10 });
 
 			expect(result.data.length).toBeGreaterThan(0);
 			for (const item of result.data) {
@@ -189,8 +186,8 @@ describe("MCP tool backing queries", () => {
 			const activity = await getActivityById(activityId);
 
 			expect(activity).toBeDefined();
-			expect(activity!.goalTitle).toBe(`${TEST_PREFIX} MCP Updated Title`);
-			expect(activity!.formatName).toBe(`${TEST_PREFIX} MCP Format`);
+			expect(activity?.goalTitle).toBe(`${TEST_PREFIX} MCP Updated Title`);
+			expect(activity?.formatName).toBe(`${TEST_PREFIX} MCP Format`);
 		});
 
 		it("update_activity: partial update with date conversion", async () => {
@@ -200,7 +197,7 @@ describe("MCP tool backing queries", () => {
 			});
 
 			expect(updated).toBeDefined();
-			expect(updated!.status).toBe("completed");
+			expect(updated?.status).toBe("completed");
 		});
 
 		it("delete_activity: removes the activity", async () => {
@@ -230,7 +227,7 @@ describe("MCP tool backing queries", () => {
 
 			const testFormat = formats.find((f) => f.id === formatId);
 			expect(testFormat).toBeDefined();
-			expect(typeof testFormat!.activityCount).toBe("number");
+			expect(typeof testFormat?.activityCount).toBe("number");
 		});
 	});
 

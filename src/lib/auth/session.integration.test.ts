@@ -28,10 +28,10 @@ describe("session management", () => {
 		await createSession({ role: "admin" });
 
 		expect(mockCookieStore.has("cpd_session")).toBe(true);
-		const token = mockCookieStore.get("cpd_session")!.value;
+		const token = mockCookieStore.get("cpd_session")?.value;
 
 		// The token should be verifiable
-		const payload = await verifyToken(token);
+		const payload = await verifyToken(token!);
 		expect(payload).toEqual({ role: "admin" });
 	});
 

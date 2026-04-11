@@ -1,13 +1,13 @@
-import { renderHook, waitFor, act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	useActivities,
-	useInfiniteActivities,
 	useCreateActivity,
-	useUpdateActivity,
 	useDeleteActivity,
+	useInfiniteActivities,
+	useUpdateActivity,
 } from "./use-activities";
 
 vi.mock("@/lib/utils/toasts", () => ({
@@ -71,7 +71,16 @@ describe("useActivities", () => {
 		} as Response);
 
 		renderHook(
-			() => useActivities({ goalId: "g1", status: "completed", formatId: "f1", from: "2026-01-01", to: "2026-12-31", page: 2, limit: 10 }),
+			() =>
+				useActivities({
+					goalId: "g1",
+					status: "completed",
+					formatId: "f1",
+					from: "2026-01-01",
+					to: "2026-12-31",
+					page: 2,
+					limit: 10,
+				}),
 			{ wrapper: createWrapper() },
 		);
 
@@ -153,9 +162,7 @@ describe("useCreateActivity", () => {
 
 		const { result } = renderHook(() => useCreateActivity(), { wrapper: createWrapper() });
 
-		await act(() =>
-			result.current.mutateAsync({ title: "New", goalId: "g1", formatId: "f1" }),
-		);
+		await act(() => result.current.mutateAsync({ title: "New", goalId: "g1", formatId: "f1" }));
 
 		expect(fetch).toHaveBeenCalledWith(
 			"/api/activities",

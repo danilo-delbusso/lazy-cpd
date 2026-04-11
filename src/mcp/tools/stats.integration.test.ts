@@ -29,7 +29,7 @@ describe("MCP stats tools", () => {
 
 	it("returns aggregate statistics", async () => {
 		registerStatsTools(mockServer as never);
-		const result = await handlers.get("get_stats")!({});
+		const result = await handlers.get("get_stats")?.({});
 		expect(isError(result)).toBe(false);
 
 		const data = parseContent(result) as {

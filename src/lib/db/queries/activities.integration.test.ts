@@ -10,8 +10,8 @@ import {
 	getAllActivities,
 	updateActivity,
 } from "./activities";
-import { createGoal, deleteGoal } from "./goals";
 import { createFormat, deleteFormat } from "./formats";
+import { createGoal, deleteGoal } from "./goals";
 
 const TEST_PREFIX = `test-act-${Date.now()}`;
 const goalIds: string[] = [];
@@ -107,10 +107,10 @@ describe("activities queries", () => {
 		const activity = await getActivityById(activityIds[0]);
 
 		expect(activity).toBeDefined();
-		expect(activity!.id).toBe(activityIds[0]);
-		expect(activity!.goalTitle).toBe(`${TEST_PREFIX} Goal`);
-		expect(activity!.formatName).toBe(`${TEST_PREFIX} Workshop`);
-		expect(activity!.formatColor).toBe("#111111");
+		expect(activity?.id).toBe(activityIds[0]);
+		expect(activity?.goalTitle).toBe(`${TEST_PREFIX} Goal`);
+		expect(activity?.formatName).toBe(`${TEST_PREFIX} Workshop`);
+		expect(activity?.formatColor).toBe("#111111");
 	});
 
 	it("getActivityById returns undefined for non-existent id", async () => {
@@ -181,9 +181,9 @@ describe("activities queries", () => {
 		});
 
 		expect(updated).toBeDefined();
-		expect(updated!.title).toBe(`${TEST_PREFIX} Activity A Updated`);
-		expect(updated!.status).toBe("in_progress");
-		expect(updated!.notes).toBe("Updated notes");
+		expect(updated?.title).toBe(`${TEST_PREFIX} Activity A Updated`);
+		expect(updated?.status).toBe("in_progress");
+		expect(updated?.notes).toBe("Updated notes");
 	});
 
 	it("updateActivity returns undefined for non-existent id", async () => {

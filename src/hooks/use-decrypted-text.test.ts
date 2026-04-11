@@ -1,5 +1,5 @@
-import { renderHook, act } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useDecryptedText } from "./use-decrypted-text";
 
 describe("useDecryptedText", () => {
@@ -12,18 +12,14 @@ describe("useDecryptedText", () => {
 	});
 
 	it("initialises with the original text for non-click mode", () => {
-		const { result } = renderHook(() =>
-			useDecryptedText({ text: "Hello", animateOn: "hover" }),
-		);
+		const { result } = renderHook(() => useDecryptedText({ text: "Hello", animateOn: "hover" }));
 		expect(result.current.displayText).toBe("Hello");
 		expect(result.current.isDecrypted).toBe(true);
 		expect(result.current.isAnimating).toBe(false);
 	});
 
 	it("initialises encrypted for click mode", () => {
-		const { result } = renderHook(() =>
-			useDecryptedText({ text: "Hello", animateOn: "click" }),
-		);
+		const { result } = renderHook(() => useDecryptedText({ text: "Hello", animateOn: "click" }));
 		// In click mode, text is shuffled immediately so it shouldn't match the original
 		// (unless extremely unlikely random match). The length should be preserved.
 		expect(result.current.displayText.length).toBe(5);
@@ -31,9 +27,7 @@ describe("useDecryptedText", () => {
 	});
 
 	it("preserves spaces during encryption", () => {
-		const { result } = renderHook(() =>
-			useDecryptedText({ text: "Hi There", animateOn: "click" }),
-		);
+		const { result } = renderHook(() => useDecryptedText({ text: "Hi There", animateOn: "click" }));
 		// Space at index 2 should be preserved
 		expect(result.current.displayText[2]).toBe(" ");
 	});
@@ -189,9 +183,7 @@ describe("useDecryptedText", () => {
 	});
 
 	it("handleClick does nothing when animateOn is not 'click'", () => {
-		const { result } = renderHook(() =>
-			useDecryptedText({ text: "NoClick", animateOn: "hover" }),
-		);
+		const { result } = renderHook(() => useDecryptedText({ text: "NoClick", animateOn: "hover" }));
 
 		act(() => {
 			result.current.handleClick();
@@ -265,9 +257,7 @@ describe("useDecryptedText", () => {
 	});
 
 	it("containerRef is available", () => {
-		const { result } = renderHook(() =>
-			useDecryptedText({ text: "Ref", animateOn: "hover" }),
-		);
+		const { result } = renderHook(() => useDecryptedText({ text: "Ref", animateOn: "hover" }));
 		expect(result.current.containerRef).toBeDefined();
 		expect(result.current.containerRef.current).toBeNull();
 	});

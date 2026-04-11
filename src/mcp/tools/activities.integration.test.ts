@@ -77,7 +77,7 @@ describe("MCP activity tools", () => {
 
 	describe("create_activity", () => {
 		it("creates an activity", async () => {
-			const result = await handlers.get("create_activity")!({
+			const result = await handlers.get("create_activity")?.({
 				goalId,
 				title: `${TEST_PREFIX} Activity`,
 				fullDate: "2025-06-15",
@@ -97,7 +97,7 @@ describe("MCP activity tools", () => {
 
 	describe("list_activities", () => {
 		it("returns paginated activities", async () => {
-			const result = await handlers.get("list_activities")!({ page: 1, limit: 10 });
+			const result = await handlers.get("list_activities")?.({ page: 1, limit: 10 });
 			expect(isError(result)).toBe(false);
 			const data = parseContent(result) as { data: unknown[]; total: number };
 			expect(data.data).toBeDefined();
@@ -105,7 +105,7 @@ describe("MCP activity tools", () => {
 		});
 
 		it("filters by goalId", async () => {
-			const result = await handlers.get("list_activities")!({ goalId, page: 1, limit: 10 });
+			const result = await handlers.get("list_activities")?.({ goalId, page: 1, limit: 10 });
 			const data = parseContent(result) as { data: { goalId: string }[] };
 			for (const item of data.data) {
 				expect(item.goalId).toBe(goalId);
@@ -116,14 +116,14 @@ describe("MCP activity tools", () => {
 	describe("get_activity", () => {
 		it("returns an activity by id", async () => {
 			const id = activityIds[0];
-			const result = await handlers.get("get_activity")!({ id });
+			const result = await handlers.get("get_activity")?.({ id });
 			expect(isError(result)).toBe(false);
 			const data = parseContent(result) as { id: string };
 			expect(data.id).toBe(id);
 		});
 
 		it("returns error for non-existent id", async () => {
-			const result = await handlers.get("get_activity")!({ id: "nonexistent-act-id" });
+			const result = await handlers.get("get_activity")?.({ id: "nonexistent-act-id" });
 			expect(isError(result)).toBe(true);
 		});
 	});
@@ -131,7 +131,7 @@ describe("MCP activity tools", () => {
 	describe("update_activity", () => {
 		it("updates an activity", async () => {
 			const id = activityIds[0];
-			const result = await handlers.get("update_activity")!({
+			const result = await handlers.get("update_activity")?.({
 				id,
 				status: "completed",
 			});
@@ -142,7 +142,7 @@ describe("MCP activity tools", () => {
 
 		it("updates fullDate with string conversion", async () => {
 			const id = activityIds[0];
-			const result = await handlers.get("update_activity")!({
+			const result = await handlers.get("update_activity")?.({
 				id,
 				fullDate: "2025-12-25",
 			});
@@ -150,12 +150,12 @@ describe("MCP activity tools", () => {
 		});
 
 		it("returns error when no fields provided", async () => {
-			const result = await handlers.get("update_activity")!({ id: activityIds[0] });
+			const result = await handlers.get("update_activity")?.({ id: activityIds[0] });
 			expect(isError(result)).toBe(true);
 		});
 
 		it("returns error for non-existent id", async () => {
-			const result = await handlers.get("update_activity")!({
+			const result = await handlers.get("update_activity")?.({
 				id: "nonexistent-act-id",
 				title: "Nope",
 			});
@@ -166,7 +166,7 @@ describe("MCP activity tools", () => {
 	describe("delete_activity", () => {
 		it("deletes an activity", async () => {
 			// Create one for deletion
-			const createResult = await handlers.get("create_activity")!({
+			const createResult = await handlers.get("create_activity")?.({
 				goalId,
 				title: `${TEST_PREFIX} Delete Me`,
 				fullDate: "2025-11-01",
@@ -176,14 +176,14 @@ describe("MCP activity tools", () => {
 			});
 			const created = parseContent(createResult) as { id: string };
 
-			const result = await handlers.get("delete_activity")!({ id: created.id });
+			const result = await handlers.get("delete_activity")?.({ id: created.id });
 			expect(isError(result)).toBe(false);
 			const data = parseContent(result) as { deleted: boolean };
 			expect(data.deleted).toBe(true);
 		});
 
 		it("returns error for non-existent id", async () => {
-			const result = await handlers.get("delete_activity")!({ id: "nonexistent-act-id" });
+			const result = await handlers.get("delete_activity")?.({ id: "nonexistent-act-id" });
 			expect(isError(result)).toBe(true);
 		});
 	});
