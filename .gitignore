@@ -30,12 +30,40 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env.local
+.env.*.local
 
-# vercel
-.vercel
+# keep .env.example tracked
+!.env.example
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright
+/playwright-report/
+/blob-report/
+/e2e/visual/**/*.png
+!/e2e/visual/**/*-snapshots/**/*.png
+
+# IDE
+.idea/
+.vscode/
+
+# plans
+.plans/
+
+# dev artifacts (screenshots, snapshots)
+/*.png
+/*.yml
+!docker-compose.yml
+
+# developer tool configs
+.mcp.json
+.serena/
+.context-guardian/
+.playwright-mcp/
+.claude/
+CLAUDE.md

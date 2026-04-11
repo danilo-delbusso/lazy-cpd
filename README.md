@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CPD Portal
 
-## Getting Started
+A self-hosted Continuing Professional Development (CPD) tracking portal. Track your learning goals, log activities, and manage your professional development — with an MCP server for AI-powered management via Claude Code.
 
-First, run the development server:
+## Features
+
+- **Goals & Activities**: Create goals, track activities with dates, formats, tags, and markdown notes
+- **Public Portfolio**: Share your CPD progress at a public URL
+- **Admin Dashboard**: Full CRUD management with tag autocomplete, markdown editor, and format management
+- **MCP Server**: 12 tools for managing CPD data via Claude Code (list, create, update, delete goals/activities, search, formats)
+- **Expand Notes**: Paste rough notes and expand them into structured key learnings via AI
+- **Docker-ready**: Multi-stage Dockerfile for production deployment
+
+## Tech Stack
+
+- **Runtime**: [Bun](https://bun.sh) (dev) / Node.js 22 (production)
+- **Framework**: [Next.js](https://nextjs.org) 16 (App Router, standalone output)
+- **Database**: PostgreSQL via [Drizzle ORM](https://orm.drizzle.team)
+- **Validation**: [Zod](https://zod.dev) v4
+- **Auth**: env-based password + JWT + HttpOnly cookies
+- **MCP**: [@modelcontextprotocol/server](https://github.com/modelcontextprotocol/typescript-sdk) v2
+- **UI**: Tailwind CSS, Motion, GSAP
+- **Testing**: Vitest, Testing Library, Playwright
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Prerequisites: Bun, Docker
+
+# Install dependencies
+bun install
+
+# Start PostgreSQL
+docker compose up -d
+
+# Configure environment
+cp .env.example .env
+# Edit .env — set JWT_SECRET (openssl rand -base64 32)
+
+# Run database migrations
+bunx drizzle-kit push
+
+# Seed with sample data (optional)
+bun run scripts/seed.ts
+
+# Start dev server
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) for the public site and [http://localhost:3000/admin](http://localhost:3000/admin) for the dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## MCP Integration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Connect Claude Code to manage your CPD data with natural language:
 
-## Learn More
+```bash
+# Generate a token
+export CPD_MCP_TOKEN=$(openssl rand -hex 32)
 
-To learn more about Next.js, take a look at the following resources:
+# Add to .env on the server
+echo "CPD_MCP_TOKEN=$CPD_MCP_TOKEN" >> .env
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Connect Claude Code
+claude mcp add -s user --transport http cpd-portal http://localhost:3000/api/mcp \
+  --header "Authorization: Bearer ${CPD_MCP_TOKEN}"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+MCP connection details are also available on the admin dashboard after login.
 
-## Deploy on Vercel
+## Production Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Build the Docker image
+docker build -t cpd-portal .
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Run with required env vars
+docker run -p 3000:3000 \
+  -e DATABASE_URL="postgresql://..." \
+  -e JWT_SECRET="$(openssl rand -base64 32)" \
+  -e CPD_MCP_TOKEN="$(openssl rand -hex 32)" \
+  cpd-portal
+```
+
+The app runs on port 3000. Put it behind a reverse proxy (nginx, Caddy, or a PaaS like Sliplane) for TLS.
+
+## Development
+
+```bash
+bun run dev          # Start dev server
+bun run check        # Lint + format (Biome)
+bun run test         # Unit tests (Vitest)
+bun run test:e2e     # E2E tests (Playwright)
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full contribution guidelines.
+
+## License
+
+[MIT](LICENSE)
