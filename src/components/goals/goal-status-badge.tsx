@@ -7,7 +7,7 @@ interface GoalStatusBadgeProps {
 	className?: string;
 }
 
-export function GoalStatusBadge({ status, className }: GoalStatusBadgeProps) {
+export function GoalStatusBadge({ status, className }: Readonly<GoalStatusBadgeProps>) {
 	return (
 		<Badge colorClasses={goalStatusColors[status]} className={className}>
 			{goalStatusLabels[status]}

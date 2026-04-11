@@ -9,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
 	({ className, label, error, helperText, id, ...props }, ref) => {
-		const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
+		const inputId = id ?? label?.toLowerCase().replaceAll(/\s+/g, "-");
 
 		return (
 			<div className="space-y-1">

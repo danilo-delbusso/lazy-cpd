@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { goalStatusValues } from "@/lib/validations/goal";
 
@@ -24,7 +24,7 @@ interface GoalFormProps {
 	isSubmitting: boolean;
 }
 
-export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: GoalFormProps) {
+export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly<GoalFormProps>) {
 	const router = useRouter();
 	const [title, setTitle] = useState(initialData?.title ?? "");
 	const [description, setDescription] = useState(initialData?.description ?? "");
@@ -64,8 +64,7 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: GoalForm
 		setTags(tags.filter((t) => t !== tag));
 	}
 
-	async function handleSubmit(e: FormEvent) {
-		e.preventDefault();
+	async function handleSubmit() {
 		const errs: Record<string, string> = {};
 		if (title.length < 3) errs.title = "Title must be at least 3 characters";
 		if (description.length < 10) errs.description = "Description must be at least 10 characters";
@@ -79,7 +78,7 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: GoalForm
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
+		<form action={handleSubmit} className="space-y-6">
 			<div>
 				<label htmlFor="title" className="block text-sm font-medium text-gray-700">
 					Title
@@ -220,11 +219,11 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: GoalForm
 									}}
 									className="flex w-full items-center gap-2 border-t border-stone-100 px-3 py-1.5 text-left text-sm text-stone-500 hover:bg-stone-50"
 								>
-									Create &ldquo;
+									{`Create \u201C`}
 									<span className="font-medium text-stone-700">
 										{tagInput.trim().toLowerCase()}
 									</span>
-									&rdquo;
+									{`\u201D`}
 								</button>
 							)}
 						</div>

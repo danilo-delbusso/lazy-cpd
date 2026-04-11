@@ -3,7 +3,6 @@
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils/cn";
 import { formatDate } from "@/lib/utils/dates";
-import type { GoalStatus } from "@/lib/validations/goal";
 import type { GoalWithStats } from "@/types";
 
 const dotColors: Record<string, string> = {
@@ -32,7 +31,7 @@ interface GoalRowProps {
 	index: number;
 }
 
-export function GoalRow({ goal, onClick, index }: GoalRowProps) {
+export function GoalRow({ goal, onClick, index }: Readonly<GoalRowProps>) {
 	const visibleTags = goal.tags.slice(0, MAX_TAGS);
 	const overflowCount = goal.tags.length - MAX_TAGS;
 

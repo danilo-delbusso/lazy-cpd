@@ -7,7 +7,7 @@ import { useResponsiveView } from "@/hooks/use-responsive-view";
 import type { GoalWithStats } from "@/types";
 import { usePublicLayout } from "./public-layout-context";
 
-export function GoalsPageClient({ initialGoals }: { initialGoals: GoalWithStats[] }) {
+export function GoalsPageClient({ initialGoals }: Readonly<{ initialGoals: GoalWithStats[] }>) {
 	const { goalFilter } = usePublicLayout();
 	const viewMode = useResponsiveView();
 	const router = useRouter();

@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { TagInput } from "@/components/admin/tag-input";
 import { Button } from "@/components/ui/button";
 import { useFormats } from "@/hooks/use-formats";
@@ -33,7 +33,12 @@ interface ActivityFormProps {
 	isSubmitting: boolean;
 }
 
-export function ActivityForm({ mode, initialData, onSubmit, isSubmitting }: ActivityFormProps) {
+export function ActivityForm({
+	mode,
+	initialData,
+	onSubmit,
+	isSubmitting,
+}: Readonly<ActivityFormProps>) {
 	const router = useRouter();
 	const { data: goals } = useGoals();
 	const { data: formats } = useFormats();
@@ -70,12 +75,11 @@ export function ActivityForm({ mode, initialData, onSubmit, isSubmitting }: Acti
 	});
 
 	const combinedTags = useMemo(
-		() => [...new Set([...allTags, ...goalTags])].sort(),
+		() => [...new Set([...allTags, ...goalTags])].sort((a, b) => a.localeCompare(b)),
 		[allTags, goalTags],
 	);
 
-	async function handleSubmit(e: FormEvent) {
-		e.preventDefault();
+	async function handleSubmit() {
 		const errs: Record<string, string> = {};
 		if (title.length < 3) errs.title = "Title must be at least 3 characters";
 		if (!goalId) errs.goalId = "Goal is required";
@@ -100,7 +104,7 @@ export function ActivityForm({ mode, initialData, onSubmit, isSubmitting }: Acti
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
+		<form action={handleSubmit} className="space-y-6">
 			<div>
 				<div>
 					<label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -165,7 +169,7 @@ export function ActivityForm({ mode, initialData, onSubmit, isSubmitting }: Acti
 					>
 						{activityStatusValues.map((s) => (
 							<option key={s} value={s}>
-								{s.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+								{s.replaceAll("_", " ").replaceAll(/\b\w/g, (c) => c.toUpperCase())}
 							</option>
 						))}
 					</select>

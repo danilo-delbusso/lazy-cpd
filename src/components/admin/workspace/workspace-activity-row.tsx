@@ -42,7 +42,7 @@ export function WorkspaceActivityRow({
 	isNew,
 	onSaveNew,
 	isSavingNew,
-}: WorkspaceActivityRowProps) {
+}: Readonly<WorkspaceActivityRowProps>) {
 	const updateActivity = useUpdateActivity();
 	const deleteActivity = useDeleteActivity();
 	const confirm = useConfirm();
@@ -135,6 +135,7 @@ export function WorkspaceActivityRow({
 				<span className="shrink-0 text-xs text-stone-400">{formatDate(activity.fullDate)}</span>
 				{!isNew && (
 					<svg
+						aria-hidden="true"
 						className={cn(
 							"h-4 w-4 shrink-0 text-stone-400 transition-transform",
 							isExpanded && "rotate-180",
@@ -160,8 +161,14 @@ export function WorkspaceActivityRow({
 					>
 						<div className="space-y-4 border-t border-stone-200 px-4 py-4">
 							<div>
-								<label className="block text-sm font-medium text-gray-700">Title</label>
+								<label
+									htmlFor={`title-${activity.id}`}
+									className="block text-sm font-medium text-gray-700"
+								>
+									Title
+								</label>
 								<input
+									id={`title-${activity.id}`}
 									value={title}
 									onChange={(e) => setTitle(e.target.value)}
 									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -170,22 +177,34 @@ export function WorkspaceActivityRow({
 
 							<div className="grid gap-4 sm:grid-cols-3">
 								<div>
-									<label className="block text-sm font-medium text-gray-700">Status</label>
+									<label
+										htmlFor={`status-${activity.id}`}
+										className="block text-sm font-medium text-gray-700"
+									>
+										Status
+									</label>
 									<select
+										id={`status-${activity.id}`}
 										value={status}
 										onChange={(e) => setStatus(e.target.value)}
 										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 									>
 										{activityStatusValues.map((s) => (
 											<option key={s} value={s}>
-												{s.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+												{s.replaceAll("_", " ").replaceAll(/\b\w/g, (c) => c.toUpperCase())}
 											</option>
 										))}
 									</select>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700">Format</label>
+									<label
+										htmlFor={`format-${activity.id}`}
+										className="block text-sm font-medium text-gray-700"
+									>
+										Format
+									</label>
 									<select
+										id={`format-${activity.id}`}
 										value={formatId}
 										onChange={(e) => setFormatId(e.target.value)}
 										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -199,8 +218,14 @@ export function WorkspaceActivityRow({
 									</select>
 								</div>
 								<div>
-									<label className="block text-sm font-medium text-gray-700">Date</label>
+									<label
+										htmlFor={`date-${activity.id}`}
+										className="block text-sm font-medium text-gray-700"
+									>
+										Date
+									</label>
 									<input
+										id={`date-${activity.id}`}
 										type="date"
 										value={fullDate}
 										onChange={(e) => setFullDate(e.target.value)}
@@ -217,8 +242,14 @@ export function WorkspaceActivityRow({
 							/>
 
 							<div>
-								<label className="block text-sm font-medium text-gray-700">References</label>
+								<label
+									htmlFor={`references-${activity.id}`}
+									className="block text-sm font-medium text-gray-700"
+								>
+									References
+								</label>
 								<textarea
+									id={`references-${activity.id}`}
 									rows={2}
 									value={references}
 									onChange={(e) => setReferences(e.target.value)}
@@ -227,10 +258,14 @@ export function WorkspaceActivityRow({
 							</div>
 
 							<div>
-								<label className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor={`tags-${activity.id}`}
+									className="block text-sm font-medium text-gray-700"
+								>
 									Tags (comma-separated)
 								</label>
 								<input
+									id={`tags-${activity.id}`}
 									value={tags}
 									onChange={(e) => setTags(e.target.value)}
 									placeholder="e.g. typescript, architecture, leadership"

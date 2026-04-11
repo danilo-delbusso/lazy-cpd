@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { type ReactNode, useEffect } from "react";
-import { cn } from "@/lib/utils/cn";
 import { Button } from "./button";
 
 interface ModalProps {
@@ -27,15 +26,15 @@ export function Modal({
 	confirmVariant = "primary",
 	onConfirm,
 	loading,
-}: ModalProps) {
+}: Readonly<ModalProps>) {
 	// Close on Escape
 	useEffect(() => {
 		if (!open) return;
 		function handleKey(e: KeyboardEvent) {
 			if (e.key === "Escape") onClose();
 		}
-		window.addEventListener("keydown", handleKey);
-		return () => window.removeEventListener("keydown", handleKey);
+		globalThis.addEventListener("keydown", handleKey);
+		return () => globalThis.removeEventListener("keydown", handleKey);
 	}, [open, onClose]);
 
 	return (

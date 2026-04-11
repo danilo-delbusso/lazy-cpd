@@ -52,19 +52,22 @@ export default function AdminActivitiesPage() {
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-gray-100">
-							{isLoading ? (
+							{isLoading && (
 								<tr>
 									<td colSpan={6} className="px-4 py-8 text-center text-gray-400">
 										Loading...
 									</td>
 								</tr>
-							) : activities.length === 0 ? (
+							)}
+							{!isLoading && activities.length === 0 && (
 								<tr>
 									<td colSpan={6} className="px-4 py-8 text-center text-gray-400">
 										No activities yet.
 									</td>
 								</tr>
-							) : (
+							)}
+							{!isLoading &&
+								activities.length > 0 &&
 								activities.map((a) => (
 									<tr key={a.id} className="hover:bg-gray-50">
 										<td className="max-w-[200px] truncate px-4 py-3 font-medium text-gray-900">
@@ -99,8 +102,7 @@ export default function AdminActivitiesPage() {
 											</div>
 										</td>
 									</tr>
-								))
-							)}
+								))}
 						</tbody>
 					</table>
 				</div>

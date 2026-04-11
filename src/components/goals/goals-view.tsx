@@ -23,7 +23,7 @@ const goalSpotlightColor: Record<string, string> = {
 	completed: "rgba(56, 189, 248, 0.08)",
 };
 
-function GoalCard({ goal, onClick }: { goal: GoalWithStats; onClick: () => void }) {
+function GoalCard({ goal, onClick }: Readonly<{ goal: GoalWithStats; onClick: () => void }>) {
 	const pct =
 		goal.totalActivities > 0 ? Math.round((goal.completedCount / goal.totalActivities) * 100) : 0;
 
@@ -36,7 +36,7 @@ function GoalCard({ goal, onClick }: { goal: GoalWithStats; onClick: () => void 
 			)}
 		>
 			<GoalStatusBadge
-				status={goal.status as GoalStatus}
+				status={goal.status}
 				className="absolute -top-px -right-px rounded-none rounded-bl-lg rounded-tr-xl border-b border-l px-3.5 py-1"
 			/>
 			<motion.button
@@ -94,17 +94,83 @@ function GoalCard({ goal, onClick }: { goal: GoalWithStats; onClick: () => void 
 	);
 }
 
+function renderGoalsContent({
+	isLoading,
+	filtered,
+	viewMode,
+	onSelectGoal,
+}: {
+	isLoading: boolean;
+	filtered: GoalWithStats[] | undefined;
+	viewMode: "grid" | "rows";
+	onSelectGoal: (id: string) => void;
+}) {
+	if (isLoading) {
+		return (
+			<div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				{["a", "b", "c", "d", "e", "f"].map((id) => (
+					<div
+						key={`skel-${id}`}
+						className="h-48 animate-pulse rounded-xl border border-stone-200 bg-stone-50"
+					/>
+				))}
+			</div>
+		);
+	}
+	if (filtered && filtered.length > 0) {
+		if (viewMode === "rows") {
+			return (
+				<div className="mt-6 flex flex-col gap-0 divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-200 bg-white/80 shadow-sm">
+					{filtered.map((goal, i) => (
+						<GoalRow key={goal.id} goal={goal} index={i} onClick={() => onSelectGoal(goal.id)} />
+					))}
+				</div>
+			);
+		}
+		return (
+			<LayoutGroup>
+				<Masonry
+					items={filtered}
+					config={{
+						columns: [1, 2, 3],
+						gap: [16, 16, 16],
+						media: [640, 768, 1024],
+					}}
+					className="mt-6"
+					render={(goal) => (
+						<motion.div
+							key={goal.id}
+							layout
+							layoutId={`goal-card-${goal.id}`}
+							initial={{ opacity: 0, scale: 0.95 }}
+							animate={{ opacity: 1, scale: 1 }}
+							transition={{
+								layout: { type: "spring", stiffness: 300, damping: 30 },
+								opacity: { duration: 0.25 },
+								scale: { duration: 0.25 },
+							}}
+						>
+							<GoalCard goal={goal} onClick={() => onSelectGoal(goal.id)} />
+						</motion.div>
+					)}
+				/>
+			</LayoutGroup>
+		);
+	}
+	return <div className="mt-16 text-center text-stone-400">No goals found</div>;
+}
+
 export function GoalsView({
 	onSelectGoal,
 	filter,
 	viewMode,
 	initialGoals,
-}: {
+}: Readonly<{
 	onSelectGoal: (id: string) => void;
 	filter: GoalStatus | "all";
 	viewMode: "grid" | "rows";
 	initialGoals?: GoalWithStats[];
-}) {
+}>) {
 	// initialGoals may come from server (JSON-serialized, dates as strings)
 	// which matches the shape returned by the API fetch in useGoals
 	const { data: goals, isLoading } = useGoals(initialGoals);
@@ -113,56 +179,5 @@ export function GoalsView({
 		?.filter((g) => filter === "all" || g.status === filter)
 		.sort((a, b) => (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9));
 
-	return (
-		<>
-			{isLoading ? (
-				<div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{Array.from({ length: 6 }).map((_, i) => (
-						<div
-							key={`skel-${i}`}
-							className="h-48 animate-pulse rounded-xl border border-stone-200 bg-stone-50"
-						/>
-					))}
-				</div>
-			) : filtered && filtered.length > 0 ? (
-				viewMode === "rows" ? (
-					<div className="mt-6 flex flex-col gap-0 divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-200 bg-white/80 shadow-sm">
-						{filtered.map((goal, i) => (
-							<GoalRow key={goal.id} goal={goal} index={i} onClick={() => onSelectGoal(goal.id)} />
-						))}
-					</div>
-				) : (
-					<LayoutGroup>
-						<Masonry
-							items={filtered}
-							config={{
-								columns: [1, 2, 3],
-								gap: [16, 16, 16],
-								media: [640, 768, 1024],
-							}}
-							className="mt-6"
-							render={(goal) => (
-								<motion.div
-									key={goal.id}
-									layout
-									layoutId={`goal-card-${goal.id}`}
-									initial={{ opacity: 0, scale: 0.95 }}
-									animate={{ opacity: 1, scale: 1 }}
-									transition={{
-										layout: { type: "spring", stiffness: 300, damping: 30 },
-										opacity: { duration: 0.25 },
-										scale: { duration: 0.25 },
-									}}
-								>
-									<GoalCard goal={goal} onClick={() => onSelectGoal(goal.id)} />
-								</motion.div>
-							)}
-						/>
-					</LayoutGroup>
-				)
-			) : (
-				<div className="mt-16 text-center text-stone-400">No goals found</div>
-			)}
-		</>
-	);
+	return <>{renderGoalsContent({ isLoading, filtered, viewMode, onSelectGoal })}</>;
 }

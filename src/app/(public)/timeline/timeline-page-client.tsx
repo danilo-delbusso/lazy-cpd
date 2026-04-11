@@ -9,9 +9,9 @@ import { usePublicLayout } from "../public-layout-context";
 
 export function TimelinePageClient({
 	initialActivities,
-}: {
+}: Readonly<{
 	initialActivities: PaginatedResult<ActivityWithJoins>;
-}) {
+}>) {
 	const { yearFilter, activityFilter } = usePublicLayout();
 	const viewMode = useResponsiveView();
 

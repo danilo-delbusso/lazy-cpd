@@ -7,7 +7,11 @@ interface ActivityFormatBadgeProps {
 }
 
 /** Renders a badge with dynamic color from the activity_formats table */
-export function ActivityFormatBadge({ name, color, className }: ActivityFormatBadgeProps) {
+export function ActivityFormatBadge({
+	name,
+	color,
+	className,
+}: Readonly<ActivityFormatBadgeProps>) {
 	return (
 		<Badge hex={color} className={className}>
 			{name}

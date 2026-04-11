@@ -8,7 +8,14 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 	hex?: string;
 }
 
-export function Badge({ className, colorClasses, hex, children, style, ...props }: BadgeProps) {
+export function Badge({
+	className,
+	colorClasses,
+	hex,
+	children,
+	style,
+	...props
+}: Readonly<BadgeProps>) {
 	const dynamicStyle = hex
 		? {
 				backgroundColor: `${hex}1a`,

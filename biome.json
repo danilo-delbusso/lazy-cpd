@@ -48,6 +48,11 @@
 			"arrowParentheses": "always"
 		}
 	},
+	"css": {
+		"parser": { "cssModules": true },
+		"linter": { "enabled": false },
+		"formatter": { "enabled": false }
+	},
 	"files": {
 		"includes": [
 			"**",
@@ -55,7 +60,8 @@
 			"!.next",
 			"!drizzle/migrations",
 			"!playwright-report",
-			"!coverage"
+			"!coverage",
+			"!**/*.css"
 		]
 	}
 }

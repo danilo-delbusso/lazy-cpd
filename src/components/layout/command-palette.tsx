@@ -88,6 +88,7 @@ export function CommandPalette() {
 	}, [open]);
 
 	// Reset selection when results change
+	// biome-ignore lint/correctness/useExhaustiveDependencies: intentionally resets when result count changes
 	useEffect(() => {
 		setSelectedIndex(0);
 	}, [filtered.length]);
@@ -142,6 +143,7 @@ export function CommandPalette() {
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
+								aria-hidden="true"
 								strokeWidth={2}
 							>
 								<path

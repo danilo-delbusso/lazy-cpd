@@ -20,13 +20,13 @@ export function GoalDetailView({
 	viewMode,
 	initialGoal,
 	initialActivities,
-}: {
+}: Readonly<{
 	goalId: string;
 	onBack: () => void;
 	viewMode: "grid" | "rows";
 	initialGoal?: Parameters<typeof useGoal>[1];
 	initialActivities?: Parameters<typeof useInfiniteActivities>[1];
-}) {
+}>) {
 	const { data: goal, isLoading: goalLoading } = useGoal(goalId, initialGoal);
 	const {
 		data,
@@ -53,7 +53,7 @@ export function GoalDetailView({
 		const sorted = goal?.activities.map((a) => a.fullDate).sort() ?? [];
 		return {
 			first: sorted[0] ?? null,
-			last: sorted[sorted.length - 1] ?? null,
+			last: sorted.at(-1) ?? null,
 		};
 	}, [goal]);
 
@@ -109,6 +109,7 @@ export function GoalDetailView({
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
+					aria-hidden="true"
 					strokeWidth={2}
 				>
 					<path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -119,11 +120,8 @@ export function GoalDetailView({
 			<div
 				className={cn(
 					"rounded-xl border bg-white/80 p-4 shadow-sm backdrop-blur-sm sm:p-6",
-					goal.status === "open"
-						? "border-green-200"
-						: goal.status === "completed"
-							? "border-sky-200"
-							: "border-stone-200",
+					{ open: "border-green-200", completed: "border-sky-200" }[goal.status] ??
+						"border-stone-200",
 				)}
 			>
 				<div>

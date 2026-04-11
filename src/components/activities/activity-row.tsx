@@ -32,7 +32,7 @@ export function ActivityRow({
 	index,
 	onClick,
 	showGoalTitle = true,
-}: ActivityRowProps) {
+}: Readonly<ActivityRowProps>) {
 	const visibleTags = a.tags.slice(0, MAX_TAGS);
 	const overflowCount = a.tags.length - MAX_TAGS;
 

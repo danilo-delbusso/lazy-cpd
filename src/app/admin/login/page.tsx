@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -8,8 +8,7 @@ export default function LoginPage() {
 	const [password, setPassword] = useState("");
 	const { login, isLoggingIn } = useAuth();
 
-	async function handleSubmit(e: FormEvent) {
-		e.preventDefault();
+	async function handleSubmit() {
 		try {
 			await login(password);
 			toast.success("Logged in successfully");
@@ -29,7 +28,7 @@ export default function LoginPage() {
 					<p className="mt-1 text-sm text-stone-500">CPD Portal Administration</p>
 				</div>
 
-				<form onSubmit={handleSubmit} className="space-y-4">
+				<form action={handleSubmit} className="space-y-4">
 					<div>
 						<label htmlFor="password" className="block text-sm font-medium text-stone-700">
 							Password

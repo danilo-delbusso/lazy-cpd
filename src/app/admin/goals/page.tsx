@@ -6,7 +6,6 @@ import { GoalStatusBadge } from "@/components/goals/goal-status-badge";
 import { PageTransition } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
 import { useGoals } from "@/hooks/use-goals";
-import type { GoalStatus } from "@/lib/validations/goal";
 
 const statusOrder: Record<string, number> = { open: 0, upcoming: 1, completed: 2 };
 
@@ -48,24 +47,27 @@ export default function AdminGoalsPage() {
 						</tr>
 					</thead>
 					<tbody className="divide-y divide-gray-100">
-						{isLoading ? (
+						{isLoading && (
 							<tr>
 								<td colSpan={4} className="px-4 py-8 text-center text-gray-400">
 									Loading...
 								</td>
 							</tr>
-						) : sorted.length === 0 ? (
+						)}
+						{!isLoading && sorted.length === 0 && (
 							<tr>
 								<td colSpan={4} className="px-4 py-8 text-center text-gray-400">
 									No goals yet.
 								</td>
 							</tr>
-						) : (
+						)}
+						{!isLoading &&
+							sorted.length > 0 &&
 							sorted.map((goal) => (
 								<tr key={goal.id} className="hover:bg-gray-50">
 									<td className="px-4 py-3 font-medium text-gray-900">{goal.title}</td>
 									<td className="px-4 py-3">
-										<GoalStatusBadge status={goal.status as GoalStatus} />
+										<GoalStatusBadge status={goal.status} />
 									</td>
 									<td className="px-4 py-3 text-right text-gray-500">{goal.totalActivities}</td>
 									<td className="px-4 py-3 text-right">
@@ -76,8 +78,7 @@ export default function AdminGoalsPage() {
 										</Link>
 									</td>
 								</tr>
-							))
-						)}
+							))}
 					</tbody>
 				</table>
 			</div>

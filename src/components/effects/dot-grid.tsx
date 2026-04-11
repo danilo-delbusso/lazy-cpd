@@ -29,12 +29,12 @@ export interface DotGridProps {
 }
 
 function hexToRgb(hex: string) {
-	const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+	const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	if (!m) return { r: 0, g: 0, b: 0 };
 	return {
-		r: parseInt(m[1], 16),
-		g: parseInt(m[2], 16),
-		b: parseInt(m[3], 16),
+		r: Number.parseInt(m[1], 16),
+		g: Number.parseInt(m[2], 16),
+		b: Number.parseInt(m[3], 16),
 	};
 }
 
@@ -71,7 +71,7 @@ export const DotGrid: React.FC<DotGridProps> = ({
 	const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
 
 	const circlePath = useMemo(() => {
-		if (typeof window === "undefined" || !window.Path2D) return null;
+		if (globalThis.window === undefined || !globalThis.Path2D) return null;
 		const p = new Path2D();
 		p.arc(0, 0, dotSize / 2, 0, Math.PI * 2);
 		return p;
@@ -250,11 +250,11 @@ export const DotGrid: React.FC<DotGridProps> = ({
 			};
 		})();
 
-		window.addEventListener("mousemove", throttledMove, { passive: true });
-		window.addEventListener("click", onClick);
+		globalThis.addEventListener("mousemove", throttledMove, { passive: true });
+		globalThis.addEventListener("click", onClick);
 		return () => {
-			window.removeEventListener("mousemove", throttledMove);
-			window.removeEventListener("click", onClick);
+			globalThis.removeEventListener("mousemove", throttledMove);
+			globalThis.removeEventListener("click", onClick);
 		};
 	}, [maxSpeed, speedTrigger, proximity, shockRadius, shockStrength, pushDot]);
 

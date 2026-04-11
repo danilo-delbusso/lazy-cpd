@@ -12,7 +12,7 @@ const navItems = [
 	{ href: "/admin/formats", label: "Formats" },
 ];
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+export default function AdminLayout({ children }: Readonly<{ children: ReactNode }>) {
 	const { isAuthenticated, isLoading, logout, isLoggingOut } = useAuth();
 	const pathname = usePathname();
 	const router = useRouter();

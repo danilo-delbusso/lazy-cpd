@@ -12,9 +12,10 @@ export function expandNotesPrompt(
 	activityTitle: string,
 	goalTitle?: string,
 ): { system: string; user: string } {
+	const goalContext = goalTitle ? ` (part of the goal: "${goalTitle}")` : "";
 	return {
 		system: CPD_SYSTEM_PROMPT,
-		user: `I have rough notes from a CPD activity titled "${activityTitle}"${goalTitle ? ` (part of the goal: "${goalTitle}")` : ""}.
+		user: `I have rough notes from a CPD activity titled "${activityTitle}"${goalContext}.
 
 Turn these notes into structured **key learnings**. Each learning should:
 - State what was learned clearly and concisely

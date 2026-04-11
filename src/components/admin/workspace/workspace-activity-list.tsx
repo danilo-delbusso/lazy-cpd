@@ -29,7 +29,7 @@ export function WorkspaceActivityList({
 	goalId,
 	goalTitle,
 	activities,
-}: WorkspaceActivityListProps) {
+}: Readonly<WorkspaceActivityListProps>) {
 	const [expandedId, setExpandedId] = useState<string | null>(null);
 	const [showNewForm, setShowNewForm] = useState(false);
 	const createActivity = useCreateActivity();

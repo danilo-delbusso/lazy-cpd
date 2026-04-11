@@ -7,15 +7,12 @@ export interface AdminPayload {
 
 const TOKEN_EXPIRY = "24h";
 
-const WEAK_SECRETS = ["change-me-in-production", "secret", "jwt_secret", "changeme"];
+const WEAK_SECRETS = new Set(["change-me-in-production", "secret", "jwt_secret", "changeme"]);
 
 function getSecret(): Uint8Array {
 	const secret = process.env.JWT_SECRET;
 	if (!secret) throw new Error("JWT_SECRET environment variable is required");
-	if (
-		process.env.NODE_ENV === "production" &&
-		(secret.length < 32 || WEAK_SECRETS.includes(secret))
-	) {
+	if (process.env.NODE_ENV === "production" && (secret.length < 32 || WEAK_SECRETS.has(secret))) {
 		throw new Error(
 			"JWT_SECRET is too weak for production. Generate one with: openssl rand -base64 32",
 		);

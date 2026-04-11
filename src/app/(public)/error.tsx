@@ -1,6 +1,9 @@
 "use client";
 
-export default function PublicError({ error, reset }: { error: Error; reset: () => void }) {
+export default function PublicError({
+	error,
+	reset,
+}: Readonly<{ error: Error; reset: () => void }>) {
 	return (
 		<div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
 			<h2 className="text-lg font-semibold text-stone-900">Something went wrong</h2>

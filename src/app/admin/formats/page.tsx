@@ -52,20 +52,24 @@ export default function AdminFormatsPage() {
 						</tr>
 					</thead>
 					<tbody className="divide-y divide-gray-100">
-						{isLoading ? (
+						{isLoading && (
 							<tr>
 								<td colSpan={5} className="px-4 py-8 text-center text-gray-400">
 									Loading...
 								</td>
 							</tr>
-						) : formats?.length === 0 ? (
+						)}
+						{!isLoading && formats?.length === 0 && (
 							<tr>
 								<td colSpan={5} className="px-4 py-8 text-center text-gray-400">
 									No formats yet.
 								</td>
 							</tr>
-						) : (
-							formats?.map((f) => (
+						)}
+						{!isLoading &&
+							formats &&
+							formats.length > 0 &&
+							formats.map((f) => (
 								<tr key={f.id} className="hover:bg-gray-50">
 									<td className="px-4 py-3">
 										<Badge hex={f.color}>{f.name}</Badge>
@@ -90,8 +94,7 @@ export default function AdminFormatsPage() {
 										</div>
 									</td>
 								</tr>
-							))
-						)}
+							))}
 					</tbody>
 				</table>
 			</div>

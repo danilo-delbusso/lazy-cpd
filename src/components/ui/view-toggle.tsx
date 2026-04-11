@@ -7,7 +7,7 @@ interface ViewToggleProps {
 	onChange: (mode: "grid" | "rows") => void;
 }
 
-export function ViewToggle({ mode, onChange }: ViewToggleProps) {
+export function ViewToggle({ mode, onChange }: Readonly<ViewToggleProps>) {
 	return (
 		<div className="flex gap-1 rounded-lg bg-stone-100 p-1">
 			<button
@@ -26,6 +26,7 @@ export function ViewToggle({ mode, onChange }: ViewToggleProps) {
 					)}
 					viewBox="0 0 16 16"
 					fill="currentColor"
+					aria-hidden="true"
 				>
 					<rect x="1" y="1" width="6" height="6" rx="1" />
 					<rect x="9" y="1" width="6" height="6" rx="1" />
@@ -49,6 +50,7 @@ export function ViewToggle({ mode, onChange }: ViewToggleProps) {
 					)}
 					viewBox="0 0 16 16"
 					fill="currentColor"
+					aria-hidden="true"
 				>
 					<rect x="1" y="2" width="14" height="2.5" rx="0.75" />
 					<rect x="1" y="6.75" width="14" height="2.5" rx="0.75" />

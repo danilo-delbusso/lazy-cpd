@@ -8,7 +8,7 @@ interface PageTransitionProps {
 	className?: string;
 }
 
-export function PageTransition({ children, className }: PageTransitionProps) {
+export function PageTransition({ children, className }: Readonly<PageTransitionProps>) {
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 8 }}
@@ -22,7 +22,7 @@ export function PageTransition({ children, className }: PageTransitionProps) {
 }
 
 /** Wrapper for staggering children animations */
-export function StaggerContainer({ children, className }: PageTransitionProps) {
+export function StaggerContainer({ children, className }: Readonly<PageTransitionProps>) {
 	return (
 		<motion.div
 			initial="hidden"
@@ -38,7 +38,7 @@ export function StaggerContainer({ children, className }: PageTransitionProps) {
 	);
 }
 
-export function StaggerItem({ children, className }: PageTransitionProps) {
+export function StaggerItem({ children, className }: Readonly<PageTransitionProps>) {
 	return (
 		<motion.div
 			variants={{

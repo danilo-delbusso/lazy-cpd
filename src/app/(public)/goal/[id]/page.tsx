@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ActivityWithJoins } from "@/hooks/use-activities";
+import type { GoalDetail } from "@/hooks/use-goals";
 import { getAllActivities } from "@/lib/db/queries/activities";
 import { getGoalWithActivities } from "@/lib/db/queries/goals";
+import { serializeDates } from "@/lib/utils/serialize";
 import type { PaginatedResult } from "@/types";
 import { GoalDetailPageClient } from "./goal-detail-page-client";
 
@@ -10,7 +12,7 @@ type Props = {
 	params: Promise<{ id: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
 	const { id } = await params;
 	const goal = await getGoalWithActivities(id);
 
@@ -25,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	};
 }
 
-export default async function GoalPage({ params }: Props) {
+export default async function GoalPage({ params }: Readonly<Props>) {
 	const { id } = await params;
 
 	const [goal, activitiesPage] = await Promise.all([
@@ -37,12 +39,11 @@ export default async function GoalPage({ params }: Props) {
 		notFound();
 	}
 
-	// JSON round-trip to match the shape the API returns (dates as strings)
-	// so initialData is consistent with subsequent TanStack Query refetches
-	const serializedGoal = JSON.parse(JSON.stringify(goal));
-	const serializedActivities = JSON.parse(
-		JSON.stringify(activitiesPage),
-	) as PaginatedResult<ActivityWithJoins>;
+	// Convert Date objects to ISO strings so initialData matches TanStack Query refetches
+	const serializedGoal = serializeDates(goal) as unknown as GoalDetail;
+	const serializedActivities = serializeDates(
+		activitiesPage,
+	) as unknown as PaginatedResult<ActivityWithJoins>;
 
 	return (
 		<GoalDetailPageClient

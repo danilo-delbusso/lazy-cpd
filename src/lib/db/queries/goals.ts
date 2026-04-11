@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "..";
-import { activities, activityFormats, type Goal, goals, type NewGoal } from "../schema";
+import { activities, type Goal, goals, type NewGoal } from "../schema";
 
 /** Summary stats computed per goal */
 export interface GoalWithStats extends Goal {

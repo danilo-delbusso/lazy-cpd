@@ -3,8 +3,6 @@ import { withAuth } from "@/lib/auth/middleware";
 import { deleteFormat, getFormatActivityCount, updateFormat } from "@/lib/db/queries/formats";
 import { formatUpdateSchema } from "@/lib/validations/format";
 
-type RouteContext = { params: Promise<{ id: string }> };
-
 export const PUT = withAuth(async (request, context) => {
 	const { id } = await context.params;
 	const body = await request.json().catch(() => null);

@@ -45,7 +45,7 @@ export function ActivityCard({
 	index,
 	onClick,
 	showGoalTitle = true,
-}: ActivityCardProps) {
+}: Readonly<ActivityCardProps>) {
 	return (
 		<motion.div
 			key={a.id}

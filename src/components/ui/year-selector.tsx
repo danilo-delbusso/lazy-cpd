@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils/cn";
 export function YearSelector({
 	value,
 	onChange,
-}: {
+}: Readonly<{
 	value: "all" | number;
 	onChange: (v: "all" | number) => void;
-}) {
+}>) {
 	const { data: goals } = useGoals();
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
@@ -70,6 +70,7 @@ export function YearSelector({
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
+					aria-hidden="true"
 					strokeWidth={2}
 				>
 					<path

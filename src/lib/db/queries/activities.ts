@@ -52,9 +52,11 @@ function buildConditions(filters: ActivityFilters) {
 	return conditions.length > 0 ? and(...conditions) : undefined;
 }
 
+const DEFAULT_PAGINATION: PaginationOptions = { page: 1, limit: 25 };
+
 export async function getAllActivities(
 	filters: ActivityFilters = {},
-	pagination: PaginationOptions = { page: 1, limit: 25 },
+	pagination: PaginationOptions = DEFAULT_PAGINATION,
 ): Promise<
 	PaginatedResult<Activity & { goalTitle: string; formatName: string; formatColor: string }>
 > {

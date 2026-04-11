@@ -5,14 +5,13 @@ import Link from "next/link";
 import { GoalStatusBadge } from "@/components/goals/goal-status-badge";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils/dates";
-import type { GoalStatus } from "@/lib/validations/goal";
 import type { GoalWithStats } from "@/types";
 
 interface GoalCardProps {
 	goal: GoalWithStats;
 }
 
-export function GoalCard({ goal }: GoalCardProps) {
+export function GoalCard({ goal }: Readonly<GoalCardProps>) {
 	const completionPct =
 		goal.totalActivities > 0 ? Math.round((goal.completedCount / goal.totalActivities) * 100) : 0;
 
@@ -27,7 +26,7 @@ export function GoalCard({ goal }: GoalCardProps) {
 					<h3 className="font-semibold text-slate-900 transition-colors group-hover:text-indigo-600">
 						{goal.title}
 					</h3>
-					<GoalStatusBadge status={goal.status as GoalStatus} />
+					<GoalStatusBadge status={goal.status} />
 				</div>
 
 				<p className="mt-2 line-clamp-2 text-sm text-slate-500">{goal.description}</p>

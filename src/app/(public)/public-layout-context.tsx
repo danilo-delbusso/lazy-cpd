@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import type { ActivityStatusValue } from "@/lib/validations/activity";
 import type { GoalStatus } from "@/lib/validations/goal";
 
@@ -13,25 +13,24 @@ interface PublicLayoutContextValue {
 	setActivityFilter: (f: ActivityStatusValue | "all") => void;
 }
 
+// biome-ignore lint/style/noNonNullAssertion: context is always provided by PublicLayoutProvider
 const PublicLayoutContext = createContext<PublicLayoutContextValue>(null!);
 export const usePublicLayout = () => useContext(PublicLayoutContext);
 
-export function PublicLayoutProvider({ children }: { children: React.ReactNode }) {
+export function PublicLayoutProvider({ children }: Readonly<{ children: React.ReactNode }>) {
 	const [goalFilter, setGoalFilter] = useState<GoalStatus | "all">("all");
 	const [yearFilter, setYearFilter] = useState<"all" | number>("all");
 	const [activityFilter, setActivityFilter] = useState<ActivityStatusValue | "all">("all");
-	return (
-		<PublicLayoutContext
-			value={{
-				goalFilter,
-				setGoalFilter,
-				yearFilter,
-				setYearFilter,
-				activityFilter,
-				setActivityFilter,
-			}}
-		>
-			{children}
-		</PublicLayoutContext>
+	const value = useMemo(
+		() => ({
+			goalFilter,
+			setGoalFilter,
+			yearFilter,
+			setYearFilter,
+			activityFilter,
+			setActivityFilter,
+		}),
+		[goalFilter, yearFilter, activityFilter],
 	);
+	return <PublicLayoutContext value={value}>{children}</PublicLayoutContext>;
 }

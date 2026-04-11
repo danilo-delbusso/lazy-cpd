@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getAllGoals } from "@/lib/db/queries/goals";
+import { serializeDates } from "@/lib/utils/serialize";
 import type { GoalWithStats } from "@/types";
 import { GoalsPageClient } from "./goals-page-client";
 
@@ -13,9 +14,8 @@ export const metadata: Metadata = {
 export default async function GoalsPage() {
 	const goals = await getAllGoals();
 
-	// JSON round-trip to match the shape the API returns (dates as strings)
-	// so initialData is consistent with subsequent TanStack Query refetches
-	const serialized = JSON.parse(JSON.stringify(goals)) as GoalWithStats[];
+	// Convert Date objects to ISO strings so initialData matches TanStack Query refetches
+	const serialized = serializeDates(goals) as GoalWithStats[];
 
 	return <GoalsPageClient initialGoals={serialized} />;
 }

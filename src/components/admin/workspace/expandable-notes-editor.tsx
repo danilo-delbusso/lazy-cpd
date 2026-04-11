@@ -22,7 +22,7 @@ export function ExpandableNotesEditor({
 	onNotesChange,
 	activityTitle,
 	goalTitle,
-}: ExpandableNotesEditorProps) {
+}: Readonly<ExpandableNotesEditorProps>) {
 	const aiStream = useAIStream();
 	const preAINotesRef = useRef<string | null>(null);
 	const prevStreamingRef = useRef(false);
@@ -37,7 +37,7 @@ export function ExpandableNotesEditor({
 	return (
 		<div>
 			<div className="flex items-center justify-between">
-				<label className="block text-sm font-medium text-gray-700">Notes</label>
+				<span className="block text-sm font-medium text-gray-700">Notes</span>
 				{notes.trim() && !aiStream.isStreaming && (
 					<button
 						type="button"
@@ -52,6 +52,7 @@ export function ExpandableNotesEditor({
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
+							aria-hidden="true"
 							strokeWidth={2}
 						>
 							<path
@@ -65,7 +66,7 @@ export function ExpandableNotesEditor({
 				)}
 				{aiStream.isStreaming && (
 					<span className="flex items-center gap-1 text-xs text-amber-500">
-						<span className="h-3 w-3 animate-spin rounded-full border border-amber-400 border-t-transparent" />
+						<span className="h-3 w-3 animate-spin rounded-full border border-amber-400 border-t-transparent" />{" "}
 						Expanding...
 					</span>
 				)}
@@ -94,7 +95,7 @@ export function ExpandableNotesEditor({
 						<button
 							type="button"
 							onClick={() => {
-								onNotesChange(preAINotesRef.current!);
+								if (preAINotesRef.current !== null) onNotesChange(preAINotesRef.current);
 								preAINotesRef.current = null;
 							}}
 							className="text-xs text-stone-400 hover:text-stone-600"
@@ -105,7 +106,7 @@ export function ExpandableNotesEditor({
 							type="button"
 							onClick={() => {
 								aiStream.start("/api/ai/expand-notes", {
-									notes: preAINotesRef.current!,
+									notes: preAINotesRef.current ?? "",
 									activityTitle,
 									goalTitle,
 								});

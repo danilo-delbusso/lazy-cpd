@@ -11,7 +11,7 @@ interface WorkspaceToolbarProps {
 	goalTitle: string;
 }
 
-export function WorkspaceToolbar({ goalId, goalTitle }: WorkspaceToolbarProps) {
+export function WorkspaceToolbar({ goalId, goalTitle }: Readonly<WorkspaceToolbarProps>) {
 	const deleteGoal = useDeleteGoal();
 	const confirm = useConfirm();
 	const router = useRouter();

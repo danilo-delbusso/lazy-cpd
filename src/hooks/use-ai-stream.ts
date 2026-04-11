@@ -10,6 +10,55 @@ interface UseAIStreamReturn {
 	abort: () => void;
 }
 
+interface SSECallbacks {
+	onText: (text: string) => void;
+	onError: (error: string) => void;
+}
+
+function parseSSELine(line: string, callbacks: SSECallbacks): void {
+	if (!line.startsWith("data: ")) return;
+
+	const payload = line.slice(6).trim();
+	if (payload === "[DONE]") return;
+
+	try {
+		const parsed = JSON.parse(payload);
+		if (parsed.error) {
+			callbacks.onError(parsed.error);
+		} else if (parsed.text) {
+			callbacks.onText(parsed.text);
+		}
+	} catch {
+		// skip malformed chunks
+	}
+}
+
+async function readSSEStream(
+	reader: ReadableStreamDefaultReader<Uint8Array>,
+	callbacks: SSECallbacks,
+): Promise<void> {
+	const decoder = new TextDecoder();
+	let buffer = "";
+
+	while (true) {
+		const { done, value } = await reader.read();
+		if (done) break;
+
+		buffer += decoder.decode(value, { stream: true });
+		const lines = buffer.split("\n");
+		buffer = lines.pop() ?? "";
+
+		for (const line of lines) {
+			parseSSELine(line, callbacks);
+		}
+	}
+}
+
+function handleStreamError(err: unknown, setError: (e: string) => void): void {
+	if (err instanceof DOMException && err.name === "AbortError") return;
+	setError(err instanceof Error ? err.message : "Stream failed");
+}
+
 export function useAIStream(): UseAIStreamReturn {
 	const [data, setData] = useState("");
 	const [isStreaming, setIsStreaming] = useState(false);
@@ -31,6 +80,11 @@ export function useAIStream(): UseAIStreamReturn {
 
 			const controller = new AbortController();
 			abortRef.current = controller;
+
+			const callbacks: SSECallbacks = {
+				onText: (text) => setData((prev) => prev + text),
+				onError: (msg) => setError(msg),
+			};
 
 			try {
 				const res = await fetch(url, {
@@ -54,40 +108,9 @@ export function useAIStream(): UseAIStreamReturn {
 					return;
 				}
 
-				const decoder = new TextDecoder();
-				let buffer = "";
-
-				while (true) {
-					const { done, value } = await reader.read();
-					if (done) break;
-
-					buffer += decoder.decode(value, { stream: true });
-					const lines = buffer.split("\n");
-					buffer = lines.pop() ?? "";
-
-					for (const line of lines) {
-						if (!line.startsWith("data: ")) continue;
-						const payload = line.slice(6).trim();
-						if (payload === "[DONE]") continue;
-
-						try {
-							const parsed = JSON.parse(payload);
-							if (parsed.error) {
-								setError(parsed.error);
-							} else if (parsed.text) {
-								setData((prev) => prev + parsed.text);
-							}
-						} catch {
-							// skip malformed chunks
-						}
-					}
-				}
+				await readSSEStream(reader, callbacks);
 			} catch (err) {
-				if (err instanceof DOMException && err.name === "AbortError") {
-					// user cancelled — not an error
-				} else {
-					setError(err instanceof Error ? err.message : "Stream failed");
-				}
+				handleStreamError(err, (msg) => setError(msg));
 			} finally {
 				setIsStreaming(false);
 				abortRef.current = null;

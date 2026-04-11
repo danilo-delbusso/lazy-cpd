@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ActivityWithJoins } from "@/hooks/use-activities";
 import { getAllActivities } from "@/lib/db/queries/activities";
+import { serializeDates } from "@/lib/utils/serialize";
 import type { PaginatedResult } from "@/types";
 import { TimelinePageClient } from "./timeline-page-client";
 
@@ -14,11 +15,10 @@ export const metadata: Metadata = {
 export default async function TimelinePage() {
 	const activitiesPage = await getAllActivities({}, { page: 1, limit: 30 });
 
-	// JSON round-trip to match the shape the API returns (dates as strings)
-	// so initialData is consistent with subsequent TanStack Query refetches
-	const serialized = JSON.parse(
-		JSON.stringify(activitiesPage),
-	) as PaginatedResult<ActivityWithJoins>;
+	// Convert Date objects to ISO strings so initialData matches TanStack Query refetches
+	const serialized = serializeDates(
+		activitiesPage,
+	) as unknown as PaginatedResult<ActivityWithJoins>;
 
 	return <TimelinePageClient initialActivities={serialized} />;
 }

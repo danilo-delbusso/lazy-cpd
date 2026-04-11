@@ -16,7 +16,7 @@ export function TagInput({
 	suggestions,
 	placeholder = "Type to search tags or add new...",
 	id = "tags",
-}: TagInputProps) {
+}: Readonly<TagInputProps>) {
 	const [tagInput, setTagInput] = useState("");
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [highlightIdx, setHighlightIdx] = useState(-1);
@@ -120,9 +120,9 @@ export function TagInput({
 								}}
 								className="flex w-full items-center gap-2 border-t border-stone-100 px-3 py-1.5 text-left text-sm text-stone-500 hover:bg-stone-50"
 							>
-								Create &ldquo;
+								{`Create \u201C`}
 								<span className="font-medium text-stone-700">{tagInput.trim().toLowerCase()}</span>
-								&rdquo;
+								{`\u201D`}
 							</button>
 						)}
 					</div>

@@ -9,7 +9,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 	({ className, label, error, showCount, maxLength, value, id, ...props }, ref) => {
-		const textareaId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
+		const textareaId = id ?? label?.toLowerCase().replaceAll(/\s+/g, "-");
 		const charCount = typeof value === "string" ? value.length : 0;
 
 		return (

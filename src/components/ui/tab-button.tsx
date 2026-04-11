@@ -8,11 +8,11 @@ export function TabButton({
 	active,
 	href,
 	children,
-}: {
+}: Readonly<{
 	active: boolean;
 	href: string;
 	children: React.ReactNode;
-}) {
+}>) {
 	return (
 		<Link
 			href={href}

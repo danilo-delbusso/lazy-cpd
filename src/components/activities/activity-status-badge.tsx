@@ -7,7 +7,7 @@ interface ActivityStatusBadgeProps {
 	className?: string;
 }
 
-export function ActivityStatusBadge({ status, className }: ActivityStatusBadgeProps) {
+export function ActivityStatusBadge({ status, className }: Readonly<ActivityStatusBadgeProps>) {
 	return (
 		<Badge colorClasses={activityStatusColors[status]} className={className}>
 			{activityStatusLabels[status]}

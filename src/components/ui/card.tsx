@@ -1,11 +1,11 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils/cn";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
 	hover?: boolean;
 }
 
-export function Card({ className, hover = false, children, ...props }: CardProps) {
+export function Card({ className, hover = false, children, ...props }: Readonly<CardProps>) {
 	return (
 		<div
 			className={cn(
@@ -20,7 +20,11 @@ export function Card({ className, hover = false, children, ...props }: CardProps
 	);
 }
 
-export function CardHeader({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
+export function CardHeader({
+	className,
+	children,
+	...props
+}: Readonly<HTMLAttributes<HTMLDivElement>>) {
 	return (
 		<div className={cn("border-b border-slate-100 px-6 py-4", className)} {...props}>
 			{children}
@@ -28,7 +32,11 @@ export function CardHeader({ className, children, ...props }: HTMLAttributes<HTM
 	);
 }
 
-export function CardBody({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
+export function CardBody({
+	className,
+	children,
+	...props
+}: Readonly<HTMLAttributes<HTMLDivElement>>) {
 	return (
 		<div className={cn("px-6 py-4", className)} {...props}>
 			{children}
@@ -36,7 +44,11 @@ export function CardBody({ className, children, ...props }: HTMLAttributes<HTMLD
 	);
 }
 
-export function CardFooter({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
+export function CardFooter({
+	className,
+	children,
+	...props
+}: Readonly<HTMLAttributes<HTMLDivElement>>) {
 	return (
 		<div className={cn("border-t border-slate-100 px-6 py-4", className)} {...props}>
 			{children}

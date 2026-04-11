@@ -14,7 +14,7 @@ export function MarkdownEditor({
 	onChange,
 	placeholder = "Write markdown...",
 	height = 300,
-}: MarkdownEditorProps) {
+}: Readonly<MarkdownEditorProps>) {
 	return (
 		<div data-color-mode="light">
 			<MDEditor

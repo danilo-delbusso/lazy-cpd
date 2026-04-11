@@ -9,7 +9,7 @@ export function useResponsiveView() {
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
-		const mq = window.matchMedia("(max-width: 639px)");
+		const mq = globalThis.matchMedia("(max-width: 639px)");
 		setIsMobile(mq.matches);
 		const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
 		mq.addEventListener("change", handler);

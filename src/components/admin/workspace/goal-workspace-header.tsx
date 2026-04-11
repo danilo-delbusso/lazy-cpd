@@ -16,7 +16,7 @@ interface GoalWorkspaceHeaderProps {
 	};
 }
 
-export function GoalWorkspaceHeader({ goal }: GoalWorkspaceHeaderProps) {
+export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>) {
 	const updateGoal = useUpdateGoal();
 	const [editingTitle, setEditingTitle] = useState(false);
 	const [editingDesc, setEditingDesc] = useState(false);
@@ -127,12 +127,13 @@ export function GoalWorkspaceHeader({ goal }: GoalWorkspaceHeaderProps) {
 							className="w-full rounded-lg border border-blue-300 px-2 py-1 text-2xl font-bold text-stone-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
 						/>
 					) : (
-						<h1
+						<button
+							type="button"
 							onClick={() => setEditingTitle(true)}
-							className="cursor-pointer rounded-lg px-2 py-1 text-2xl font-bold text-stone-900 hover:bg-stone-100"
+							className="w-full cursor-pointer rounded-lg px-2 py-1 text-left text-2xl font-bold text-stone-900 hover:bg-stone-100"
 						>
 							{goal.title}
-						</h1>
+						</button>
 					)}
 
 					{editingDesc ? (
@@ -145,15 +146,16 @@ export function GoalWorkspaceHeader({ goal }: GoalWorkspaceHeaderProps) {
 							className="mt-1 w-full rounded-lg border border-blue-300 px-2 py-1 text-sm text-stone-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
 						/>
 					) : (
-						<p
+						<button
+							type="button"
 							onClick={() => setEditingDesc(true)}
 							className={cn(
-								"mt-1 cursor-pointer rounded-lg px-2 py-1 text-sm hover:bg-stone-100",
+								"mt-1 w-full cursor-pointer rounded-lg px-2 py-1 text-left text-sm hover:bg-stone-100",
 								goal.description ? "text-stone-600" : "text-stone-400 italic",
 							)}
 						>
 							{goal.description || "Add a description..."}
-						</p>
+						</button>
 					)}
 				</div>
 

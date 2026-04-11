@@ -51,9 +51,9 @@ export default function AdminDashboard() {
 function McpDetails() {
 	const [copied, setCopied] = useState<string | null>(null);
 	const baseUrl =
-		typeof window !== "undefined"
-			? `${window.location.protocol}//${window.location.host}`
-			: "http://localhost:3000";
+		globalThis.window === undefined
+			? "http://localhost:3000"
+			: `${globalThis.location.protocol}//${globalThis.location.host}`;
 	const mcpUrl = `${baseUrl}/api/mcp`;
 
 	const addCommand = `claude mcp add -s user --transport http cpd-portal ${mcpUrl} --header "Authorization: Bearer \${CPD_MCP_TOKEN}"`;
@@ -64,6 +64,7 @@ function McpDetails() {
 				"cpd-portal": {
 					type: "http",
 					url: mcpUrl,
+					// biome-ignore lint/suspicious/noTemplateCurlyInString: literal placeholder for user to copy
 					headers: { Authorization: "Bearer ${CPD_MCP_TOKEN}" },
 				},
 			},
@@ -136,12 +137,12 @@ function McpField({
 	value,
 	onCopy,
 	copied,
-}: {
+}: Readonly<{
 	label: string;
 	value: string;
 	onCopy: () => void;
 	copied: boolean;
-}) {
+}>) {
 	return (
 		<div className="flex items-center justify-between gap-3">
 			<div className="min-w-0 flex-1">
@@ -153,7 +154,7 @@ function McpField({
 	);
 }
 
-function CopyButton({ onClick, copied }: { onClick: () => void; copied: boolean }) {
+function CopyButton({ onClick, copied }: Readonly<{ onClick: () => void; copied: boolean }>) {
 	return (
 		<button
 			type="button"
@@ -165,7 +166,7 @@ function CopyButton({ onClick, copied }: { onClick: () => void; copied: boolean 
 	);
 }
 
-function StatCard({ label, value }: { label: string; value: number }) {
+function StatCard({ label, value }: Readonly<{ label: string; value: number }>) {
 	return (
 		<div className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
 			<p className="text-xs font-medium uppercase tracking-wider text-stone-400">{label}</p>
@@ -179,12 +180,12 @@ function QuickAction({
 	title,
 	description,
 	count,
-}: {
+}: Readonly<{
 	href: string;
 	title: string;
 	description: string;
 	count?: number;
-}) {
+}>) {
 	return (
 		<Link
 			href={href}

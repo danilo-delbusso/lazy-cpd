@@ -2,6 +2,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Direction = "forward" | "reverse";
 
+/** Build an index order that reveals characters from the center outward */
+function computeCenterOutOrder(len: number): number[] {
+	const order: number[] = [];
+	const middle = Math.floor(len / 2);
+	let offset = 0;
+	while (order.length < len) {
+		const idx = offset % 2 === 0 ? middle + offset / 2 : middle - Math.ceil(offset / 2);
+		if (idx >= 0 && idx < len) order.push(idx);
+		offset++;
+	}
+	return order.slice(0, len);
+}
+
 interface UseDecryptedTextOptions {
 	text: string;
 	speed?: number;
@@ -58,29 +71,14 @@ export function useDecryptedText({
 
 	const computeOrder = useCallback(
 		(len: number): number[] => {
-			const order: number[] = [];
-			if (len <= 0) return order;
+			if (len <= 0) return [];
 			if (revealDirection === "start") {
-				for (let i = 0; i < len; i++) order.push(i);
-				return order;
+				return Array.from({ length: len }, (_, i) => i);
 			}
 			if (revealDirection === "end") {
-				for (let i = len - 1; i >= 0; i--) order.push(i);
-				return order;
+				return Array.from({ length: len }, (_, i) => len - 1 - i);
 			}
-			const middle = Math.floor(len / 2);
-			let offset = 0;
-			while (order.length < len) {
-				if (offset % 2 === 0) {
-					const idx = middle + offset / 2;
-					if (idx >= 0 && idx < len) order.push(idx);
-				} else {
-					const idx = middle - Math.ceil(offset / 2);
-					if (idx >= 0 && idx < len) order.push(idx);
-				}
-				offset++;
-			}
-			return order.slice(0, len);
+			return computeCenterOutOrder(len);
 		},
 		[revealDirection],
 	);
@@ -133,13 +131,8 @@ export function useDecryptedText({
 		setIsAnimating(true);
 	}, [sequential, computeOrder, fillAllIndices, shuffleText, text]);
 
-	// Main animation loop
-	useEffect(() => {
-		if (!isAnimating) return;
-
-		let currentIteration = 0;
-
-		const getNextIndex = (revealedSet: Set<number>): number => {
+	const getNextIndex = useCallback(
+		(revealedSet: Set<number>): number => {
 			const textLength = text.length;
 			if (revealDirection === "start") return revealedSet.size;
 			if (revealDirection === "end") return textLength - 1 - revealedSet.size;
@@ -151,68 +144,83 @@ export function useDecryptedText({
 				if (!revealedSet.has(i)) return i;
 			}
 			return 0;
+		},
+		[text.length, revealDirection],
+	);
+
+	// Main animation loop
+	useEffect(() => {
+		if (!isAnimating) return;
+
+		let currentIteration = 0;
+
+		const stepSequentialForward = (prev: Set<number>, stop: () => void): Set<number> => {
+			if (prev.size >= text.length) {
+				stop();
+				setIsAnimating(false);
+				setIsDecrypted(true);
+				return prev;
+			}
+			const next = new Set(prev);
+			next.add(getNextIndex(prev));
+			setDisplayText(shuffleText(text, next));
+			return next;
+		};
+
+		const stepSequentialReverse = (prev: Set<number>, stop: () => void): Set<number> => {
+			if (pointerRef.current >= orderRef.current.length) {
+				stop();
+				setIsAnimating(false);
+				setIsDecrypted(false);
+				return prev;
+			}
+			const next = new Set(prev);
+			next.delete(orderRef.current[pointerRef.current++]);
+			setDisplayText(shuffleText(text, next));
+			if (next.size === 0) {
+				stop();
+				setIsAnimating(false);
+				setIsDecrypted(false);
+			}
+			return next;
+		};
+
+		const stepRandomForward = (prev: Set<number>, stop: () => void): Set<number> => {
+			setDisplayText(shuffleText(text, prev));
+			currentIteration++;
+			if (currentIteration >= maxIterations) {
+				stop();
+				setIsAnimating(false);
+				setDisplayText(text);
+				setIsDecrypted(true);
+			}
+			return prev;
+		};
+
+		const stepRandomReverse = (prev: Set<number>, stop: () => void): Set<number> => {
+			const currentSet = prev.size === 0 ? fillAllIndices() : prev;
+			const removeCount = Math.max(1, Math.ceil(text.length / Math.max(1, maxIterations)));
+			const nextSet = removeRandomIndices(currentSet, removeCount);
+			setDisplayText(shuffleText(text, nextSet));
+			currentIteration++;
+			if (nextSet.size === 0 || currentIteration >= maxIterations) {
+				stop();
+				setIsAnimating(false);
+				setIsDecrypted(false);
+				setDisplayText(shuffleText(text, new Set()));
+				return new Set();
+			}
+			return nextSet;
 		};
 
 		const interval = setInterval(() => {
+			const stop = () => clearInterval(interval);
+
 			setRevealedIndices((prev) => {
-				if (sequential) {
-					if (direction === "forward") {
-						if (prev.size < text.length) {
-							const next = new Set(prev);
-							next.add(getNextIndex(prev));
-							setDisplayText(shuffleText(text, next));
-							return next;
-						}
-						clearInterval(interval);
-						setIsAnimating(false);
-						setIsDecrypted(true);
-						return prev;
-					}
-					if (direction === "reverse") {
-						if (pointerRef.current < orderRef.current.length) {
-							const next = new Set(prev);
-							next.delete(orderRef.current[pointerRef.current++]);
-							setDisplayText(shuffleText(text, next));
-							if (next.size === 0) {
-								clearInterval(interval);
-								setIsAnimating(false);
-								setIsDecrypted(false);
-							}
-							return next;
-						}
-						clearInterval(interval);
-						setIsAnimating(false);
-						setIsDecrypted(false);
-						return prev;
-					}
-				} else {
-					if (direction === "forward") {
-						setDisplayText(shuffleText(text, prev));
-						currentIteration++;
-						if (currentIteration >= maxIterations) {
-							clearInterval(interval);
-							setIsAnimating(false);
-							setDisplayText(text);
-							setIsDecrypted(true);
-						}
-						return prev;
-					}
-					if (direction === "reverse") {
-						const currentSet = prev.size === 0 ? fillAllIndices() : prev;
-						const removeCount = Math.max(1, Math.ceil(text.length / Math.max(1, maxIterations)));
-						const nextSet = removeRandomIndices(currentSet, removeCount);
-						setDisplayText(shuffleText(text, nextSet));
-						currentIteration++;
-						if (nextSet.size === 0 || currentIteration >= maxIterations) {
-							clearInterval(interval);
-							setIsAnimating(false);
-							setIsDecrypted(false);
-							setDisplayText(shuffleText(text, new Set()));
-							return new Set();
-						}
-						return nextSet;
-					}
-				}
+				if (sequential && direction === "forward") return stepSequentialForward(prev, stop);
+				if (sequential && direction === "reverse") return stepSequentialReverse(prev, stop);
+				if (direction === "forward") return stepRandomForward(prev, stop);
+				if (direction === "reverse") return stepRandomReverse(prev, stop);
 				return prev;
 			});
 		}, speed);
@@ -223,13 +231,11 @@ export function useDecryptedText({
 		speed,
 		maxIterations,
 		sequential,
-		revealDirection,
 		shuffleText,
 		direction,
 		fillAllIndices,
 		removeRandomIndices,
-		characters,
-		useOriginalCharsOnly,
+		getNextIndex,
 	]);
 
 	// View observer

@@ -8,7 +8,7 @@ interface MarkdownContentProps {
 	children: string;
 }
 
-export function MarkdownContent({ children }: MarkdownContentProps) {
+export function MarkdownContent({ children }: Readonly<MarkdownContentProps>) {
 	return (
 		<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
 			{children}

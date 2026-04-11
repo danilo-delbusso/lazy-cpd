@@ -15,7 +15,7 @@ export function GradientText({
 	colors = ["#f59e0b", "#eab308", "#d97706", "#fbbf24", "#f59e0b"],
 	animationSpeed = 6,
 	className = "",
-}: GradientTextProps) {
+}: Readonly<GradientTextProps>) {
 	const ref = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {

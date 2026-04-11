@@ -19,8 +19,8 @@ export const formatUpdateSchema = formatSchema.partial();
 export function slugify(name: string): string {
 	return name
 		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, "_")
-		.replace(/^_|_$/g, "");
+		.replaceAll(/[^a-z0-9]+/g, "_")
+		.replaceAll(/^_|_$/g, "");
 }
 
 export type FormatInput = z.infer<typeof formatSchema>;

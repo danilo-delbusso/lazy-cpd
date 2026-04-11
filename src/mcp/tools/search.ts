@@ -19,7 +19,7 @@ export function registerSearchTools(server: McpServer) {
 		},
 		async ({ query, scope }) => {
 			try {
-				const escaped = query.replace(/%/g, "\\%").replace(/_/g, "\\_");
+				const escaped = query.replaceAll("%", String.raw`\%`).replaceAll("_", String.raw`\_`);
 				const pattern = `%${escaped}%`;
 				const results: { goals?: unknown[]; activities?: unknown[] } = {};
 

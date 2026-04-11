@@ -11,11 +11,11 @@ export function GoalDetailPageClient({
 	goalId,
 	initialGoal,
 	initialActivities,
-}: {
+}: Readonly<{
 	goalId: string;
 	initialGoal: Parameters<typeof GoalDetailView>[0]["initialGoal"];
 	initialActivities: PaginatedResult<ActivityWithJoins>;
-}) {
+}>) {
 	const viewMode = useResponsiveView();
 	const router = useRouter();
 

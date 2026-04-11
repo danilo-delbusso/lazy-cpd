@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { slugify } from "@/lib/validations/format";
@@ -18,7 +18,12 @@ interface FormatFormProps {
 	isSubmitting: boolean;
 }
 
-export function FormatForm({ mode, initialData, onSubmit, isSubmitting }: FormatFormProps) {
+export function FormatForm({
+	mode,
+	initialData,
+	onSubmit,
+	isSubmitting,
+}: Readonly<FormatFormProps>) {
 	const router = useRouter();
 	const [name, setName] = useState(initialData?.name ?? "");
 	const [color, setColor] = useState(initialData?.color ?? "#6366f1");
@@ -26,8 +31,7 @@ export function FormatForm({ mode, initialData, onSubmit, isSubmitting }: Format
 
 	const slug = slugify(name);
 
-	async function handleSubmit(e: FormEvent) {
-		e.preventDefault();
+	async function handleSubmit() {
 		const errs: Record<string, string> = {};
 		if (name.length < 2) errs.name = "Name must be at least 2 characters";
 		if (Object.keys(errs).length > 0) {
@@ -40,7 +44,7 @@ export function FormatForm({ mode, initialData, onSubmit, isSubmitting }: Format
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
+		<form action={handleSubmit} className="space-y-6">
 			<div>
 				<label htmlFor="name" className="block text-sm font-medium text-gray-700">
 					Name

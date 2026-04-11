@@ -31,7 +31,7 @@ export function DecryptedText({
 	animateOn = "hover",
 	clickMode = "once",
 	...props
-}: DecryptedTextProps) {
+}: Readonly<DecryptedTextProps>) {
 	const {
 		displayText,
 		isAnimating,
@@ -53,12 +53,15 @@ export function DecryptedText({
 		clickMode,
 	});
 
-	const interactionProps =
-		animateOn === "hover" || animateOn === "inViewHover"
-			? { onMouseEnter: triggerHoverDecrypt, onMouseLeave: resetToPlainText }
-			: animateOn === "click"
-				? { onClick: handleClick }
-				: {};
+	const interactionProps = (() => {
+		if (animateOn === "hover" || animateOn === "inViewHover") {
+			return { onMouseEnter: triggerHoverDecrypt, onMouseLeave: resetToPlainText };
+		}
+		if (animateOn === "click") {
+			return { onClick: handleClick };
+		}
+		return {};
+	})();
 
 	return (
 		<motion.span
@@ -72,7 +75,7 @@ export function DecryptedText({
 				{displayText.split("").map((char, index) => {
 					const isRevealed = revealedIndices.has(index) || (!isAnimating && isDecrypted);
 					return (
-						<span key={index} className={isRevealed ? className : encryptedClassName}>
+						<span key={`c${index}`} className={isRevealed ? className : encryptedClassName}>
 							{char}
 						</span>
 					);

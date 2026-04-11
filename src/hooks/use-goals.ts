@@ -27,7 +27,7 @@ interface GoalDetailActivity {
 	format: { id: string; name: string; color: string };
 }
 
-interface GoalDetail {
+export interface GoalDetail {
 	id: string;
 	title: string;
 	description: string;
