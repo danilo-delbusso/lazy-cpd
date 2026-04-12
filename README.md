@@ -1,7 +1,6 @@
 # CPD Portal
 
 [![CI](https://github.com/Ricky-Stevens/cpd-portal2/actions/workflows/ci.yml/badge.svg)](https://github.com/Ricky-Stevens/cpd-portal2/actions/workflows/ci.yml)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=Ricky-Stevens_cpd-portal2&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Ricky-Stevens_cpd-portal2)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Ricky-Stevens_cpd-portal2&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Ricky-Stevens_cpd-portal2)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Ricky-Stevens_cpd-portal2&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Ricky-Stevens_cpd-portal2)
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=Ricky-Stevens_cpd-portal2&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Ricky-Stevens_cpd-portal2)
