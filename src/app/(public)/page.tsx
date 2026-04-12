@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { getAllGoals } from "@/lib/db/queries/goals";
 import { serializeDates } from "@/lib/utils/serialize";

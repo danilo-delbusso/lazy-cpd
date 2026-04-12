@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import type { ActivityWithJoins } from "@/hooks/use-activities";
 import { getAllActivities } from "@/lib/db/queries/activities";
