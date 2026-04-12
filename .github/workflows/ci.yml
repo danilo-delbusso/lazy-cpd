@@ -30,18 +30,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
-      - run: bun run test:coverage
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 7
+      - run: bun run test:unit
 
-  # Runs the full unit test suite against a real PostgreSQL instance to catch
-  # tests that accidentally depend on the database being available.
+  # Runs the full test suite (unit + integration) against a real PostgreSQL
+  # instance and produces a merged coverage report.
   unit-tests-db:
-    name: Unit Tests (with DB)
+    name: Unit & Integration Tests (with DB)
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -64,7 +58,13 @@ jobs:
       - run: bun run db:generate
       - run: bun run db:migrate
       - run: bun run db:seed
-      - run: bun run test
+      - run: bun run test:coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
 
   e2e-tests:
     name: E2E Tests

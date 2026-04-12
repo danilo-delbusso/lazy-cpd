@@ -42,8 +42,8 @@ test.describe("Admin Authentication", () => {
 		await page.getByRole("button", { name: /sign in/i }).click();
 		await expect(page).toHaveURL("/admin", { timeout: 10000 });
 
-		// Navigate to goals management
-		await page.getByRole("link", { name: "Goals" }).click();
+		// Navigate to goals management via the nav bar (not the QuickAction card)
+		await page.getByRole("navigation").getByRole("link", { name: "Goals" }).click();
 		await expect(page.getByRole("heading", { name: "Goals" })).toBeVisible();
 	});
 });

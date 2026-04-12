@@ -75,6 +75,7 @@ export function DecryptedText({
 				{displayText.split("").map((char, index) => {
 					const isRevealed = revealedIndices.has(index) || (!isAnimating && isDecrypted);
 					return (
+						// biome-ignore lint/suspicious/noArrayIndexKey: character positions are the stable identity
 						<span key={`c${index}`} className={isRevealed ? className : encryptedClassName}>
 							{char}
 						</span>

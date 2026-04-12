@@ -4,7 +4,7 @@ import { createSession } from "@/lib/auth/session";
 
 // Simple in-memory rate limiting with TTL pruning
 const attempts = new Map<string, { count: number; resetAt: number }>();
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = process.env.NODE_ENV === "production" ? 5 : 50;
 const WINDOW_MS = 60_000;
 const MAX_ENTRIES = 1000;
 

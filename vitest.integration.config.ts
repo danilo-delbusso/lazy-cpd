@@ -14,7 +14,12 @@ export default defineConfig({
 			reporter: ["lcov"],
 			reportsDirectory: "coverage-integration",
 			include: ["src/**/*.{ts,tsx}"],
-			exclude: ["src/test/**", "src/**/*.d.ts", "src/**/*.test.{ts,tsx}", "src/**/*.integration.test.ts"],
+			exclude: [
+				"src/test/**",
+				"src/**/*.d.ts",
+				"src/**/*.test.{ts,tsx}",
+				"src/**/*.integration.test.ts",
+			],
 		},
 		// Run serially — integration tests share a DB
 		sequence: { concurrent: false },

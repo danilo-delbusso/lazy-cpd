@@ -16,7 +16,7 @@ test.describe("Admin Goals CRUD", () => {
 	});
 
 	test("can navigate to goals management", async ({ page }) => {
-		await page.getByRole("link", { name: "Goals" }).click();
+		await page.getByRole("navigation").getByRole("link", { name: "Goals" }).click();
 		await expect(page.getByRole("heading", { name: "Goals" })).toBeVisible();
 		await expect(page.getByRole("link", { name: "Add Goal" })).toBeVisible();
 	});
