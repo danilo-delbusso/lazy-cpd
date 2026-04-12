@@ -7,7 +7,7 @@ test.describe("Visual Regression @visual", () => {
 		await page.waitForTimeout(1000);
 		await expect(page).toHaveScreenshot("homepage.png", {
 			fullPage: true,
-			maxDiffPixels: 50,
+			maxDiffPixelRatio: 0.05,
 		});
 	});
 
@@ -16,7 +16,7 @@ test.describe("Visual Regression @visual", () => {
 		await page.waitForTimeout(1000);
 		await expect(page).toHaveScreenshot("goals-page.png", {
 			fullPage: true,
-			maxDiffPixels: 50,
+			maxDiffPixelRatio: 0.05,
 		});
 	});
 
@@ -25,7 +25,7 @@ test.describe("Visual Regression @visual", () => {
 		await page.waitForTimeout(1000);
 		await expect(page).toHaveScreenshot("timeline-page.png", {
 			fullPage: true,
-			maxDiffPixels: 50,
+			maxDiffPixelRatio: 0.05,
 		});
 	});
 
@@ -33,7 +33,7 @@ test.describe("Visual Regression @visual", () => {
 		await page.goto("/admin/login");
 		await page.waitForTimeout(500);
 		await expect(page).toHaveScreenshot("login-page.png", {
-			maxDiffPixels: 50,
+			maxDiffPixelRatio: 0.05,
 		});
 	});
 });

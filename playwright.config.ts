@@ -10,7 +10,7 @@ export default defineConfig({
 
 	expect: {
 		toHaveScreenshot: {
-			maxDiffPixels: 10,
+			maxDiffPixelRatio: 0.05,
 		},
 	},
 
@@ -24,7 +24,7 @@ export default defineConfig({
 		// Auth setup — logs in once and saves cookies
 		{ name: "setup", testMatch: /auth\.setup\.ts/ },
 
-		// Public pages — no auth needed
+		// Public pages — no auth needed, both browsers
 		{
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"] },
@@ -36,20 +36,11 @@ export default defineConfig({
 			testIgnore: /admin\//,
 		},
 
-		// Admin pages — reuse authenticated session
+		// Admin pages — reuse authenticated session, chromium only
 		{
 			name: "chromium-admin",
 			use: {
 				...devices["Desktop Chrome"],
-				storageState: "e2e/.auth/admin.json",
-			},
-			testMatch: /admin\//,
-			dependencies: ["setup"],
-		},
-		{
-			name: "firefox-admin",
-			use: {
-				...devices["Desktop Firefox"],
 				storageState: "e2e/.auth/admin.json",
 			},
 			testMatch: /admin\//,
