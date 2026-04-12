@@ -10,6 +10,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_SITE_OWNER="Ricky Stevens"
+ENV NEXT_PUBLIC_GITHUB_URL="https://github.com/Ricky-Stevens"
+ENV NEXT_PUBLIC_LINKEDIN_URL="https://www.linkedin.com/in/rickysstevens/"
 RUN bun run build
 
 # Stage 3: Production runtime
