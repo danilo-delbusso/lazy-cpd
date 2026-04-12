@@ -1,11 +1,34 @@
 import { relations } from "drizzle-orm";
-import { date, index, integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+	date,
+	index,
+	integer,
+	pgEnum,
+	pgSchema,
+	pgTable,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
+
+// --- Schema ---
+// When DB_SCHEMA is set (e.g. "cpd_portal"), tables live in a custom schema —
+// useful for Supabase where you share a database with other apps.
+// When unset, tables use the default public schema (vanilla Postgres).
+
+const schemaName = process.env.DB_SCHEMA;
+
+export const cpdSchema = schemaName ? pgSchema(schemaName) : null;
+
+// biome-ignore lint/suspicious/noExplicitAny: pgSchema.table and pgTable have compatible signatures but differ in generic parameter
+const defineTable: typeof pgTable = (cpdSchema ? cpdSchema.table.bind(cpdSchema) : pgTable) as any;
+// biome-ignore lint/suspicious/noExplicitAny: pgSchema.enum and pgEnum have compatible signatures but differ in generic parameter
+const defineEnum: typeof pgEnum = (cpdSchema ? cpdSchema.enum.bind(cpdSchema) : pgEnum) as any;
 
 // --- Enums ---
 
-export const goalStatusEnum = pgEnum("goal_status", ["open", "upcoming", "completed"]);
+export const goalStatusEnum = defineEnum("goal_status", ["open", "upcoming", "completed"]);
 
-export const activityStatusEnum = pgEnum("activity_status", [
+export const activityStatusEnum = defineEnum("activity_status", [
 	"upcoming",
 	"in_progress",
 	"completed",
@@ -13,7 +36,7 @@ export const activityStatusEnum = pgEnum("activity_status", [
 
 // --- Tables ---
 
-export const goals = pgTable("goals", {
+export const goals = defineTable("goals", {
 	id: text("id").primaryKey(),
 	title: text("title").notNull(),
 	description: text("description").notNull(),
@@ -27,7 +50,7 @@ export const goals = pgTable("goals", {
 		.$onUpdate(() => new Date()),
 });
 
-export const activityFormats = pgTable("activity_formats", {
+export const activityFormats = defineTable("activity_formats", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull().unique(),
 	slug: text("slug").notNull().unique(),
@@ -40,7 +63,7 @@ export const activityFormats = pgTable("activity_formats", {
 		.$onUpdate(() => new Date()),
 });
 
-export const activities = pgTable(
+export const activities = defineTable(
 	"activities",
 	{
 		id: text("id").primaryKey(),

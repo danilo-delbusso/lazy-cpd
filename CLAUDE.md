@@ -29,6 +29,14 @@ Only **expand-notes** remains (`src/lib/ai/capabilities/expand-notes.ts`). All o
 - The proxy protects `/admin/*` routes (except `/admin/login`) via JWT verification
 - Auth is env-based: single `ADMIN_PASSWORD` env var, no database-backed users
 
+## Database Schema Isolation
+- `DB_SCHEMA` env var controls which PostgreSQL schema tables live in
+- **Unset (default):** tables in `public` schema — vanilla Postgres, no setup needed
+- **Set (e.g. `cpd_portal`):** tables in a custom schema — for Supabase or shared databases
+- Schema is defined in `src/lib/db/schema.ts` via conditional `pgSchema`/`pgTable`
+- `drizzle.config.ts` uses `schemaFilter` when `DB_SCHEMA` is set to avoid touching other schemas
+- When switching schemas, run `drizzle-kit push` or `drizzle-kit generate` + `drizzle-kit migrate`
+
 ## Stack
 - **Runtime:** Bun (not npm) — use `bun add`, `bun run`, `bunx`
 - **Framework:** Next.js 16 with App Router, `output: "standalone"` for Docker
