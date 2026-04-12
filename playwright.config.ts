@@ -28,12 +28,19 @@ export default defineConfig({
 		{
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"] },
-			testIgnore: /admin\//,
+			testIgnore: [/admin\//, /visual\//],
 		},
 		{
 			name: "firefox",
 			use: { ...devices["Desktop Firefox"] },
-			testIgnore: /admin\//,
+			testIgnore: [/admin\//, /visual\//],
+		},
+
+		// Visual regression — chromium only (one browser is sufficient for layout regression)
+		{
+			name: "chromium-visual",
+			use: { ...devices["Desktop Chrome"] },
+			testMatch: /visual\//,
 		},
 
 		// Admin pages — reuse authenticated session, chromium only
