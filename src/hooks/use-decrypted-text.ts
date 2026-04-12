@@ -216,6 +216,7 @@ export function useDecryptedText({
 		const interval = setInterval(() => {
 			const stop = () => clearInterval(interval);
 
+			// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: animation state machine with multiple reveal directions
 			setRevealedIndices((prev) => {
 				if (sequential && direction === "forward") return stepSequentialForward(prev, stop);
 				if (sequential && direction === "reverse") return stepSequentialReverse(prev, stop);

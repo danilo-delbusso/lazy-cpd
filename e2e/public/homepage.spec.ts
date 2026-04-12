@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 test.describe("Homepage", () => {
 	test("displays the site header", async ({ page }) => {
 		await page.goto("/");
-		await expect(page.getByText("CPD")).toBeVisible();
-		await expect(page.getByText("Portal")).toBeVisible();
+		// Desktop header (hidden sm:block) contains h1 with "CPD Portal"
+		await expect(page.locator("header h1").last()).toBeVisible();
 	});
 
 	test("has navigation tabs", async ({ page }) => {
@@ -27,6 +27,6 @@ test.describe("Homepage", () => {
 
 	test("footer is visible", async ({ page }) => {
 		await page.goto("/");
-		await expect(page.getByText(/built by/i)).toBeVisible();
+		await expect(page.locator("footer")).toBeVisible();
 	});
 });

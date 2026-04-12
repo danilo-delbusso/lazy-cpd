@@ -14,6 +14,7 @@ import { formatDate } from "@/lib/utils/dates";
 import type { GoalStatus } from "@/lib/validations/goal";
 import { useUIStore } from "@/stores/ui-store";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: detail view with multiple conditional sections
 export function GoalDetailView({
 	goalId,
 	onBack,

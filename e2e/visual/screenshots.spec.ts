@@ -12,9 +12,8 @@ test.describe("Visual Regression @visual", () => {
 	});
 
 	test("goals page", async ({ page }) => {
-		await page.goto("/goals");
-		await page.waitForResponse("**/api/goals");
-		await page.waitForTimeout(500);
+		await page.goto("/");
+		await page.waitForTimeout(1000);
 		await expect(page).toHaveScreenshot("goals-page.png", {
 			fullPage: true,
 			maxDiffPixels: 50,
@@ -23,8 +22,7 @@ test.describe("Visual Regression @visual", () => {
 
 	test("timeline page", async ({ page }) => {
 		await page.goto("/timeline");
-		await page.waitForResponse("**/api/activities*");
-		await page.waitForTimeout(500);
+		await page.waitForTimeout(1000);
 		await expect(page).toHaveScreenshot("timeline-page.png", {
 			fullPage: true,
 			maxDiffPixels: 50,

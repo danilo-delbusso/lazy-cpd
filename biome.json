@@ -60,6 +60,7 @@
 			"!.next",
 			"!drizzle/migrations",
 			"!playwright-report",
+			"!test-results",
 			"!coverage",
 			"!**/*.css"
 		]

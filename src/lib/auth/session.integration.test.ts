@@ -31,7 +31,8 @@ describe("session management", () => {
 		const token = mockCookieStore.get("cpd_session")?.value;
 
 		// The token should be verifiable
-		const payload = await verifyToken(token!);
+		expect(token).toBeDefined();
+		const payload = await verifyToken(token as string);
 		expect(payload).toEqual({ role: "admin" });
 	});
 

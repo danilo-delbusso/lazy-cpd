@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+// Auth tests need their OWN browser context (no shared storageState)
+// so they can test the unauthenticated → authenticated flow.
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe("Admin Authentication", () => {
 	test("redirects to login when not authenticated", async ({ page }) => {
 		await page.goto("/admin");
@@ -42,7 +46,7 @@ test.describe("Admin Authentication", () => {
 		await page.getByRole("button", { name: /sign in/i }).click();
 		await expect(page).toHaveURL("/admin", { timeout: 10000 });
 
-		// Navigate to goals management via the nav bar (not the QuickAction card)
+		// Navigate to goals management via the nav bar
 		await page.getByRole("navigation").getByRole("link", { name: "Goals" }).click();
 		await expect(page.getByRole("heading", { name: "Goals" })).toBeVisible();
 	});

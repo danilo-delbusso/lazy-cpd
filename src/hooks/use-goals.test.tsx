@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { GoalWithStats } from "@/types";
 import { useCreateGoal, useDeleteGoal, useGoal, useGoals, useUpdateGoal } from "./use-goals";
 
 vi.mock("@/lib/utils/toasts", () => ({
@@ -22,7 +23,7 @@ const mockGoals = [
 		id: "g1",
 		title: "Learn Rust",
 		description: "Systems programming",
-		status: "active",
+		status: "open",
 		tags: [],
 		sortOrder: 0,
 		totalActivities: 5,
@@ -31,14 +32,16 @@ const mockGoals = [
 		completedCount: 2,
 		firstDate: null,
 		lastDate: null,
+		createdAt: new Date("2025-01-01"),
+		updatedAt: new Date("2025-01-01"),
 	},
-];
+] satisfies GoalWithStats[];
 
 const mockGoalDetail = {
 	id: "g1",
 	title: "Learn Rust",
 	description: "Systems programming",
-	status: "active",
+	status: "open",
 	tags: [],
 	sortOrder: 0,
 	activities: [],
@@ -62,7 +65,7 @@ describe("useGoals", () => {
 	});
 
 	it("uses initialData when provided", () => {
-		const { result } = renderHook(() => useGoals(mockGoals as any), {
+		const { result } = renderHook(() => useGoals(mockGoals), {
 			wrapper: createWrapper(),
 		});
 
@@ -117,7 +120,7 @@ describe("useCreateGoal", () => {
 		const { result } = renderHook(() => useCreateGoal(), { wrapper: createWrapper() });
 
 		await act(() =>
-			result.current.mutateAsync({ title: "New Goal", description: "Desc", status: "active" }),
+			result.current.mutateAsync({ title: "New Goal", description: "Desc", status: "open" }),
 		);
 
 		expect(fetch).toHaveBeenCalledWith("/api/goals", expect.objectContaining({ method: "POST" }));
@@ -137,7 +140,11 @@ describe("useUpdateGoal", () => {
 
 		const { result } = renderHook(() => useUpdateGoal(), { wrapper: createWrapper() });
 
-		await act(() => result.current.mutateAsync({ id: "g1", title: "Updated" } as any));
+		await act(() =>
+			result.current.mutateAsync({ id: "g1", title: "Updated" } as {
+				id: string;
+			} & Partial<GoalWithStats>),
+		);
 
 		expect(fetch).toHaveBeenCalledWith("/api/goals/g1", expect.objectContaining({ method: "PUT" }));
 	});

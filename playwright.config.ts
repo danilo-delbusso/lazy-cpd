@@ -21,18 +21,44 @@ export default defineConfig({
 	},
 
 	projects: [
+		// Auth setup — logs in once and saves cookies
+		{ name: "setup", testMatch: /auth\.setup\.ts/ },
+
+		// Public pages — no auth needed
 		{
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"] },
+			testIgnore: /admin\//,
 		},
 		{
 			name: "firefox",
 			use: { ...devices["Desktop Firefox"] },
+			testIgnore: /admin\//,
+		},
+
+		// Admin pages — reuse authenticated session
+		{
+			name: "chromium-admin",
+			use: {
+				...devices["Desktop Chrome"],
+				storageState: "e2e/.auth/admin.json",
+			},
+			testMatch: /admin\//,
+			dependencies: ["setup"],
+		},
+		{
+			name: "firefox-admin",
+			use: {
+				...devices["Desktop Firefox"],
+				storageState: "e2e/.auth/admin.json",
+			},
+			testMatch: /admin\//,
+			dependencies: ["setup"],
 		},
 	],
 
 	webServer: {
-		command: process.env.CI ? "bun run start" : "bun run dev",
+		command: process.env.CI ? "node .next/standalone/server.js" : "bun run dev",
 		url: "http://localhost:3000",
 		reuseExistingServer: !process.env.CI,
 		timeout: 120_000,

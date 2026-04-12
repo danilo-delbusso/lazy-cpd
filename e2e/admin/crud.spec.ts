@@ -1,21 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-// Helper to login before each test
-async function loginAsAdmin(page: import("@playwright/test").Page) {
-	await page.goto("/admin/login");
-	await page
-		.getByLabel("Password")
-		.fill(process.env.ADMIN_PASSWORD ?? "local-dev-password-change-me");
-	await page.getByRole("button", { name: /sign in/i }).click();
-	await expect(page).toHaveURL("/admin", { timeout: 10000 });
-}
+// These tests run with storageState from the setup project — already authenticated.
 
 test.describe("Admin Goals CRUD", () => {
-	test.beforeEach(async ({ page }) => {
-		await loginAsAdmin(page);
-	});
-
 	test("can navigate to goals management", async ({ page }) => {
+		await page.goto("/admin");
 		await page.getByRole("navigation").getByRole("link", { name: "Goals" }).click();
 		await expect(page.getByRole("heading", { name: "Goals" })).toBeVisible();
 		await expect(page.getByRole("link", { name: "Add Goal" })).toBeVisible();
@@ -38,10 +27,6 @@ test.describe("Admin Goals CRUD", () => {
 });
 
 test.describe("Admin Activities CRUD", () => {
-	test.beforeEach(async ({ page }) => {
-		await loginAsAdmin(page);
-	});
-
 	test("can navigate to activities management", async ({ page }) => {
 		await page.goto("/admin/activities");
 		await expect(page.getByRole("heading", { name: "Activities" })).toBeVisible();
@@ -56,10 +41,6 @@ test.describe("Admin Activities CRUD", () => {
 });
 
 test.describe("Admin Formats CRUD", () => {
-	test.beforeEach(async ({ page }) => {
-		await loginAsAdmin(page);
-	});
-
 	test("can navigate to formats management", async ({ page }) => {
 		await page.goto("/admin/formats");
 		await expect(page.getByRole("heading", { name: "Activity Formats" })).toBeVisible();

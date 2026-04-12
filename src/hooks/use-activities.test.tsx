@@ -184,7 +184,12 @@ describe("useUpdateActivity", () => {
 
 		const { result } = renderHook(() => useUpdateActivity(), { wrapper: createWrapper() });
 
-		await act(() => result.current.mutateAsync({ id: "a1", title: "Updated" } as any));
+		await act(() =>
+			result.current.mutateAsync({
+				id: "a1",
+				title: "Updated",
+			} as { id: string } & Partial<import("./use-activities").ActivityWithJoins>),
+		);
 
 		expect(fetch).toHaveBeenCalledWith(
 			"/api/activities/a1",

@@ -153,6 +153,7 @@ function daysAgo(n: number): Date {
 	return d;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: seed data generator with many branches per goal
 function generateActivities(): NewActivity[] {
 	const acts: NewActivity[] = [];
 	const statuses = ["upcoming", "in_progress", "completed"] as const;

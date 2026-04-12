@@ -34,8 +34,8 @@ export function useAuth() {
 			}
 			return res.json();
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["session"] });
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ["session"] });
 			router.push("/admin");
 		},
 	});
@@ -44,8 +44,8 @@ export function useAuth() {
 		mutationFn: async () => {
 			await fetch("/api/admin/session", { method: "DELETE" });
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["session"] });
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ["session"] });
 			router.push("/");
 		},
 	});

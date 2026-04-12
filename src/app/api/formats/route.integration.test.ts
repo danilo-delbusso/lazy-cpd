@@ -14,6 +14,7 @@ vi.mock("next/headers", () => ({
 }));
 
 import { createId } from "@paralleldrive/cuid2";
+import type { NextRequest } from "next/server";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { signToken } from "@/lib/auth/jwt";
 import { createActivity, deleteActivity } from "@/lib/db/queries/activities";
@@ -21,6 +22,8 @@ import { deleteFormat } from "@/lib/db/queries/formats";
 import { createGoal, deleteGoal } from "@/lib/db/queries/goals";
 import { DELETE, PUT } from "./[id]/route";
 import { GET, POST } from "./route";
+
+type RouteContext = { params: Promise<Record<string, string>> };
 
 const TEST_PREFIX = `test-api-fmt-${Date.now()}`;
 const formatIds: string[] = [];
@@ -83,7 +86,7 @@ describe("formats API routes", () => {
 				}),
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(201);
@@ -105,7 +108,7 @@ describe("formats API routes", () => {
 				}),
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(201);
@@ -121,7 +124,7 @@ describe("formats API routes", () => {
 				body: JSON.stringify({ name: "x", color: "not-a-color" }),
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			expect(res.status).toBe(400);
 		});
 
@@ -133,7 +136,7 @@ describe("formats API routes", () => {
 				body: JSON.stringify({ name: `${TEST_PREFIX} NoAuth`, color: "#aabbcc" }),
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			expect(res.status).toBe(401);
 			await setAuthCookie();
 		});
@@ -149,7 +152,7 @@ describe("formats API routes", () => {
 				body: JSON.stringify({ color: "#999999" }),
 			});
 
-			const res = await PUT(req as any, makeContext(id) as any);
+			const res = await PUT(req as NextRequest, makeContext(id) as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(200);
@@ -164,7 +167,7 @@ describe("formats API routes", () => {
 				body: JSON.stringify({ color: "#000000" }),
 			});
 
-			const res = await PUT(req as any, makeContext("nope") as any);
+			const res = await PUT(req as NextRequest, makeContext("nope") as RouteContext);
 			expect(res.status).toBe(404);
 		});
 	});
@@ -196,7 +199,7 @@ describe("formats API routes", () => {
 			});
 
 			const req = new Request(`http://localhost/api/formats/${fmtId}`, { method: "DELETE" });
-			const res = await DELETE(req as any, makeContext(fmtId) as any);
+			const res = await DELETE(req as NextRequest, makeContext(fmtId) as RouteContext);
 			expect(res.status).toBe(409);
 			const data = await res.json();
 			expect(data.error).toContain("Cannot delete format");
@@ -207,7 +210,7 @@ describe("formats API routes", () => {
 			const id = formatIds[1]; // the one with explicit slug, no activities
 
 			const req = new Request(`http://localhost/api/formats/${id}`, { method: "DELETE" });
-			const res = await DELETE(req as any, makeContext(id) as any);
+			const res = await DELETE(req as NextRequest, makeContext(id) as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(200);
@@ -218,7 +221,7 @@ describe("formats API routes", () => {
 		it("returns 404 for non-existent id", async () => {
 			await setAuthCookie();
 			const req = new Request("http://localhost/api/formats/nope", { method: "DELETE" });
-			const res = await DELETE(req as any, makeContext("nope") as any);
+			const res = await DELETE(req as NextRequest, makeContext("nope") as RouteContext);
 			expect(res.status).toBe(404);
 		});
 	});

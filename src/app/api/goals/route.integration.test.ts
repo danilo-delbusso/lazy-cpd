@@ -14,12 +14,15 @@ vi.mock("next/headers", () => ({
 	}),
 }));
 
+import type { NextRequest } from "next/server";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { signToken } from "@/lib/auth/jwt";
 import { deleteGoal } from "@/lib/db/queries/goals";
 import { DELETE, GET as GET_BY_ID, PUT } from "./[id]/route";
 import { GET, POST } from "./route";
 import { GET as GET_TAGS } from "./tags/route";
+
+type RouteContext = { params: Promise<Record<string, string>> };
 
 const TEST_PREFIX = `test-api-goal-${Date.now()}`;
 const goalIds: string[] = [];
@@ -89,7 +92,7 @@ describe("goals API routes", () => {
 				body: JSON.stringify(body),
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(201);
@@ -106,7 +109,7 @@ describe("goals API routes", () => {
 				body: JSON.stringify({ title: "ab" }), // too short, missing description
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			expect(res.status).toBe(400);
 			const data = await res.json();
 			expect(data.error).toBe("Validation failed");
@@ -123,7 +126,7 @@ describe("goals API routes", () => {
 				}),
 			});
 
-			const res = await POST(req as any, { params: Promise.resolve({}) } as any);
+			const res = await POST(req as NextRequest, { params: Promise.resolve({}) } as RouteContext);
 			expect(res.status).toBe(401);
 			await setAuthCookie(); // restore for subsequent tests
 		});
@@ -157,7 +160,7 @@ describe("goals API routes", () => {
 				body: JSON.stringify({ title: `${TEST_PREFIX} Updated Goal` }),
 			});
 
-			const res = await PUT(req as any, makeContext(id) as any);
+			const res = await PUT(req as NextRequest, makeContext(id) as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(200);
@@ -172,7 +175,7 @@ describe("goals API routes", () => {
 				body: JSON.stringify({ title: `${TEST_PREFIX} Nope` }),
 			});
 
-			const res = await PUT(req as any, makeContext("nope") as any);
+			const res = await PUT(req as NextRequest, makeContext("nope") as RouteContext);
 			expect(res.status).toBe(404);
 		});
 
@@ -184,7 +187,7 @@ describe("goals API routes", () => {
 				body: JSON.stringify({ title: "No Auth" }),
 			});
 
-			const res = await PUT(req as any, makeContext(goalIds[0]) as any);
+			const res = await PUT(req as NextRequest, makeContext(goalIds[0]) as RouteContext);
 			expect(res.status).toBe(401);
 			await setAuthCookie();
 		});
@@ -202,12 +205,15 @@ describe("goals API routes", () => {
 					description: "This goal will be deleted in a test",
 				}),
 			});
-			const createRes = await POST(createReq as any, { params: Promise.resolve({}) } as any);
+			const createRes = await POST(
+				createReq as NextRequest,
+				{ params: Promise.resolve({}) } as RouteContext,
+			);
 			const created = await createRes.json();
 			const deleteId = created.id;
 
 			const req = new Request(`http://localhost/api/goals/${deleteId}`, { method: "DELETE" });
-			const res = await DELETE(req as any, makeContext(deleteId) as any);
+			const res = await DELETE(req as NextRequest, makeContext(deleteId) as RouteContext);
 			const data = await res.json();
 
 			expect(res.status).toBe(200);
@@ -217,7 +223,7 @@ describe("goals API routes", () => {
 		it("returns 404 for non-existent id", async () => {
 			await setAuthCookie();
 			const req = new Request("http://localhost/api/goals/nope", { method: "DELETE" });
-			const res = await DELETE(req as any, makeContext("nope") as any);
+			const res = await DELETE(req as NextRequest, makeContext("nope") as RouteContext);
 			expect(res.status).toBe(404);
 		});
 	});

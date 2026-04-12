@@ -120,6 +120,7 @@ export const DotGrid: React.FC<DotGridProps> = ({
 		let rafId: number;
 		const proxSq = proximity * proximity;
 
+		// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: canvas animation loop with physics
 		const draw = () => {
 			const canvas = canvasRef.current;
 			if (!canvas) return;
@@ -185,6 +186,7 @@ export const DotGrid: React.FC<DotGridProps> = ({
 	}, []);
 
 	useEffect(() => {
+		// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: mouse interaction with shock wave physics
 		const onMove = (e: MouseEvent) => {
 			const now = performance.now();
 			const pr = pointerRef.current;
