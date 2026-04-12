@@ -7,7 +7,6 @@
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=Ricky-Stevens_cpd-portal2&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Ricky-Stevens_cpd-portal2)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Ricky-Stevens_cpd-portal2&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Ricky-Stevens_cpd-portal2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/Ricky-Stevens/cpd-portal2/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/Ricky-Stevens/cpd-portal2)
 
 A self-hosted Continuing Professional Development (CPD) tracking portal. Track your learning goals, log activities, and manage your professional development — with an MCP server for AI-powered management via Claude Code.
 

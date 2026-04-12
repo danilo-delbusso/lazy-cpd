@@ -51,6 +51,7 @@ next-env.d.ts
 !/e2e/visual/**/*-snapshots/**/*.png
 .scannerwork
 coverage-integration
+coverage-merged
 coverage
 
 # IDE

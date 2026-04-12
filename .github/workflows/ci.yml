@@ -31,11 +31,16 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bun run test:unit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-unit
+          path: coverage/coverage-final.json
+          retention-days: 1
 
-  # Runs the full test suite (unit + integration) against a real PostgreSQL
-  # instance and produces a merged coverage report.
-  unit-tests-db:
-    name: Unit & Integration Tests (with DB)
+  # Runs integration tests against a real PostgreSQL instance.
+  integration-tests:
+    name: Integration Tests (with DB)
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -58,26 +63,40 @@ jobs:
       - run: bun run db:generate
       - run: bun run db:migrate
       - run: bun run db:seed
-      - run: bun run test:coverage
+      - run: bun run test:integration
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 7
+          name: coverage-integration
+          path: coverage-integration/coverage-final.json
+          retention-days: 1
 
+  # Merges unit + integration coverage and runs SonarCloud analysis.
+  # SonarCloud gates on bugs, vulnerabilities, security hotspots, code smells.
+  # Coverage is for trending/display — thresholds are enforced by Vitest.
   sonarcloud:
     name: SonarCloud Analysis
+    needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
-    needs: [unit-tests-db]
+    if: always() && needs.unit-tests.result == 'success' && needs.integration-tests.result == 'success'
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
-          name: coverage-report
-          path: coverage/
+          name: coverage-unit
+          path: coverage-artifacts/unit
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-integration
+          path: coverage-artifacts/integration
+      - name: Merge coverage reports
+        run: |
+          mkdir -p coverage-merged
+          cp coverage-artifacts/unit/coverage-final.json coverage-merged/unit.json
+          cp coverage-artifacts/integration/coverage-final.json coverage-merged/integration.json
+          npx nyc report --temp-dir coverage-merged -r lcov --report-dir coverage-merged
       - uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

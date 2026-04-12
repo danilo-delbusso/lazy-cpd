@@ -14,7 +14,7 @@ export default defineConfig({
 		},
 		coverage: {
 			provider: "v8",
-			reporter: ["text", "lcov", "json", "html"],
+			reporter: ["text", "lcov", "json"],
 			include: ["src/**/*.{ts,tsx}"],
 			exclude: ["src/test/**", "src/**/*.d.ts", "src/**/*.test.{ts,tsx}"],
 		},
