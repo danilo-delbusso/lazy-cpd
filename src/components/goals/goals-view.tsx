@@ -175,9 +175,15 @@ export function GoalsView({
 	// which matches the shape returned by the API fetch in useGoals
 	const { data: goals, isLoading } = useGoals(initialGoals);
 	const statusOrder: Record<string, number> = { open: 0, upcoming: 1, completed: 2 };
+	const dateValue = (d: Date | string | null | undefined) =>
+		d ? new Date(d).getTime() : Number.NEGATIVE_INFINITY;
 	const filtered = goals
 		?.filter((g) => filter === "all" || g.status === filter)
-		.sort((a, b) => (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9));
+		.sort((a, b) => {
+			const statusDiff = (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9);
+			if (statusDiff !== 0) return statusDiff;
+			return dateValue(b.lastDate) - dateValue(a.lastDate);
+		});
 
 	return <>{renderGoalsContent({ isLoading, filtered, viewMode, onSelectGoal })}</>;
 }
