@@ -34,6 +34,7 @@ export default function RootLayout({
 			lang="en"
 			data-scroll-behavior="smooth"
 			className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+			suppressHydrationWarning
 		>
 			<body className="min-h-full text-stone-900">
 				<QueryProvider>
