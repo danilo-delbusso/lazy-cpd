@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 	title: `CPD Portal — ${siteOwner}`,
 	description:
 		"Continuing Professional Development portfolio showcasing goals, activities, and learning progress.",
+	icons: { icon: "/favicon.png" },
 };
 
 export default function RootLayout({

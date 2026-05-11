@@ -3,10 +3,10 @@ import { expect, test } from "@playwright/test";
 test.describe("Goals Page", () => {
 	test("shows filter pills", async ({ page }) => {
 		await page.goto("/");
-		await expect(page.getByRole("button", { name: "All" })).toBeVisible();
-		await expect(page.getByRole("button", { name: "Open" })).toBeVisible();
-		await expect(page.getByRole("button", { name: "Upcoming" })).toBeVisible();
-		await expect(page.getByRole("button", { name: "Completed" })).toBeVisible();
+		await expect(page.getByRole("button", { name: "All", exact: true })).toBeVisible();
+		await expect(page.getByRole("button", { name: "Open", exact: true })).toBeVisible();
+		await expect(page.getByRole("button", { name: "Upcoming", exact: true })).toBeVisible();
+		await expect(page.getByRole("button", { name: "Completed", exact: true })).toBeVisible();
 	});
 
 	test("filters goals by status", async ({ page }) => {

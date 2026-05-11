@@ -10,7 +10,6 @@ env:
   DATABASE_URL: postgresql://cpd:cpd_ci_password@localhost:5432/cpd_portal_test
   JWT_SECRET: ci-test-secret-not-for-production
   ADMIN_PASSWORD: ci-test-password-not-for-production
-  SEED_MODE: ci
 
 jobs:
   lint-and-typecheck:
