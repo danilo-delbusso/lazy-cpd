@@ -204,6 +204,29 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 									</svg>
 								</a>
 							)}
+							{process.env.NEXT_PUBLIC_CODEBERG_URL && (
+								<a
+									href={process.env.NEXT_PUBLIC_CODEBERG_URL}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-stone-400 transition-colors hover:text-stone-600"
+									aria-label="Codeberg"
+								>
+									<span className="sr-only">Codeberg</span>
+									<svg
+										className="h-5 w-5"
+										viewBox="0 0 512 512"
+										fill="currentColor"
+										aria-hidden="true"
+									>
+										<path
+											fill="currentColor"
+											style={{ transform: "scale(1.3)", transformOrigin: "center" }}
+											d="M255.3 71.8a192 192 0 0 0-162 294l160.1-207c.5-.6 1.5-1 2.6-1s2 .4 2.6 1l160 207a192 192 0 0 0 29.4-102c0-106-86-192-192-192a192 192 0 0 0-.7 0z"
+										/>
+									</svg>
+								</a>
+							)}
 						</div>
 					</div>
 				</header>
