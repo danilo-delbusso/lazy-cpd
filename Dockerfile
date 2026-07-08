@@ -36,6 +36,7 @@ RUN addgroup --system --gid 1001 nextjs && \
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nextjs /app/.next/static ./.next/static
+COPY --chmod=0755 docker-entrypoint.sh ./docker-entrypoint.sh
 
 USER nextjs
 
@@ -43,4 +44,13 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+# V8 heap ceiling used when the platform exposes no cgroup memory limit that Node
+# can read (the common PaaS case — the container cgroup reports "max"). Without a
+# ceiling V8 grows heapTotal against its multi-GB default and never returns it, so
+# RSS ratchets upward for days until the platform OOM-kills the container. Tune to
+# ~75% of the container's memory; the entrypoint auto-derives from the cgroup limit
+# when one is visible, and NODE_MAX_OLD_SPACE_MB overrides everything.
+ENV DEFAULT_OLD_SPACE_MB=384
+
+# Entrypoint applies the heap ceiling before starting the server.
+CMD ["/app/docker-entrypoint.sh"]
