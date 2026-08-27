@@ -71,16 +71,16 @@ export function ActivityBlade({ activity, onClose, onPrev, onNext }: Readonly<Ac
 						animate={{ x: 0 }}
 						exit={{ x: "100%" }}
 						transition={{ type: "spring", stiffness: 400, damping: 35 }}
-						className="fixed top-0 right-0 z-50 flex h-full w-1/2 min-w-[300px] flex-col border-l border-stone-200 bg-white shadow-2xl"
+						className="fixed top-0 right-0 z-50 flex h-full w-1/2 min-w-[300px] flex-col border-l border-stone-200 bg-white shadow-2xl dark:border-stone-800 dark:bg-stone-950"
 					>
 						{/* Header */}
-						<div className="flex items-center justify-between border-b border-stone-100 px-6 py-4">
+						<div className="flex items-center justify-between border-b border-stone-100 px-6 py-4 dark:border-stone-800">
 							<div className="flex items-center gap-2">
 								{onPrev && (
 									<button
 										type="button"
 										onClick={onPrev}
-										className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600"
+										className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:text-stone-500 dark:hover:bg-stone-800 dark:hover:text-stone-300"
 										aria-label="Previous activity"
 									>
 										<svg
@@ -99,7 +99,7 @@ export function ActivityBlade({ activity, onClose, onPrev, onNext }: Readonly<Ac
 									<button
 										type="button"
 										onClick={onNext}
-										className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600"
+										className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:text-stone-500 dark:hover:bg-stone-800 dark:hover:text-stone-300"
 										aria-label="Next activity"
 									>
 										<svg
@@ -118,7 +118,7 @@ export function ActivityBlade({ activity, onClose, onPrev, onNext }: Readonly<Ac
 							<button
 								type="button"
 								onClick={onClose}
-								className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600"
+								className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:text-stone-500 dark:hover:bg-stone-800 dark:hover:text-stone-300"
 								aria-label="Close"
 							>
 								<svg
@@ -142,21 +142,27 @@ export function ActivityBlade({ activity, onClose, onPrev, onNext }: Readonly<Ac
 								<ActivityFormatBadge name={activity.formatName} color={activity.formatColor} />
 							</div>
 
-							<h2 className="mt-4 text-xl font-bold text-stone-900">{activity.title}</h2>
+							<h2 className="mt-4 text-xl font-bold text-stone-900 dark:text-stone-100">
+								{activity.title}
+							</h2>
 
 							{activity.goalTitle && (
-								<p className="mt-1 text-sm font-medium text-amber-600">{activity.goalTitle}</p>
+								<p className="mt-1 text-sm font-medium text-amber-600 dark:text-amber-400">
+									{activity.goalTitle}
+								</p>
 							)}
 
-							<p className="mt-2 text-sm text-stone-400">{formatDate(activity.fullDate)}</p>
+							<p className="mt-2 text-sm text-stone-400 dark:text-stone-500">
+								{formatDate(activity.fullDate)}
+							</p>
 
 							{/* Notes */}
 							{activity.notes && (
 								<div className="mt-6">
-									<h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400">
+									<h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
 										Notes
 									</h3>
-									<div className="prose prose-sm prose-stone mt-2 max-w-none">
+									<div className="prose prose-sm prose-stone dark:prose-invert mt-2 max-w-none">
 										<MarkdownContent>{activity.notes}</MarkdownContent>
 									</div>
 								</div>
@@ -165,10 +171,10 @@ export function ActivityBlade({ activity, onClose, onPrev, onNext }: Readonly<Ac
 							{/* References */}
 							{activity.references && (
 								<div className="mt-6">
-									<h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400">
+									<h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
 										References
 									</h3>
-									<p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-stone-600">
+									<p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 dark:text-stone-400">
 										{activity.references}
 									</p>
 								</div>
@@ -177,25 +183,27 @@ export function ActivityBlade({ activity, onClose, onPrev, onNext }: Readonly<Ac
 							{/* Empty state for activities with no notes or references */}
 							{!activity.notes && !activity.references && (
 								<div className="mt-8 text-center">
-									<p className="text-sm text-stone-300">No additional details recorded</p>
+									<p className="text-sm text-stone-300 dark:text-stone-700">
+										No additional details recorded
+									</p>
 								</div>
 							)}
 						</div>
 
 						{/* Footer with keyboard hints */}
-						<div className="border-t border-stone-100 px-6 py-3">
-							<div className="flex items-center justify-center gap-4 text-[11px] text-stone-400">
+						<div className="border-t border-stone-100 px-6 py-3 dark:border-stone-800">
+							<div className="flex items-center justify-center gap-4 text-[11px] text-stone-400 dark:text-stone-600">
 								<span>
-									<kbd className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-500">
+									<kbd className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-500 dark:bg-stone-800 dark:text-stone-400">
 										←
 									</kbd>{" "}
-									<kbd className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-500">
+									<kbd className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-500 dark:bg-stone-800 dark:text-stone-400">
 										→
 									</kbd>{" "}
 									navigate
 								</span>
 								<span>
-									<kbd className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-500">
+									<kbd className="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-stone-500 dark:bg-stone-800 dark:text-stone-400">
 										esc
 									</kbd>{" "}
 									close

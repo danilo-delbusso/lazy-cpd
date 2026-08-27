@@ -9,20 +9,24 @@ interface ViewToggleProps {
 
 export function ViewToggle({ mode, onChange }: Readonly<ViewToggleProps>) {
 	return (
-		<div className="flex gap-1 rounded-lg bg-stone-100 p-1">
+		<div className="flex gap-1 rounded-lg bg-stone-100 p-1 dark:bg-stone-800">
 			<button
 				type="button"
 				onClick={() => onChange("grid")}
 				className={cn(
 					"rounded-md p-1.5 transition-all",
-					mode === "grid" ? "bg-white shadow-sm ring-1 ring-stone-200/60" : "hover:bg-stone-50",
+					mode === "grid"
+						? "bg-white shadow-sm ring-1 ring-stone-200/60 dark:bg-stone-700 dark:ring-stone-600/60"
+						: "hover:bg-stone-50 dark:hover:bg-stone-700/50",
 				)}
 				aria-label="Grid view"
 			>
 				<svg
 					className={cn(
 						"h-4 w-4 transition-colors",
-						mode === "grid" ? "text-amber-600" : "text-stone-400",
+						mode === "grid"
+							? "text-amber-600 dark:text-amber-400"
+							: "text-stone-400 dark:text-stone-500",
 					)}
 					viewBox="0 0 16 16"
 					fill="currentColor"
@@ -39,14 +43,18 @@ export function ViewToggle({ mode, onChange }: Readonly<ViewToggleProps>) {
 				onClick={() => onChange("rows")}
 				className={cn(
 					"rounded-md p-1.5 transition-all",
-					mode === "rows" ? "bg-white shadow-sm ring-1 ring-stone-200/60" : "hover:bg-stone-50",
+					mode === "rows"
+						? "bg-white shadow-sm ring-1 ring-stone-200/60 dark:bg-stone-700 dark:ring-stone-600/60"
+						: "hover:bg-stone-50 dark:hover:bg-stone-700/50",
 				)}
 				aria-label="List view"
 			>
 				<svg
 					className={cn(
 						"h-4 w-4 transition-colors",
-						mode === "rows" ? "text-amber-600" : "text-stone-400",
+						mode === "rows"
+							? "text-amber-600 dark:text-amber-400"
+							: "text-stone-400 dark:text-stone-500",
 					)}
 					viewBox="0 0 16 16"
 					fill="currentColor"

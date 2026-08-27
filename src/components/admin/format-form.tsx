@@ -46,21 +46,29 @@ export function FormatForm({
 	return (
 		<form action={handleSubmit} className="space-y-6">
 			<div>
-				<label htmlFor="name" className="block text-sm font-medium text-gray-700">
+				<label
+					htmlFor="name"
+					className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+				>
 					Name
 				</label>
 				<input
 					id="name"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
-					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				/>
-				{errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
-				{slug && <p className="mt-1 text-xs text-gray-400">Slug: {slug}</p>}
+				{errors.name && (
+					<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>
+				)}
+				{slug && <p className="mt-1 text-xs text-gray-400 dark:text-stone-500">Slug: {slug}</p>}
 			</div>
 
 			<div>
-				<label htmlFor="color" className="block text-sm font-medium text-gray-700">
+				<label
+					htmlFor="color"
+					className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+				>
 					Color
 				</label>
 				<div className="mt-1 flex items-center gap-3">
@@ -69,14 +77,14 @@ export function FormatForm({
 						type="color"
 						value={color}
 						onChange={(e) => setColor(e.target.value)}
-						className="h-10 w-14 cursor-pointer rounded border border-gray-300"
+						className="h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-stone-700"
 					/>
 					<input
 						type="text"
 						value={color}
 						onChange={(e) => setColor(e.target.value)}
 						pattern="^#[0-9a-fA-F]{6}$"
-						className="w-28 rounded-lg border border-gray-300 px-3 py-2 font-mono text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						className="w-28 rounded-lg border border-gray-300 px-3 py-2 font-mono text-sm shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
 					/>
 				</div>
 			</div>
@@ -84,7 +92,7 @@ export function FormatForm({
 			{/* Preview */}
 			{name && (
 				<div>
-					<p className="text-sm font-medium text-gray-700">Preview</p>
+					<p className="text-sm font-medium text-gray-700 dark:text-stone-300">Preview</p>
 					<div className="mt-2">
 						<Badge hex={color}>{name}</Badge>
 					</div>

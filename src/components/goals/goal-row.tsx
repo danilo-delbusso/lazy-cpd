@@ -43,7 +43,7 @@ export function GoalRow({ goal, onClick, index }: Readonly<GoalRowProps>) {
 			whileHover={{ y: -1 }}
 			onClick={onClick}
 			className={cn(
-				"flex cursor-pointer items-center gap-3 border-l-4 bg-white/80 px-4 py-2.5 transition-all duration-150 hover:bg-stone-50/80",
+				"flex cursor-pointer items-center gap-3 border-l-4 bg-white/80 px-4 py-2.5 transition-all duration-150 hover:bg-stone-50/80 dark:bg-stone-900/80 dark:hover:bg-stone-800/80",
 				leftBorderColors[goal.status] ?? leftBorderColors.upcoming,
 			)}
 		>
@@ -55,13 +55,13 @@ export function GoalRow({ goal, onClick, index }: Readonly<GoalRowProps>) {
 						dotColors[goal.status] ?? dotColors.upcoming,
 					)}
 				/>
-				<span className="line-clamp-2 text-sm font-medium text-stone-800 sm:line-clamp-1">
+				<span className="line-clamp-2 text-sm font-medium text-stone-800 sm:line-clamp-1 dark:text-stone-100">
 					{goal.title}
 				</span>
 			</div>
 
 			{/* Right-center: compact stats */}
-			<div className="hidden items-center gap-2 text-xs tabular-nums text-stone-500 lg:flex">
+			<div className="hidden items-center gap-2 text-xs tabular-nums text-stone-500 lg:flex dark:text-stone-400">
 				{goal.upcomingCount > 0 && (
 					<span className="flex items-center gap-1">
 						<span className={cn("h-1.5 w-1.5 rounded-full", statDotColors.upcoming)} />
@@ -88,19 +88,19 @@ export function GoalRow({ goal, onClick, index }: Readonly<GoalRowProps>) {
 					{visibleTags.map((tag) => (
 						<span
 							key={tag}
-							className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200"
+							className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800"
 						>
 							{tag}
 						</span>
 					))}
 					{overflowCount > 0 && (
-						<span className="rounded-full bg-yellow-50 px-1.5 py-0.5 text-[10px] font-medium text-yellow-600 ring-1 ring-yellow-200">
+						<span className="rounded-full bg-yellow-50 px-1.5 py-0.5 text-[10px] font-medium text-yellow-600 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-500 dark:ring-yellow-800">
 							+{overflowCount}
 						</span>
 					)}
 				</div>
 				{goal.firstDate && (
-					<span className="text-xs text-stone-400">
+					<span className="text-xs text-stone-400 dark:text-stone-500">
 						{formatDate(goal.firstDate)}
 						{goal.lastDate && goal.lastDate !== goal.firstDate && (
 							<> — {formatDate(goal.lastDate)}</>

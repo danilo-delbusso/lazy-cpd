@@ -46,20 +46,20 @@ export function TagInput({
 
 	return (
 		<div>
-			<label htmlFor={id} className="block text-sm font-medium text-gray-700">
+			<label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-stone-300">
 				Tags
 			</label>
 			<div className="mt-1 flex flex-wrap gap-1.5">
 				{tags.map((tag) => (
 					<span
 						key={tag}
-						className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+						className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800"
 					>
 						{tag}
 						<button
 							type="button"
 							onClick={() => onTagsChange(tags.filter((t) => t !== tag))}
-							className="ml-0.5 text-yellow-500 hover:text-yellow-800"
+							className="ml-0.5 text-yellow-500 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"
 						>
 							×
 						</button>
@@ -93,19 +93,19 @@ export function TagInput({
 					}}
 					placeholder={placeholder}
 					autoComplete="off"
-					className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-300 focus:outline-none"
+					className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-300 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				/>
 				{showSuggestions && filtered.length > 0 && (
-					<div className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg">
+					<div className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg dark:border-stone-700 dark:bg-stone-900">
 						{filtered.map((s, i) => (
 							<button
 								key={s}
 								type="button"
 								onMouseDown={(e) => e.preventDefault()}
 								onClick={() => selectTag(s)}
-								className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors ${i === highlightIdx ? "bg-amber-50 text-amber-700" : "text-stone-600 hover:bg-stone-50"}`}
+								className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors ${i === highlightIdx ? "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400" : "text-stone-600 hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800"}`}
 							>
-								<span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200">
+								<span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800">
 									{s}
 								</span>
 							</button>
@@ -118,10 +118,12 @@ export function TagInput({
 									addTag();
 									inputRef.current?.focus();
 								}}
-								className="flex w-full items-center gap-2 border-t border-stone-100 px-3 py-1.5 text-left text-sm text-stone-500 hover:bg-stone-50"
+								className="flex w-full items-center gap-2 border-t border-stone-100 px-3 py-1.5 text-left text-sm text-stone-500 hover:bg-stone-50 dark:border-stone-800 dark:text-stone-400 dark:hover:bg-stone-800"
 							>
 								{`Create \u201C`}
-								<span className="font-medium text-stone-700">{tagInput.trim().toLowerCase()}</span>
+								<span className="font-medium text-stone-700 dark:text-stone-200">
+									{tagInput.trim().toLowerCase()}
+								</span>
 								{`\u201D`}
 							</button>
 						)}

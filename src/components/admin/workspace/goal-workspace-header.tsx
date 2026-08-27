@@ -124,13 +124,13 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 									setEditingTitle(false);
 								}
 							}}
-							className="w-full rounded-lg border border-blue-300 px-2 py-1 text-2xl font-bold text-stone-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="w-full rounded-lg border border-amber-300 px-2 py-1 text-2xl font-bold text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-amber-700 dark:bg-stone-900 dark:text-stone-100"
 						/>
 					) : (
 						<button
 							type="button"
 							onClick={() => setEditingTitle(true)}
-							className="w-full cursor-pointer rounded-lg px-2 py-1 text-left text-2xl font-bold text-stone-900 hover:bg-stone-100"
+							className="w-full cursor-pointer rounded-lg px-2 py-1 text-left text-2xl font-bold text-stone-900 hover:bg-stone-100 dark:text-stone-100 dark:hover:bg-stone-800"
 						>
 							{goal.title}
 						</button>
@@ -143,15 +143,17 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 							onChange={(e) => setDescription(e.target.value)}
 							onBlur={handleDescBlur}
 							rows={2}
-							className="mt-1 w-full rounded-lg border border-blue-300 px-2 py-1 text-sm text-stone-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="mt-1 w-full rounded-lg border border-amber-300 px-2 py-1 text-sm text-stone-600 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-amber-700 dark:bg-stone-900 dark:text-stone-300"
 						/>
 					) : (
 						<button
 							type="button"
 							onClick={() => setEditingDesc(true)}
 							className={cn(
-								"mt-1 w-full cursor-pointer rounded-lg px-2 py-1 text-left text-sm hover:bg-stone-100",
-								goal.description ? "text-stone-600" : "text-stone-400 italic",
+								"mt-1 w-full cursor-pointer rounded-lg px-2 py-1 text-left text-sm hover:bg-stone-100 dark:hover:bg-stone-800",
+								goal.description
+									? "text-stone-600 dark:text-stone-300"
+									: "text-stone-400 italic dark:text-stone-500",
 							)}
 						>
 							{goal.description || "Add a description..."}
@@ -164,7 +166,9 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 						className={cn(
 							"text-xs transition-opacity",
 							saveState === "idle" ? "opacity-0" : "opacity-100",
-							saveState === "saving" ? "text-stone-400" : "text-green-600",
+							saveState === "saving"
+								? "text-stone-400 dark:text-stone-500"
+								: "text-green-600 dark:text-green-400",
 						)}
 					>
 						{saveState === "saving" ? "Saving..." : "Saved"}
@@ -172,7 +176,7 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 					<select
 						value={goal.status}
 						onChange={(e) => handleStatusChange(e.target.value)}
-						className="rounded-lg border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className="rounded-lg border border-gray-300 px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
 					>
 						{goalStatusValues.map((s) => (
 							<option key={s} value={s}>
@@ -188,13 +192,13 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 				{goal.tags.map((tag) => (
 					<span
 						key={tag}
-						className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+						className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800"
 					>
 						{tag}
 						<button
 							type="button"
 							onClick={() => removeTag(tag)}
-							className="ml-0.5 text-yellow-500 hover:text-yellow-800"
+							className="ml-0.5 text-yellow-500 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"
 						>
 							×
 						</button>
@@ -218,10 +222,10 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 							if (e.key === "Escape") setShowTagSuggestions(false);
 						}}
 						placeholder="+ Add tag"
-						className="w-24 rounded-md border-none bg-transparent px-1.5 py-0.5 text-xs text-stone-500 outline-none placeholder:text-stone-300 focus:ring-1 focus:ring-amber-300"
+						className="w-24 rounded-md border-none bg-transparent px-1.5 py-0.5 text-xs text-stone-500 outline-none placeholder:text-stone-300 focus:ring-1 focus:ring-amber-300 dark:text-stone-400 dark:placeholder:text-stone-600"
 					/>
 					{showTagSuggestions && tagSuggestions.length > 0 && (
-						<div className="absolute left-0 z-20 mt-1 max-h-36 w-48 overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg">
+						<div className="absolute left-0 z-20 mt-1 max-h-36 w-48 overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg dark:border-stone-700 dark:bg-stone-900">
 							{tagSuggestions.slice(0, 10).map((s) => (
 								<button
 									key={s}
@@ -231,9 +235,9 @@ export function GoalWorkspaceHeader({ goal }: Readonly<GoalWorkspaceHeaderProps>
 										addTag(s);
 										tagInputRef.current?.focus();
 									}}
-									className="flex w-full px-3 py-1 text-left text-xs text-stone-600 hover:bg-stone-50"
+									className="flex w-full px-3 py-1 text-left text-xs text-stone-600 hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800"
 								>
-									<span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200">
+									<span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800">
 										{s}
 									</span>
 								</button>

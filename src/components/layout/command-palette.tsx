@@ -134,12 +134,12 @@ export function CommandPalette() {
 						animate={{ opacity: 1, scale: 1 }}
 						exit={{ opacity: 0, scale: 0.95 }}
 						transition={{ duration: 0.15 }}
-						className="relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-stone-200 bg-white shadow-2xl"
+						className="relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-stone-200 bg-white shadow-2xl dark:border-stone-700 dark:bg-stone-900"
 					>
 						{/* Search input */}
-						<div className="flex items-center border-b border-stone-200 px-4">
+						<div className="flex items-center border-b border-stone-200 px-4 dark:border-stone-800">
 							<svg
-								className="h-5 w-5 text-stone-400"
+								className="h-5 w-5 text-stone-400 dark:text-stone-500"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -158,9 +158,9 @@ export function CommandPalette() {
 								onChange={(e) => setQuery(e.target.value)}
 								onKeyDown={handleKeyDown}
 								placeholder="Search goals, pages..."
-								className="w-full px-3 py-4 text-sm text-stone-900 placeholder-stone-400 focus:outline-none"
+								className="w-full px-3 py-4 text-sm text-stone-900 placeholder-stone-400 focus:outline-none dark:text-stone-100 dark:placeholder-stone-600"
 							/>
-							<kbd className="rounded border border-stone-200 px-1.5 py-0.5 font-mono text-xs text-stone-400">
+							<kbd className="rounded border border-stone-200 px-1.5 py-0.5 font-mono text-xs text-stone-400 dark:border-stone-700 dark:text-stone-500">
 								esc
 							</kbd>
 						</div>
@@ -168,7 +168,9 @@ export function CommandPalette() {
 						{/* Results */}
 						<div className="max-h-80 overflow-y-auto py-2">
 							{filtered.length === 0 && (
-								<p className="px-4 py-8 text-center text-sm text-stone-400">No results found</p>
+								<p className="px-4 py-8 text-center text-sm text-stone-400 dark:text-stone-500">
+									No results found
+								</p>
 							)}
 							{filtered.map((item, i) => (
 								<button
@@ -179,16 +181,16 @@ export function CommandPalette() {
 									className={cn(
 										"flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors",
 										i === selectedIndex
-											? "bg-amber-50 text-amber-900"
-											: "text-stone-600 hover:bg-stone-50",
+											? "bg-amber-50 text-amber-900 dark:bg-amber-950/40 dark:text-amber-300"
+											: "text-stone-600 hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800",
 									)}
 								>
 									<span
 										className={cn(
 											"flex h-6 w-6 items-center justify-center rounded text-xs font-semibold",
 											item.type === "goal"
-												? "bg-amber-100 text-amber-700"
-												: "bg-stone-100 text-stone-500",
+												? "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
+												: "bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400",
 										)}
 									>
 										{typeIcons[item.type]}
@@ -196,7 +198,9 @@ export function CommandPalette() {
 									<div className="min-w-0 flex-1">
 										<p className="truncate font-medium">{item.title}</p>
 										{item.subtitle && (
-											<p className="truncate text-xs text-stone-400">{item.subtitle}</p>
+											<p className="truncate text-xs text-stone-400 dark:text-stone-500">
+												{item.subtitle}
+											</p>
 										)}
 									</div>
 								</button>
@@ -204,7 +208,7 @@ export function CommandPalette() {
 						</div>
 
 						{/* Footer hint */}
-						<div className="flex gap-4 border-t border-stone-200 px-4 py-2 text-xs text-stone-400">
+						<div className="flex gap-4 border-t border-stone-200 px-4 py-2 text-xs text-stone-400 dark:border-stone-800 dark:text-stone-500">
 							<span>
 								<kbd className="font-mono">↑↓</kbd> navigate
 							</span>

@@ -96,14 +96,17 @@ export function GoalDetailView({
 				<div className="h-8 w-8 animate-spin rounded-full border-2 border-amber-500 border-t-transparent" />
 			</div>
 		);
-	if (!goal) return <div className="py-24 text-center text-stone-400">Goal not found</div>;
+	if (!goal)
+		return (
+			<div className="py-24 text-center text-stone-400 dark:text-stone-600">Goal not found</div>
+		);
 
 	return (
 		<>
 			<button
 				type="button"
 				onClick={onBack}
-				className="mb-4 flex items-center gap-1 text-sm text-stone-400 transition hover:text-amber-600"
+				className="mb-4 flex items-center gap-1 text-sm text-stone-400 transition hover:text-amber-600 dark:text-stone-500 dark:hover:text-amber-400"
 			>
 				<svg
 					className="h-4 w-4"
@@ -120,23 +123,29 @@ export function GoalDetailView({
 
 			<div
 				className={cn(
-					"rounded-xl border bg-white/80 p-4 shadow-sm backdrop-blur-sm sm:p-6",
-					{ open: "border-green-200", completed: "border-sky-200" }[goal.status] ??
-						"border-stone-200",
+					"rounded-xl border bg-white/80 p-4 shadow-sm backdrop-blur-sm sm:p-6 dark:bg-stone-900/80",
+					{
+						open: "border-green-200 dark:border-green-800",
+						completed: "border-sky-200 dark:border-sky-800",
+					}[goal.status] ?? "border-stone-200 dark:border-stone-800",
 				)}
 			>
 				<div>
 					<div className="flex flex-wrap items-center gap-2">
-						<h2 className="text-xl font-bold text-stone-900 sm:text-2xl">{goal.title}</h2>
+						<h2 className="text-xl font-bold text-stone-900 sm:text-2xl dark:text-stone-100">
+							{goal.title}
+						</h2>
 						<GoalStatusBadge status={goal.status as GoalStatus} />
 					</div>
 					{dates.first && (
-						<p className="mt-1 text-xs text-stone-400">
+						<p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
 							{formatDate(dates.first)}
 							{dates.last && dates.last !== dates.first && <span> — {formatDate(dates.last)}</span>}
 						</p>
 					)}
-					<p className="mt-2 text-sm text-stone-600 sm:text-base">{goal.description}</p>
+					<p className="mt-2 text-sm text-stone-600 sm:text-base dark:text-stone-300">
+						{goal.description}
+					</p>
 				</div>
 
 				{goal.tags.length > 0 && (
@@ -144,7 +153,7 @@ export function GoalDetailView({
 						{goal.tags.map((tag) => (
 							<span
 								key={tag}
-								className="rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+								className="rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800"
 							>
 								{tag}
 							</span>
@@ -155,29 +164,41 @@ export function GoalDetailView({
 				{/* Progress bar */}
 				{goal.activities.length > 0 && (
 					<div className="mt-4 flex items-center gap-3">
-						<div className="h-2 flex-1 overflow-hidden rounded-full bg-stone-100">
+						<div className="h-2 flex-1 overflow-hidden rounded-full bg-stone-100 dark:bg-stone-800">
 							<div
-								className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500"
+								className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500 dark:from-amber-600 dark:to-yellow-500"
 								style={{
 									width: `${Math.round((stats.completed / goal.activities.length) * 100)}%`,
 								}}
 							/>
 						</div>
-						<span className="text-xs font-medium tabular-nums text-stone-500">
+						<span className="text-xs font-medium tabular-nums text-stone-500 dark:text-stone-400">
 							{Math.round((stats.completed / goal.activities.length) * 100)}%
 						</span>
 					</div>
 				)}
 
 				<div className="mt-4 flex gap-3">
-					<StatChip label="Upcoming" value={stats.upcoming} cls="text-orange-600 bg-orange-50" />
-					<StatChip label="In Progress" value={stats.inProgress} cls="text-sky-600 bg-sky-50" />
-					<StatChip label="Done" value={stats.completed} cls="text-emerald-600 bg-emerald-50" />
+					<StatChip
+						label="Upcoming"
+						value={stats.upcoming}
+						cls="text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-950/40"
+					/>
+					<StatChip
+						label="In Progress"
+						value={stats.inProgress}
+						cls="text-sky-600 bg-sky-50 dark:text-sky-400 dark:bg-sky-950/40"
+					/>
+					<StatChip
+						label="Done"
+						value={stats.completed}
+						cls="text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950/40"
+					/>
 				</div>
 			</div>
 
 			<div className="mt-4 flex items-center justify-between">
-				<p className="text-sm text-stone-400">
+				<p className="text-sm text-stone-400 dark:text-stone-500">
 					{allActivities.length} {allActivities.length === 1 ? "activity" : "activities"}
 				</p>
 				<div className="hidden sm:block">
@@ -186,7 +207,7 @@ export function GoalDetailView({
 			</div>
 
 			{viewMode === "rows" ? (
-				<div className="mt-2 flex flex-col gap-0 divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-200 bg-white/80 shadow-sm">
+				<div className="mt-2 flex flex-col gap-0 divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-200 bg-white/80 shadow-sm dark:divide-stone-800 dark:border-stone-800 dark:bg-stone-900/80">
 					{allActivities.map((a, i) => (
 						<ActivityRow
 							key={a.id}

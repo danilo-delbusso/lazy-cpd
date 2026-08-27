@@ -37,7 +37,7 @@ export function ExpandableNotesEditor({
 	return (
 		<div>
 			<div className="flex items-center justify-between">
-				<span className="block text-sm font-medium text-gray-700">Notes</span>
+				<span className="block text-sm font-medium text-gray-700 dark:text-stone-300">Notes</span>
 				{notes.trim() && !aiStream.isStreaming && (
 					<button
 						type="button"
@@ -45,7 +45,7 @@ export function ExpandableNotesEditor({
 							preAINotesRef.current = notes;
 							aiStream.start("/api/ai/expand-notes", { notes, activityTitle, goalTitle });
 						}}
-						className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-stone-400 transition-colors hover:bg-amber-50 hover:text-amber-600"
+						className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-stone-400 transition-colors hover:bg-amber-50 hover:text-amber-600 dark:text-stone-500 dark:hover:bg-amber-950/40 dark:hover:text-amber-400"
 					>
 						<svg
 							className="h-3.5 w-3.5"
@@ -82,7 +82,7 @@ export function ExpandableNotesEditor({
 					<button
 						type="button"
 						onClick={() => aiStream.abort()}
-						className="text-xs text-stone-400 hover:text-stone-600"
+						className="text-xs text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
 					>
 						Stop & keep
 					</button>
@@ -98,7 +98,7 @@ export function ExpandableNotesEditor({
 								if (preAINotesRef.current !== null) onNotesChange(preAINotesRef.current);
 								preAINotesRef.current = null;
 							}}
-							className="text-xs text-stone-400 hover:text-stone-600"
+							className="text-xs text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
 						>
 							Revert to original
 						</button>
@@ -111,13 +111,15 @@ export function ExpandableNotesEditor({
 									goalTitle,
 								});
 							}}
-							className="text-xs text-stone-400 hover:text-stone-600"
+							className="text-xs text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
 						>
 							Regenerate
 						</button>
 					</div>
 				)}
-			{aiStream.error && <p className="mt-1 text-xs text-red-500">{aiStream.error}</p>}
+			{aiStream.error && (
+				<p className="mt-1 text-xs text-red-500 dark:text-red-400">{aiStream.error}</p>
+			)}
 		</div>
 	);
 }

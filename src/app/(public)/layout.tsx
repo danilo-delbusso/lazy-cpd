@@ -8,8 +8,10 @@ import { DotGrid } from "@/components/effects/dot-grid";
 import { GradientText } from "@/components/effects/gradient-text";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { TabButton } from "@/components/ui/tab-button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ViewToggle } from "@/components/ui/view-toggle";
 import { YearSelector } from "@/components/ui/year-selector";
+import { useDarkMode } from "@/hooks/use-dark-mode";
 import { cn } from "@/lib/utils/cn";
 import type { ActivityStatusValue } from "@/lib/validations/activity";
 import type { GoalStatus } from "@/lib/validations/goal";
@@ -59,7 +61,7 @@ function DesktopFilterPills() {
 
 	return (
 		<div className="flex items-center gap-2">
-			<div className="flex gap-1 rounded-lg bg-stone-100 p-1">
+			<div className="flex gap-1 rounded-lg bg-stone-100 p-1 dark:bg-stone-800">
 				{filterOptions.map((f) => (
 					<button
 						key={f.value}
@@ -68,8 +70,8 @@ function DesktopFilterPills() {
 						className={cn(
 							"shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-all",
 							currentFilter === f.value
-								? "bg-white text-amber-700 shadow-sm ring-1 ring-stone-200/60"
-								: "text-stone-400 hover:text-stone-600",
+								? "bg-white text-amber-700 shadow-sm ring-1 ring-stone-200/60 dark:bg-stone-700 dark:text-amber-400 dark:ring-stone-600/60"
+								: "text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300",
 						)}
 					>
 						{f.label}
@@ -86,6 +88,7 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 	const setCommandPaletteOpen = useUIStore((s) => s.setCommandPaletteOpen);
 	const viewMode = useUIStore((s) => s.viewMode);
 	const setViewMode = useUIStore((s) => s.setViewMode);
+	const isDark = useDarkMode();
 
 	const isGoalsTab = pathname === "/" || pathname.startsWith("/goal/");
 	const isTimelineTab = pathname === "/timeline";
@@ -108,8 +111,8 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 				<DotGrid
 					dotSize={10}
 					gap={10}
-					baseColor="#fafafa"
-					activeColor="#fde68a"
+					baseColor={isDark ? "#14110f" : "#fafafa"}
+					activeColor={isDark ? "#44372a" : "#fde68a"}
 					proximity={50}
 					speedTrigger={50}
 					shockRadius={80}
@@ -123,9 +126,9 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 			{/* Content above background */}
 			<div className="relative z-10">
 				{/* Mobile header */}
-				<header className="sticky top-0 z-30 border-b border-stone-200/40 bg-white/80 backdrop-blur-sm sm:hidden">
+				<header className="sticky top-0 z-30 border-b border-stone-200/40 bg-white/80 backdrop-blur-sm dark:border-stone-800/60 dark:bg-stone-950/80 sm:hidden">
 					<div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-4">
-						<h1 className="text-base font-bold text-stone-900">
+						<h1 className="text-base font-bold text-stone-900 dark:text-stone-100">
 							<GradientText
 								colors={["#d97706", "#b45309", "#92400e", "#d97706"]}
 								animationSpeed={6}
@@ -133,17 +136,20 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 							>
 								CPD
 							</GradientText>
-							<span className="ml-1 font-semibold text-stone-600">Portal</span>
+							<span className="ml-1 font-semibold text-stone-600 dark:text-stone-400">Portal</span>
 						</h1>
-						<MobileNav />
+						<div className="flex items-center gap-1.5">
+							<ThemeToggle />
+							<MobileNav />
+						</div>
 					</div>
 				</header>
 
 				{/* Desktop header */}
-				<header className="hidden border-b border-stone-200/40 bg-white/55 backdrop-blur-[1px] sm:block">
+				<header className="hidden border-b border-stone-200/40 bg-white/55 backdrop-blur-[1px] dark:border-stone-800/60 dark:bg-stone-950/55 sm:block">
 					<div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
 						<div className="flex items-center gap-3">
-							<h1 className="text-lg font-bold text-stone-900">
+							<h1 className="text-lg font-bold text-stone-900 dark:text-stone-100">
 								<GradientText
 									colors={["#d97706", "#b45309", "#92400e", "#d97706"]}
 									animationSpeed={6}
@@ -151,7 +157,9 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 								>
 									CPD
 								</GradientText>
-								<span className="ml-1.5 font-semibold text-stone-600">Portal</span>
+								<span className="ml-1.5 font-semibold text-stone-600 dark:text-stone-400">
+									Portal
+								</span>
 							</h1>
 							{process.env.NEXT_PUBLIC_SITE_OWNER && (
 								<DecryptedText
@@ -160,8 +168,8 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 									sequential
 									revealDirection="start"
 									speed={40}
-									className="text-xs text-stone-400"
-									encryptedClassName="text-xs text-stone-300"
+									className="text-xs text-stone-400 dark:text-stone-500"
+									encryptedClassName="text-xs text-stone-300 dark:text-stone-700"
 								/>
 							)}
 						</div>
@@ -171,7 +179,7 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 									href={process.env.NEXT_PUBLIC_GITHUB_URL}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-stone-400 transition-colors hover:text-stone-600"
+									className="text-stone-400 transition-colors hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
 									aria-label="GitHub"
 								>
 									<span className="sr-only">GitHub</span>
@@ -190,7 +198,7 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 									href={process.env.NEXT_PUBLIC_LINKEDIN_URL}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-stone-400 transition-colors hover:text-stone-600"
+									className="text-stone-400 transition-colors hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
 									aria-label="LinkedIn"
 								>
 									<span className="sr-only">LinkedIn</span>
@@ -209,7 +217,7 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 									href={process.env.NEXT_PUBLIC_CODEBERG_URL}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-stone-400 transition-colors hover:text-stone-600"
+									className="text-stone-400 transition-colors hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
 									aria-label="Codeberg"
 								>
 									<span className="sr-only">Codeberg</span>
@@ -227,12 +235,13 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 									</svg>
 								</a>
 							)}
+							<ThemeToggle />
 						</div>
 					</div>
 				</header>
 
 				{/* Desktop navigation bar */}
-				<div className="relative z-20 hidden border-b border-stone-200/40 bg-white/55 backdrop-blur-[1px] sm:block">
+				<div className="relative z-20 hidden border-b border-stone-200/40 bg-white/55 backdrop-blur-[1px] dark:border-stone-800/60 dark:bg-stone-950/55 sm:block">
 					<div className="mx-auto flex max-w-6xl items-center justify-between px-6">
 						<LayoutGroup>
 							<div className="flex items-center">
@@ -255,15 +264,15 @@ function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>
 				<div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6">{children}</div>
 
 				{/* Footer */}
-				<footer className="mt-8 border-t border-stone-100 py-6 text-center text-xs text-stone-400">
+				<footer className="mt-8 border-t border-stone-100 py-6 text-center text-xs text-stone-400 dark:border-stone-800 dark:text-stone-600">
 					<DecryptedText
 						text="Built by Ricky Stevens"
 						animateOn="view"
 						sequential
 						revealDirection="center"
 						speed={30}
-						className="text-stone-400"
-						encryptedClassName="text-stone-300"
+						className="text-stone-400 dark:text-stone-600"
+						encryptedClassName="text-stone-300 dark:text-stone-700"
 					/>
 				</footer>
 			</div>

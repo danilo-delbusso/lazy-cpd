@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Badge } from "./badge";
+
+const { useDarkMode } = vi.hoisted(() => ({ useDarkMode: vi.fn(() => false) }));
+vi.mock("@/hooks/use-dark-mode", () => ({ useDarkMode }));
 
 describe("Badge", () => {
 	it("renders children text", () => {
@@ -43,5 +46,37 @@ describe("Badge", () => {
 	it("merges custom className", () => {
 		render(<Badge className="ml-2">Spaced</Badge>);
 		expect(screen.getByText("Spaced").className).toContain("ml-2");
+	});
+
+	it("uses a tinted style for a hex that contrasts with a light background", () => {
+		useDarkMode.mockReturnValue(false);
+		render(<Badge hex="#dc2626">Red</Badge>);
+		const el = screen.getByText("Red");
+		expect(el.style.backgroundColor).not.toBe("rgb(220, 38, 38)");
+		expect(el.style.color).toBe("rgb(220, 38, 38)");
+	});
+
+	it("falls back to a solid filled chip for a dark hex on a dark background", () => {
+		useDarkMode.mockReturnValue(true);
+		render(<Badge hex="#000000">Black</Badge>);
+		const el = screen.getByText("Black");
+		expect(el.style.backgroundColor).toBe("rgb(0, 0, 0)");
+		expect(el.style.color).toBe("rgb(250, 250, 249)");
+	});
+
+	it("falls back to a solid filled chip for a light hex on a light background", () => {
+		useDarkMode.mockReturnValue(false);
+		render(<Badge hex="#ffffff">White</Badge>);
+		const el = screen.getByText("White");
+		expect(el.style.backgroundColor).toBe("rgb(255, 255, 255)");
+		expect(el.style.color).toBe("rgb(28, 25, 23)");
+	});
+
+	it("keeps the tinted style for a dark hex on a light background", () => {
+		useDarkMode.mockReturnValue(false);
+		render(<Badge hex="#000000">Black on light</Badge>);
+		const el = screen.getByText("Black on light");
+		expect(el.style.backgroundColor).not.toBe("rgb(0, 0, 0)");
+		expect(el.style.color).toBe("rgb(0, 0, 0)");
 	});
 });

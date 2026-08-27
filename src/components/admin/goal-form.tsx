@@ -80,21 +80,29 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly
 	return (
 		<form action={handleSubmit} className="space-y-6">
 			<div>
-				<label htmlFor="title" className="block text-sm font-medium text-gray-700">
+				<label
+					htmlFor="title"
+					className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+				>
 					Title
 				</label>
 				<input
 					id="title"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
-					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				/>
-				{errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+				{errors.title && (
+					<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title}</p>
+				)}
 			</div>
 
 			<div>
 				<div>
-					<label htmlFor="description" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="description"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Description
 					</label>
 				</div>
@@ -103,20 +111,25 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly
 					rows={4}
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
-					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				/>
-				{errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
+				{errors.description && (
+					<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.description}</p>
+				)}
 			</div>
 
 			<div>
-				<label htmlFor="status" className="block text-sm font-medium text-gray-700">
+				<label
+					htmlFor="status"
+					className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+				>
 					Status
 				</label>
 				<select
 					id="status"
 					value={status}
 					onChange={(e) => setStatus(e.target.value)}
-					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				>
 					{goalStatusValues.map((s) => (
 						<option key={s} value={s}>
@@ -127,20 +140,23 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly
 			</div>
 
 			<div>
-				<label htmlFor="tags" className="block text-sm font-medium text-gray-700">
+				<label
+					htmlFor="tags"
+					className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+				>
 					Tags
 				</label>
 				<div className="mt-1 flex flex-wrap gap-1.5">
 					{tags.map((tag) => (
 						<span
 							key={tag}
-							className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+							className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800"
 						>
 							{tag}
 							<button
 								type="button"
 								onClick={() => removeTag(tag)}
-								className="ml-0.5 text-yellow-500 hover:text-yellow-800"
+								className="ml-0.5 text-yellow-500 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"
 							>
 								×
 							</button>
@@ -182,10 +198,10 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly
 						}}
 						placeholder="Type to search tags or add new..."
 						autoComplete="off"
-						className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-300 focus:outline-none"
+						className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-300 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 					/>
 					{showSuggestions && suggestions.length > 0 && (
-						<div className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg">
+						<div className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg dark:border-stone-700 dark:bg-stone-900">
 							{suggestions.map((s, i) => (
 								<button
 									key={s}
@@ -200,11 +216,11 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly
 									}}
 									className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm transition-colors ${
 										i === highlightIdx
-											? "bg-amber-50 text-amber-700"
-											: "text-stone-600 hover:bg-stone-50"
+											? "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
+											: "text-stone-600 hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800"
 									}`}
 								>
-									<span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200">
+									<span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800">
 										{s}
 									</span>
 								</button>
@@ -217,10 +233,10 @@ export function GoalForm({ mode, initialData, onSubmit, isSubmitting }: Readonly
 										addTag();
 										tagInputRef.current?.focus();
 									}}
-									className="flex w-full items-center gap-2 border-t border-stone-100 px-3 py-1.5 text-left text-sm text-stone-500 hover:bg-stone-50"
+									className="flex w-full items-center gap-2 border-t border-stone-100 px-3 py-1.5 text-left text-sm text-stone-500 hover:bg-stone-50 dark:border-stone-800 dark:text-stone-400 dark:hover:bg-stone-800"
 								>
 									{`Create \u201C`}
-									<span className="font-medium text-stone-700">
+									<span className="font-medium text-stone-700 dark:text-stone-200">
 										{tagInput.trim().toLowerCase()}
 									</span>
 									{`\u201D`}

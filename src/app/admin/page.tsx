@@ -14,8 +14,8 @@ export default function AdminDashboard() {
 
 	return (
 		<PageTransition className="mx-auto max-w-5xl px-6 py-8">
-			<h1 className="text-2xl font-bold text-stone-900">Dashboard</h1>
-			<p className="mt-1 text-sm text-stone-500">Welcome back</p>
+			<h1 className="text-2xl font-bold text-stone-900 dark:text-stone-100">Dashboard</h1>
+			<p className="mt-1 text-sm text-stone-500 dark:text-stone-400">Welcome back</p>
 
 			{/* Stats */}
 			<div className="mt-6 grid gap-4 sm:grid-cols-4">
@@ -80,9 +80,11 @@ function McpDetails() {
 	}
 
 	return (
-		<div className="mt-6 rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
-			<h2 className="text-sm font-semibold uppercase tracking-wider text-stone-400">MCP Server</h2>
-			<p className="mt-1 text-xs text-stone-400">
+		<div className="mt-6 rounded-xl border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-800 dark:bg-stone-900">
+			<h2 className="text-sm font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
+				MCP Server
+			</h2>
+			<p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
 				Connect Claude Code to manage goals and activities via MCP tools
 			</p>
 
@@ -102,28 +104,35 @@ function McpDetails() {
 
 				<div>
 					<div className="flex items-center justify-between">
-						<span className="text-xs font-medium text-stone-500">CLI Setup</span>
+						<span className="text-xs font-medium text-stone-500 dark:text-stone-400">
+							CLI Setup
+						</span>
 						<CopyButton onClick={() => copy(addCommand, "cli")} copied={copied === "cli"} />
 					</div>
-					<pre className="mt-1 overflow-x-auto rounded-lg bg-stone-50 p-3 text-xs text-stone-700">
+					<pre className="mt-1 overflow-x-auto rounded-lg bg-stone-50 p-3 text-xs text-stone-700 dark:bg-stone-800 dark:text-stone-300">
 						{addCommand}
 					</pre>
 				</div>
 
 				<div>
 					<div className="flex items-center justify-between">
-						<span className="text-xs font-medium text-stone-500">JSON Config</span>
+						<span className="text-xs font-medium text-stone-500 dark:text-stone-400">
+							JSON Config
+						</span>
 						<CopyButton onClick={() => copy(jsonConfig, "json")} copied={copied === "json"} />
 					</div>
-					<pre className="mt-1 overflow-x-auto rounded-lg bg-stone-50 p-3 text-xs text-stone-700">
+					<pre className="mt-1 overflow-x-auto rounded-lg bg-stone-50 p-3 text-xs text-stone-700 dark:bg-stone-800 dark:text-stone-300">
 						{jsonConfig}
 					</pre>
 				</div>
 
-				<p className="text-xs text-stone-400">
-					Set <code className="rounded bg-stone-100 px-1 py-0.5 text-stone-600">CPD_MCP_TOKEN</code>{" "}
+				<p className="text-xs text-stone-400 dark:text-stone-500">
+					Set{" "}
+					<code className="rounded bg-stone-100 px-1 py-0.5 text-stone-600 dark:bg-stone-800 dark:text-stone-300">
+						CPD_MCP_TOKEN
+					</code>{" "}
 					in your shell profile. Generate with:{" "}
-					<code className="rounded bg-stone-100 px-1 py-0.5 text-stone-600">
+					<code className="rounded bg-stone-100 px-1 py-0.5 text-stone-600 dark:bg-stone-800 dark:text-stone-300">
 						openssl rand -hex 32
 					</code>
 				</p>
@@ -146,8 +155,8 @@ function McpField({
 	return (
 		<div className="flex items-center justify-between gap-3">
 			<div className="min-w-0 flex-1">
-				<span className="text-xs font-medium text-stone-500">{label}</span>
-				<p className="truncate font-mono text-sm text-stone-700">{value}</p>
+				<span className="text-xs font-medium text-stone-500 dark:text-stone-400">{label}</span>
+				<p className="truncate font-mono text-sm text-stone-700 dark:text-stone-300">{value}</p>
 			</div>
 			<CopyButton onClick={onCopy} copied={copied} />
 		</div>
@@ -159,7 +168,7 @@ function CopyButton({ onClick, copied }: Readonly<{ onClick: () => void; copied:
 		<button
 			type="button"
 			onClick={onClick}
-			className="shrink-0 rounded-md border border-stone-200 px-2 py-1 text-xs text-stone-500 transition-colors hover:bg-stone-50"
+			className="shrink-0 rounded-md border border-stone-200 px-2 py-1 text-xs text-stone-500 transition-colors hover:bg-stone-50 dark:border-stone-700 dark:text-stone-400 dark:hover:bg-stone-800"
 		>
 			{copied ? "Copied" : "Copy"}
 		</button>
@@ -168,9 +177,11 @@ function CopyButton({ onClick, copied }: Readonly<{ onClick: () => void; copied:
 
 function StatCard({ label, value }: Readonly<{ label: string; value: number }>) {
 	return (
-		<div className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
-			<p className="text-xs font-medium uppercase tracking-wider text-stone-400">{label}</p>
-			<p className="mt-1 text-2xl font-bold text-stone-900">{value}</p>
+		<div className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-800 dark:bg-stone-900">
+			<p className="text-xs font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500">
+				{label}
+			</p>
+			<p className="mt-1 text-2xl font-bold text-stone-900 dark:text-stone-100">{value}</p>
 		</div>
 	);
 }
@@ -189,17 +200,19 @@ function QuickAction({
 	return (
 		<Link
 			href={href}
-			className="group rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-md"
+			className="group rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-md dark:border-stone-800 dark:bg-stone-900 dark:hover:border-amber-700 dark:hover:shadow-none"
 		>
 			<div className="flex items-center justify-between">
-				<h3 className="font-semibold text-stone-900 group-hover:text-amber-700">{title}</h3>
+				<h3 className="font-semibold text-stone-900 group-hover:text-amber-700 dark:text-stone-100 dark:group-hover:text-amber-400">
+					{title}
+				</h3>
 				{count !== undefined && (
-					<span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-500">
+					<span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-500 dark:bg-stone-800 dark:text-stone-400">
 						{count}
 					</span>
 				)}
 			</div>
-			<p className="mt-1 text-sm text-stone-500">{description}</p>
+			<p className="mt-1 text-sm text-stone-500 dark:text-stone-400">{description}</p>
 		</Link>
 	);
 }

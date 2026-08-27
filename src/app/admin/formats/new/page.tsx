@@ -9,7 +9,7 @@ export default function NewFormatPage() {
 
 	return (
 		<PageTransition className="mx-auto max-w-2xl px-6 py-8">
-			<h1 className="text-2xl font-bold text-gray-900">New Format</h1>
+			<h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">New Format</h1>
 			<div className="mt-6">
 				<FormatForm
 					mode="create"

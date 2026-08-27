@@ -55,7 +55,9 @@ export function WorkspaceActivityList({
 	return (
 		<div className="mt-8">
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold text-stone-800">Activities ({activities.length})</h2>
+				<h2 className="text-lg font-semibold text-stone-800 dark:text-stone-100">
+					Activities ({activities.length})
+				</h2>
 				<Button size="sm" onClick={() => setShowNewForm(true)} disabled={showNewForm}>
 					Add Activity
 				</Button>
@@ -86,7 +88,7 @@ export function WorkspaceActivityList({
 				)}
 
 				{sorted.length === 0 && !showNewForm ? (
-					<div className="rounded-xl border border-dashed border-stone-300 py-12 text-center text-stone-400">
+					<div className="rounded-xl border border-dashed border-stone-300 py-12 text-center text-stone-400 dark:border-stone-700 dark:text-stone-500">
 						No activities yet. Add one to get started.
 					</div>
 				) : (

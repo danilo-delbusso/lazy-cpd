@@ -1,10 +1,17 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
 	--background: #ffffff;
 	--foreground: #0f172a;
 	--primary: #d97706;
+}
+
+.dark {
+	--background: #0c0a09;
+	--foreground: #f5f5f4;
+	--primary: #fbbf24;
 }
 
 @theme inline {
@@ -33,6 +40,11 @@ html {
 ::selection {
 	background-color: #fef3c7;
 	color: #78350f;
+}
+
+.dark ::selection {
+	background-color: #78350f;
+	color: #fef3c7;
 }
 
 @keyframes gradient-shift {

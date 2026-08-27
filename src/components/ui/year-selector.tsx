@@ -61,8 +61,8 @@ export function YearSelector({
 				className={cn(
 					"flex items-center gap-2 rounded-lg border px-3.5 py-1.5 text-sm font-medium transition-all",
 					open
-						? "border-amber-300 bg-amber-50/50 text-amber-700 shadow-sm"
-						: "border-stone-200 bg-white text-stone-600 hover:border-amber-300 hover:text-amber-700",
+						? "border-amber-300 bg-amber-50/50 text-amber-700 shadow-sm dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-300"
+						: "border-stone-200 bg-white text-stone-600 hover:border-amber-300 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:border-amber-600 dark:hover:text-amber-400",
 				)}
 			>
 				<svg
@@ -100,7 +100,7 @@ export function YearSelector({
 						animate={{ opacity: 1, y: 0, scale: 1 }}
 						exit={{ opacity: 0, y: -4, scale: 0.97 }}
 						transition={{ duration: 0.15, ease: "easeOut" }}
-						className="absolute right-0 z-50 mt-1.5 min-w-[140px] overflow-hidden rounded-xl border border-stone-200 bg-white/95 py-1 shadow-lg shadow-stone-200/50 backdrop-blur-xl"
+						className="absolute right-0 z-50 mt-1.5 min-w-[140px] overflow-hidden rounded-xl border border-stone-200 bg-white/95 py-1 shadow-lg shadow-stone-200/50 backdrop-blur-xl dark:border-stone-700 dark:bg-stone-900/95 dark:shadow-black/40"
 					>
 						{options.map((option, i) => (
 							<motion.button
@@ -116,14 +116,16 @@ export function YearSelector({
 								className={cn(
 									"flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm transition-colors",
 									option.value === value
-										? "bg-amber-50 font-medium text-amber-700"
-										: "text-stone-600 hover:bg-stone-50 hover:text-stone-900",
+										? "bg-amber-50 font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
+										: "text-stone-600 hover:bg-stone-50 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-100",
 								)}
 							>
 								<span
 									className={cn(
 										"flex h-4 w-4 items-center justify-center rounded-full border transition-all",
-										option.value === value ? "border-amber-400 bg-amber-400" : "border-stone-300",
+										option.value === value
+											? "border-amber-400 bg-amber-400 dark:border-amber-500 dark:bg-amber-500"
+											: "border-stone-300 dark:border-stone-600",
 									)}
 								>
 									{option.value === value && (

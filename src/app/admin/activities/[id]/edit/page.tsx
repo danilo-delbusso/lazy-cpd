@@ -30,12 +30,14 @@ export default function EditActivityPage() {
 	}
 
 	if (!activity) {
-		return <div className="py-24 text-center text-gray-400">Activity not found</div>;
+		return (
+			<div className="py-24 text-center text-gray-400 dark:text-stone-500">Activity not found</div>
+		);
 	}
 
 	return (
 		<PageTransition className="mx-auto max-w-2xl px-6 py-8">
-			<h1 className="text-2xl font-bold text-gray-900">Edit Activity</h1>
+			<h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Edit Activity</h1>
 			<div className="mt-6">
 				<ActivityForm
 					mode="edit"
