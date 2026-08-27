@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ActivityBlade, type ActivityBladeData } from "@/components/activities/activity-blade";
 import { ActivityCard, type ActivityCardData } from "@/components/activities/activity-card";
 import { ActivityRow } from "@/components/activities/activity-row";
@@ -8,77 +8,98 @@ import { CountUp } from "@/components/effects/count-up";
 import { useInfiniteActivities } from "@/hooks/use-activities";
 import type { ActivityStatusValue } from "@/lib/validations/activity";
 
+export function currentMonthKey() {
+	const now = new Date();
+	return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
 function TimelineContent({
 	grouped,
 	viewMode,
 	setBladeActivityId,
 	sentinelRef,
 	isFetchingNextPage,
+	currentMonthRef,
 }: Readonly<{
-	grouped: { label: string; items: ActivityCardData[] }[];
+	grouped: { key: string; label: string; items: ActivityCardData[] }[];
 	viewMode: "grid" | "rows";
 	setBladeActivityId: (id: string | null) => void;
 	sentinelRef: React.RefObject<HTMLDivElement | null>;
 	isFetchingNextPage: boolean;
+	currentMonthRef: (node: HTMLDivElement | null) => void;
 }>) {
+	const thisMonth = currentMonthKey();
+
 	return (
 		<div className="relative mt-6">
 			<div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-amber-300 via-stone-200 to-stone-100 sm:left-6" />
 
-			{grouped.map((group) => (
-				<div key={group.label} className="mb-8">
-					<div className="relative mb-3 flex items-center">
-						<div className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700 ring-2 ring-amber-300 sm:h-12 sm:w-12 sm:text-sm">
-							<CountUp to={group.items.length} from={0} duration={0.8} />
+			{grouped.map((group) => {
+				const isCurrentMonth = group.key === thisMonth;
+				return (
+					<div
+						key={group.label}
+						ref={isCurrentMonth ? currentMonthRef : undefined}
+						className="mb-8 scroll-mt-20"
+					>
+						<div className="relative mb-3 flex items-center">
+							<div className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700 ring-2 ring-amber-400 sm:h-12 sm:w-12 sm:text-sm">
+								<CountUp to={group.items.length} from={0} duration={0.8} />
+							</div>
+							<h3 className="ml-4 text-lg font-semibold text-stone-800">{group.label}</h3>
+							{isCurrentMonth && (
+								<span className="ml-2 text-[10px] font-medium uppercase tracking-wider text-amber-500/80">
+									This month
+								</span>
+							)}
 						</div>
-						<h3 className="ml-4 text-lg font-semibold text-stone-800">{group.label}</h3>
-					</div>
 
-					{viewMode === "rows" ? (
-						<div className="ml-5 flex flex-col gap-0 divide-y divide-stone-100 border-l border-stone-100 pl-8 sm:ml-6 sm:pl-10">
-							{group.items.map((a, i) => (
-								<ActivityRow
-									key={a.id}
-									activity={{
-										id: a.id,
-										title: a.title,
-										fullDate: a.fullDate,
-										status: a.status,
-										notes: a.notes,
-										tags: a.tags,
-										formatName: a.formatName,
-										formatColor: a.formatColor,
-										goalTitle: a.goalTitle,
-									}}
-									index={i}
-									onClick={() => setBladeActivityId(a.id)}
-								/>
-							))}
-						</div>
-					) : (
-						<div className="ml-5 grid grid-cols-1 gap-2 border-l border-stone-100 pl-8 sm:ml-6 sm:grid-cols-2 sm:pl-10">
-							{group.items.map((a, i) => (
-								<ActivityCard
-									key={a.id}
-									activity={{
-										id: a.id,
-										title: a.title,
-										fullDate: a.fullDate,
-										status: a.status,
-										notes: a.notes,
-										tags: a.tags,
-										formatName: a.formatName,
-										formatColor: a.formatColor,
-										goalTitle: a.goalTitle,
-									}}
-									index={i}
-									onClick={() => setBladeActivityId(a.id)}
-								/>
-							))}
-						</div>
-					)}
-				</div>
-			))}
+						{viewMode === "rows" ? (
+							<div className="ml-5 flex flex-col gap-0 divide-y divide-stone-100 border-l border-stone-100 pl-8 sm:ml-6 sm:pl-10">
+								{group.items.map((a, i) => (
+									<ActivityRow
+										key={a.id}
+										activity={{
+											id: a.id,
+											title: a.title,
+											fullDate: a.fullDate,
+											status: a.status,
+											notes: a.notes,
+											tags: a.tags,
+											formatName: a.formatName,
+											formatColor: a.formatColor,
+											goalTitle: a.goalTitle,
+										}}
+										index={i}
+										onClick={() => setBladeActivityId(a.id)}
+									/>
+								))}
+							</div>
+						) : (
+							<div className="ml-5 grid grid-cols-1 gap-2 border-l border-stone-100 pl-8 sm:ml-6 sm:grid-cols-2 sm:pl-10">
+								{group.items.map((a, i) => (
+									<ActivityCard
+										key={a.id}
+										activity={{
+											id: a.id,
+											title: a.title,
+											fullDate: a.fullDate,
+											status: a.status,
+											notes: a.notes,
+											tags: a.tags,
+											formatName: a.formatName,
+											formatColor: a.formatColor,
+											goalTitle: a.goalTitle,
+										}}
+										index={i}
+										onClick={() => setBladeActivityId(a.id)}
+									/>
+								))}
+							</div>
+						)}
+					</div>
+				);
+			})}
 
 			<div ref={sentinelRef} className="h-1" />
 			{isFetchingNextPage && (
@@ -134,7 +155,8 @@ export function TimelineView({
 				groups.set(key, [activity]);
 			}
 		}
-		return Array.from(groups.entries()).map(([, items]) => ({
+		return Array.from(groups.entries()).map(([key, items]) => ({
+			key,
 			label: new Date(items[0].fullDate).toLocaleDateString("en-GB", {
 				month: "long",
 				year: "numeric",
@@ -142,6 +164,11 @@ export function TimelineView({
 			items,
 		}));
 	}, [allActivities]);
+
+	const hasCurrentMonthGroup = useMemo(
+		() => grouped.some((g) => g.key === currentMonthKey()),
+		[grouped],
+	);
 
 	const bladeIdx = bladeActivityId ? allActivities.findIndex((a) => a.id === bladeActivityId) : -1;
 	const bladeActivity: ActivityBladeData | null =
@@ -160,6 +187,9 @@ export function TimelineView({
 			: null;
 
 	const sentinelRef = useRef<HTMLDivElement>(null);
+	const currentMonthNodeRef = useRef<HTMLDivElement | null>(null);
+	const currentMonthObserverRef = useRef<IntersectionObserver | null>(null);
+	const [currentMonthOutOfView, setCurrentMonthOutOfView] = useState(false);
 
 	useEffect(() => {
 		const el = sentinelRef.current;
@@ -175,6 +205,24 @@ export function TimelineView({
 		observer.observe(el);
 		return () => observer.disconnect();
 	}, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+	// Drive the "jump to this month" pill without forcing a scroll.
+	const currentMonthRef = useCallback((node: HTMLDivElement | null) => {
+		currentMonthObserverRef.current?.disconnect();
+		currentMonthNodeRef.current = node;
+		if (!node) {
+			setCurrentMonthOutOfView(false);
+			return;
+		}
+		const observer = new IntersectionObserver(
+			([entry]) => setCurrentMonthOutOfView(!entry.isIntersecting),
+			{ rootMargin: "-72px 0px 0px 0px" },
+		);
+		observer.observe(node);
+		currentMonthObserverRef.current = observer;
+	}, []);
+
+	useEffect(() => () => currentMonthObserverRef.current?.disconnect(), []);
 
 	return (
 		<>
@@ -195,10 +243,34 @@ export function TimelineView({
 					setBladeActivityId={setBladeActivityId}
 					sentinelRef={sentinelRef}
 					isFetchingNextPage={isFetchingNextPage}
+					currentMonthRef={currentMonthRef}
 				/>
 			)}
 			{!isLoading && grouped.length === 0 && (
 				<div className="mt-16 text-center text-stone-400">No activities found</div>
+			)}
+
+			{hasCurrentMonthGroup && currentMonthOutOfView && (
+				<button
+					type="button"
+					onClick={() =>
+						currentMonthNodeRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+					}
+					className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-amber-300 bg-white/95 px-4 py-2 text-sm font-medium text-amber-700 shadow-lg shadow-stone-900/10 backdrop-blur-sm transition-colors hover:bg-amber-50"
+				>
+					<svg
+						className="h-3.5 w-3.5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth={2.5}
+						aria-hidden="true"
+					>
+						<circle cx="12" cy="12" r="9" />
+						<path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 3" />
+					</svg>
+					Jump to this month
+				</button>
 			)}
 
 			<ActivityBlade
