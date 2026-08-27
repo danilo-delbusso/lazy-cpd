@@ -4,21 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { usePublicLayout } from "@/app/(public)/public-layout-context";
+import { useFormats } from "@/hooks/use-formats";
 import { cn } from "@/lib/utils/cn";
-import type { ActivityStatusValue } from "@/lib/validations/activity";
+import { activityStatusLabels } from "@/lib/utils/format-labels";
+import { type ActivityStatusValue, activityStatusValues } from "@/lib/validations/activity";
 import type { GoalStatus } from "@/lib/validations/goal";
 
 const GOAL_STATUS_OPTIONS = [
 	{ value: "all", label: "All" },
 	{ value: "open", label: "Open" },
 	{ value: "upcoming", label: "Upcoming" },
-	{ value: "completed", label: "Completed" },
-] as const;
-
-const ACTIVITY_STATUS_OPTIONS = [
-	{ value: "all", label: "All" },
-	{ value: "upcoming", label: "Upcoming" },
-	{ value: "in_progress", label: "In Progress" },
 	{ value: "completed", label: "Completed" },
 ] as const;
 
@@ -46,9 +41,12 @@ export function MobileNav() {
 		setGoalFilter,
 		yearFilter,
 		setYearFilter,
-		activityFilter,
-		setActivityFilter,
+		timelineStatusFilter,
+		setTimelineStatusFilter,
+		timelineTypeFilter,
+		setTimelineTypeFilter,
 	} = usePublicLayout();
+	const { data: formats } = useFormats();
 	const [navOpen, setNavOpen] = useState(false);
 	const [filterOpen, setFilterOpen] = useState(false);
 	const navRef = useRef<HTMLDivElement>(null);
@@ -59,16 +57,10 @@ export function MobileNav() {
 
 	useClickOutside([navRef, filterRef], [() => setNavOpen(false), () => setFilterOpen(false)]);
 
-	const statusOptions = isGoals ? GOAL_STATUS_OPTIONS : ACTIVITY_STATUS_OPTIONS;
-	const currentFilter = isGoals ? goalFilter : activityFilter;
-	const setFilter = isGoals
-		? (v: string) => setGoalFilter(v as GoalStatus | "all")
-		: (v: string) => setActivityFilter(v as ActivityStatusValue | "all");
-
-	const activeFilterLabel =
-		currentFilter === "all" ? null : statusOptions.find((o) => o.value === currentFilter)?.label;
 	const activeYearLabel = isTimeline && yearFilter !== "all" ? String(yearFilter) : null;
-	const hasActiveFilter = activeFilterLabel || activeYearLabel;
+	const hasActiveFilter = isGoals
+		? goalFilter !== "all"
+		: timelineStatusFilter.length > 0 || timelineTypeFilter.length > 0 || !!activeYearLabel;
 
 	return (
 		<div className="flex items-center gap-1.5">
@@ -90,11 +82,16 @@ export function MobileNav() {
 					setFilterOpen(!filterOpen);
 					setNavOpen(false);
 				}}
-				hasActiveFilter={!!hasActiveFilter}
-				statusOptions={statusOptions}
-				currentFilter={currentFilter}
-				onFilterChange={setFilter}
+				hasActiveFilter={hasActiveFilter}
+				isGoals={isGoals}
 				isTimeline={isTimeline}
+				goalFilter={goalFilter}
+				onGoalFilterChange={setGoalFilter}
+				timelineStatusFilter={timelineStatusFilter}
+				onTimelineStatusChange={setTimelineStatusFilter}
+				timelineTypeFilter={timelineTypeFilter}
+				onTimelineTypeChange={setTimelineTypeFilter}
+				formats={formats ?? []}
 				yearFilter={yearFilter}
 				onYearChange={setYearFilter}
 			/>
@@ -162,10 +159,15 @@ interface FilterDropdownProps {
 	isOpen: boolean;
 	onToggle: () => void;
 	hasActiveFilter: boolean;
-	statusOptions: readonly { readonly value: string; readonly label: string }[];
-	currentFilter: string;
-	onFilterChange: (v: string) => void;
+	isGoals: boolean;
 	isTimeline: boolean;
+	goalFilter: GoalStatus | "all";
+	onGoalFilterChange: (v: GoalStatus | "all") => void;
+	timelineStatusFilter: ActivityStatusValue[];
+	onTimelineStatusChange: (v: ActivityStatusValue[]) => void;
+	timelineTypeFilter: string[];
+	onTimelineTypeChange: (v: string[]) => void;
+	formats: { id: string; name: string }[];
 	yearFilter: "all" | number;
 	onYearChange: (v: "all" | number) => void;
 }
@@ -175,10 +177,15 @@ const FilterDropdown = forwardRef<HTMLDivElement, FilterDropdownProps>(function 
 		isOpen,
 		onToggle,
 		hasActiveFilter,
-		statusOptions,
-		currentFilter,
-		onFilterChange,
+		isGoals,
 		isTimeline,
+		goalFilter,
+		onGoalFilterChange,
+		timelineStatusFilter,
+		onTimelineStatusChange,
+		timelineTypeFilter,
+		onTimelineTypeChange,
+		formats,
 		yearFilter,
 		onYearChange,
 	},
@@ -200,10 +207,31 @@ const FilterDropdown = forwardRef<HTMLDivElement, FilterDropdownProps>(function 
 				{hasActiveFilter && <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />}
 			</button>
 			{isOpen && (
-				<div className="absolute right-0 top-full z-50 mt-1 w-56 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
-					<StatusPills options={statusOptions} current={currentFilter} onChange={onFilterChange} />
+				<div className="absolute right-0 top-full z-50 mt-1 w-64 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
+					{isGoals && (
+						<StatusPills
+							options={GOAL_STATUS_OPTIONS}
+							current={goalFilter}
+							onChange={(v) => onGoalFilterChange(v as GoalStatus | "all")}
+						/>
+					)}
 					{isTimeline && (
 						<>
+							<MultiSelectPills
+								label="Status"
+								options={activityStatusValues.map((v) => ({
+									value: v,
+									label: activityStatusLabels[v],
+								}))}
+								selected={timelineStatusFilter}
+								onChange={(v) => onTimelineStatusChange(v as ActivityStatusValue[])}
+							/>
+							<MultiSelectPills
+								label="Type"
+								options={formats.map((f) => ({ value: f.id, label: f.name }))}
+								selected={timelineTypeFilter}
+								onChange={onTimelineTypeChange}
+							/>
 							<p className="mb-2 mt-3 text-[10px] font-semibold uppercase tracking-wider text-stone-400">
 								Year
 							</p>
@@ -246,6 +274,59 @@ function StatusPills({
 						{o.label}
 					</button>
 				))}
+			</div>
+		</>
+	);
+}
+
+function MultiSelectPills({
+	label,
+	options,
+	selected,
+	onChange,
+}: Readonly<{
+	label: string;
+	options: { value: string; label: string }[];
+	selected: string[];
+	onChange: (v: string[]) => void;
+}>) {
+	function toggle(value: string) {
+		onChange(selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]);
+	}
+
+	return (
+		<>
+			<div className="mb-2 mt-3 flex items-center justify-between first:mt-0">
+				<p className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">{label}</p>
+				{selected.length > 0 && (
+					<button
+						type="button"
+						onClick={() => onChange([])}
+						className="text-[10px] font-medium text-stone-400 hover:text-stone-600"
+					>
+						Clear
+					</button>
+				)}
+			</div>
+			<div className="flex flex-wrap gap-1">
+				{options.map((o) => {
+					const isSelected = selected.includes(o.value);
+					return (
+						<button
+							key={o.value}
+							type="button"
+							onClick={() => toggle(o.value)}
+							className={cn(
+								"rounded-md px-2.5 py-1 text-xs font-medium transition-all",
+								isSelected
+									? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
+									: "bg-stone-50 text-stone-500 hover:bg-stone-100",
+							)}
+						>
+							{o.label}
+						</button>
+					);
+				})}
 			</div>
 		</>
 	);

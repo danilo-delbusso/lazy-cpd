@@ -7,78 +7,98 @@ import { DecryptedText } from "@/components/effects/decrypted-text";
 import { DotGrid } from "@/components/effects/dot-grid";
 import { GradientText } from "@/components/effects/gradient-text";
 import { MobileNav } from "@/components/ui/mobile-nav";
+import { MultiSelectFilter } from "@/components/ui/multi-select-filter";
 import { TabButton } from "@/components/ui/tab-button";
 import { ViewToggle } from "@/components/ui/view-toggle";
 import { YearSelector } from "@/components/ui/year-selector";
+import { useFormats } from "@/hooks/use-formats";
 import { cn } from "@/lib/utils/cn";
-import type { ActivityStatusValue } from "@/lib/validations/activity";
+import { activityStatusLabels } from "@/lib/utils/format-labels";
+import { activityStatusValues } from "@/lib/validations/activity";
 import type { GoalStatus } from "@/lib/validations/goal";
 import { useUIStore } from "@/stores/ui-store";
 import { PublicLayoutProvider, usePublicLayout } from "./public-layout-context";
 
-function DesktopFilterPills() {
-	const pathname = usePathname();
+function GoalsFilterPills() {
+	const { goalFilter, setGoalFilter } = usePublicLayout();
+
+	const filterOptions = [
+		{ value: "all", label: "All" },
+		{ value: "open", label: "Open" },
+		{ value: "upcoming", label: "Upcoming" },
+		{ value: "completed", label: "Completed" },
+	] as const;
+
+	return (
+		<div className="flex gap-1 rounded-lg bg-stone-100 p-1">
+			{filterOptions.map((f) => (
+				<button
+					key={f.value}
+					type="button"
+					onClick={() => setGoalFilter(f.value as GoalStatus | "all")}
+					className={cn(
+						"shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-all",
+						goalFilter === f.value
+							? "bg-white text-amber-700 shadow-sm ring-1 ring-stone-200/60"
+							: "text-stone-400 hover:text-stone-600",
+					)}
+				>
+					{f.label}
+				</button>
+			))}
+		</div>
+	);
+}
+
+const statusFilterOptions = activityStatusValues.map((v) => ({
+	value: v,
+	label: activityStatusLabels[v],
+}));
+
+function TimelineFilters() {
 	const {
-		goalFilter,
-		setGoalFilter,
 		yearFilter,
 		setYearFilter,
-		activityFilter,
-		setActivityFilter,
+		timelineStatusFilter,
+		setTimelineStatusFilter,
+		timelineTypeFilter,
+		setTimelineTypeFilter,
 	} = usePublicLayout();
+	const { data: formats } = useFormats();
 
-	const isGoalsRoot = pathname === "/";
-	const isTimeline = pathname === "/timeline";
-
-	const filterOptions = (() => {
-		if (isGoalsRoot) {
-			return [
-				{ value: "all", label: "All" },
-				{ value: "open", label: "Open" },
-				{ value: "upcoming", label: "Upcoming" },
-				{ value: "completed", label: "Completed" },
-			] as const;
-		}
-		if (isTimeline) {
-			return [
-				{ value: "all", label: "All" },
-				{ value: "upcoming", label: "Upcoming" },
-				{ value: "in_progress", label: "In Progress" },
-				{ value: "completed", label: "Completed" },
-			] as const;
-		}
-		return null;
-	})();
-
-	if (!filterOptions) return null;
-
-	const currentFilter = isGoalsRoot ? goalFilter : activityFilter;
-	const setFilter = isGoalsRoot
-		? (v: string) => setGoalFilter(v as GoalStatus | "all")
-		: (v: string) => setActivityFilter(v as ActivityStatusValue | "all");
+	const typeFilterOptions = (formats ?? []).map((f) => ({
+		value: f.id,
+		label: f.name,
+		swatch: f.color,
+	}));
 
 	return (
 		<div className="flex items-center gap-2">
-			<div className="flex gap-1 rounded-lg bg-stone-100 p-1">
-				{filterOptions.map((f) => (
-					<button
-						key={f.value}
-						type="button"
-						onClick={() => setFilter(f.value)}
-						className={cn(
-							"shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-all",
-							currentFilter === f.value
-								? "bg-white text-amber-700 shadow-sm ring-1 ring-stone-200/60"
-								: "text-stone-400 hover:text-stone-600",
-						)}
-					>
-						{f.label}
-					</button>
-				))}
-			</div>
-			{isTimeline && <YearSelector value={yearFilter} onChange={setYearFilter} />}
+			<MultiSelectFilter
+				label="Status"
+				options={statusFilterOptions}
+				selected={timelineStatusFilter}
+				onChange={(v) => setTimelineStatusFilter(v as typeof timelineStatusFilter)}
+			/>
+			<MultiSelectFilter
+				label="Type"
+				options={typeFilterOptions}
+				selected={timelineTypeFilter}
+				onChange={setTimelineTypeFilter}
+			/>
+			<YearSelector value={yearFilter} onChange={setYearFilter} />
 		</div>
 	);
+}
+
+function DesktopFilterPills() {
+	const pathname = usePathname();
+	const isGoalsRoot = pathname === "/";
+	const isTimeline = pathname === "/timeline";
+
+	if (isGoalsRoot) return <GoalsFilterPills />;
+	if (isTimeline) return <TimelineFilters />;
+	return null;
 }
 
 function PublicLayoutInner({ children }: Readonly<{ children: React.ReactNode }>) {
