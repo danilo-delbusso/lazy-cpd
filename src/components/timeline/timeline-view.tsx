@@ -5,12 +5,27 @@ import { ActivityBlade, type ActivityBladeData } from "@/components/activities/a
 import { ActivityCard, type ActivityCardData } from "@/components/activities/activity-card";
 import { ActivityRow } from "@/components/activities/activity-row";
 import { CountUp } from "@/components/effects/count-up";
-import { useInfiniteActivities } from "@/hooks/use-activities";
+import { type ActivityWithJoins, useInfiniteActivities } from "@/hooks/use-activities";
 import type { ActivityStatusValue } from "@/lib/validations/activity";
 
 export function currentMonthKey() {
 	const now = new Date();
 	return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
+/** Whether an activity passes the timeline's status and type filters (an empty filter matches everything). */
+export function matchesTimelineFilters(
+	activity: ActivityWithJoins,
+	statusFilter: ActivityStatusValue[],
+	typeFilter: string[],
+) {
+	if (statusFilter.length > 0 && !statusFilter.includes(activity.status as ActivityStatusValue)) {
+		return false;
+	}
+	if (typeFilter.length > 0 && !typeFilter.includes(activity.formatId)) {
+		return false;
+	}
+	return true;
 }
 
 function TimelineContent({
@@ -115,12 +130,14 @@ function TimelineContent({
 
 export function TimelineView({
 	yearFilter,
-	activityFilter,
+	statusFilter,
+	typeFilter,
 	viewMode,
 	initialActivities,
 }: Readonly<{
 	yearFilter: "all" | number;
-	activityFilter: ActivityStatusValue | "all";
+	statusFilter: ActivityStatusValue[];
+	typeFilter: string[];
 	viewMode: "grid" | "rows";
 	initialActivities?: Parameters<typeof useInfiniteActivities>[1];
 }>) {
@@ -130,19 +147,19 @@ export function TimelineView({
 			f.from = `${yearFilter}-01-01`;
 			f.to = `${yearFilter}-12-31`;
 		}
-		if (activityFilter !== "all") {
-			f.status = activityFilter;
-		}
 		return f;
-	}, [yearFilter, activityFilter]);
-	const isDefaultFilters = yearFilter === "all" && activityFilter === "all";
+	}, [yearFilter]);
+	const isDefaultFilters = yearFilter === "all";
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteActivities(
 		filters,
 		isDefaultFilters ? initialActivities : undefined,
 	);
 	const [bladeActivityId, setBladeActivityId] = useState<string | null>(null);
 
-	const allActivities = useMemo(() => data?.pages.flatMap((p) => p.data) ?? [], [data]);
+	const allActivities = useMemo(() => {
+		const activities = data?.pages.flatMap((p) => p.data) ?? [];
+		return activities.filter((a) => matchesTimelineFilters(a, statusFilter, typeFilter));
+	}, [data, statusFilter, typeFilter]);
 
 	const grouped = useMemo(() => {
 		if (allActivities.length === 0) return [];

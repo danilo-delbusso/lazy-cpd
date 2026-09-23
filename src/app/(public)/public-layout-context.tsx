@@ -11,6 +11,10 @@ interface PublicLayoutContextValue {
 	setYearFilter: (y: "all" | number) => void;
 	activityFilter: ActivityStatusValue | "all";
 	setActivityFilter: (f: ActivityStatusValue | "all") => void;
+	timelineStatusFilter: ActivityStatusValue[];
+	setTimelineStatusFilter: (f: ActivityStatusValue[]) => void;
+	timelineTypeFilter: string[];
+	setTimelineTypeFilter: (f: string[]) => void;
 }
 
 // biome-ignore lint/style/noNonNullAssertion: context is always provided by PublicLayoutProvider
@@ -21,6 +25,8 @@ export function PublicLayoutProvider({ children }: Readonly<{ children: React.Re
 	const [goalFilter, setGoalFilter] = useState<GoalStatus | "all">("all");
 	const [yearFilter, setYearFilter] = useState<"all" | number>("all");
 	const [activityFilter, setActivityFilter] = useState<ActivityStatusValue | "all">("all");
+	const [timelineStatusFilter, setTimelineStatusFilter] = useState<ActivityStatusValue[]>([]);
+	const [timelineTypeFilter, setTimelineTypeFilter] = useState<string[]>([]);
 	const value = useMemo(
 		() => ({
 			goalFilter,
@@ -29,8 +35,12 @@ export function PublicLayoutProvider({ children }: Readonly<{ children: React.Re
 			setYearFilter,
 			activityFilter,
 			setActivityFilter,
+			timelineStatusFilter,
+			setTimelineStatusFilter,
+			timelineTypeFilter,
+			setTimelineTypeFilter,
 		}),
-		[goalFilter, yearFilter, activityFilter],
+		[goalFilter, yearFilter, activityFilter, timelineStatusFilter, timelineTypeFilter],
 	);
 	return <PublicLayoutContext value={value}>{children}</PublicLayoutContext>;
 }

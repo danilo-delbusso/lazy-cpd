@@ -12,7 +12,7 @@ export function TimelinePageClient({
 }: Readonly<{
 	initialActivities: PaginatedResult<ActivityWithJoins>;
 }>) {
-	const { yearFilter, activityFilter } = usePublicLayout();
+	const { yearFilter, timelineStatusFilter, timelineTypeFilter } = usePublicLayout();
 	const viewMode = useResponsiveView();
 
 	return (
@@ -25,7 +25,8 @@ export function TimelinePageClient({
 		>
 			<TimelineView
 				yearFilter={yearFilter}
-				activityFilter={activityFilter}
+				statusFilter={timelineStatusFilter}
+				typeFilter={timelineTypeFilter}
 				viewMode={viewMode}
 				initialActivities={initialActivities}
 			/>
