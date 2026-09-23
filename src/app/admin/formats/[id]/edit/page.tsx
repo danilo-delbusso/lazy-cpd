@@ -22,12 +22,14 @@ export default function EditFormatPage() {
 	}
 
 	if (!format) {
-		return <div className="py-24 text-center text-gray-400">Format not found</div>;
+		return (
+			<div className="py-24 text-center text-gray-400 dark:text-stone-500">Format not found</div>
+		);
 	}
 
 	return (
 		<PageTransition className="mx-auto max-w-2xl px-6 py-8">
-			<h1 className="text-2xl font-bold text-gray-900">Edit Format</h1>
+			<h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">Edit Format</h1>
 			<div className="mt-6">
 				<FormatForm
 					mode="edit"

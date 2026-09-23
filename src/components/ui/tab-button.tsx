@@ -18,7 +18,9 @@ export function TabButton({
 			href={href}
 			className={cn(
 				"relative px-4 py-3 text-sm font-semibold transition-colors sm:text-base",
-				active ? "text-amber-700" : "text-stone-400 hover:text-stone-600",
+				active
+					? "text-amber-700 dark:text-amber-400"
+					: "text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300",
 			)}
 		>
 			{children}

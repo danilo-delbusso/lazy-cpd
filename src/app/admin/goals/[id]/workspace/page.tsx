@@ -25,7 +25,7 @@ export default function GoalWorkspacePage() {
 	if (!goal) {
 		return (
 			<PageTransition className="mx-auto max-w-5xl px-6 py-8">
-				<p className="py-20 text-center text-stone-400">Goal not found.</p>
+				<p className="py-20 text-center text-stone-400 dark:text-stone-500">Goal not found.</p>
 			</PageTransition>
 		);
 	}

@@ -121,21 +121,21 @@ const PageSelector = forwardRef<HTMLDivElement, PageSelectorProps>(function Page
 			<button
 				type="button"
 				onClick={onToggle}
-				className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-100"
+				className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-100 dark:text-stone-200 dark:hover:bg-stone-800"
 			>
 				{currentPage}
 				<ChevronDown className={cn("transition-transform", isOpen && "rotate-180")} />
 			</button>
 			{isOpen && (
-				<div className="absolute right-0 top-full z-50 mt-1 w-36 rounded-xl border border-stone-200 bg-white py-1 shadow-lg">
+				<div className="absolute right-0 top-full z-50 mt-1 w-36 rounded-xl border border-stone-200 bg-white py-1 shadow-lg dark:border-stone-700 dark:bg-stone-900">
 					<Link
 						href="/"
 						onClick={onClose}
 						className={cn(
 							"block px-4 py-2 text-sm transition-colors",
 							isGoals
-								? "font-medium text-amber-700 bg-amber-50"
-								: "text-stone-600 hover:bg-stone-50",
+								? "font-medium text-amber-700 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400"
+								: "text-stone-600 hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800",
 						)}
 					>
 						Goals
@@ -146,8 +146,8 @@ const PageSelector = forwardRef<HTMLDivElement, PageSelectorProps>(function Page
 						className={cn(
 							"block px-4 py-2 text-sm transition-colors",
 							isTimeline
-								? "font-medium text-amber-700 bg-amber-50"
-								: "text-stone-600 hover:bg-stone-50",
+								? "font-medium text-amber-700 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400"
+								: "text-stone-600 hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800",
 						)}
 					>
 						Timeline
@@ -192,19 +192,19 @@ const FilterDropdown = forwardRef<HTMLDivElement, FilterDropdownProps>(function 
 				className={cn(
 					"flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors",
 					hasActiveFilter
-						? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
-						: "text-stone-500 hover:bg-stone-100",
+						? "bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:ring-amber-800"
+						: "text-stone-500 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800",
 				)}
 			>
 				<FilterIcon />
 				{hasActiveFilter && <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />}
 			</button>
 			{isOpen && (
-				<div className="absolute right-0 top-full z-50 mt-1 w-56 rounded-xl border border-stone-200 bg-white p-3 shadow-lg">
+				<div className="absolute right-0 top-full z-50 mt-1 w-56 rounded-xl border border-stone-200 bg-white p-3 shadow-lg dark:border-stone-700 dark:bg-stone-900">
 					<StatusPills options={statusOptions} current={currentFilter} onChange={onFilterChange} />
 					{isTimeline && (
 						<>
-							<p className="mb-2 mt-3 text-[10px] font-semibold uppercase tracking-wider text-stone-400">
+							<p className="mb-2 mt-3 text-[10px] font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
 								Year
 							</p>
 							<YearPills value={yearFilter} onChange={onYearChange} />
@@ -227,7 +227,7 @@ function StatusPills({
 }>) {
 	return (
 		<>
-			<p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-stone-400">
+			<p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
 				Status
 			</p>
 			<div className="flex flex-wrap gap-1">
@@ -239,8 +239,8 @@ function StatusPills({
 						className={cn(
 							"rounded-md px-2.5 py-1 text-xs font-medium transition-all",
 							current === o.value
-								? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
-								: "bg-stone-50 text-stone-500 hover:bg-stone-100",
+								? "bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:ring-amber-800"
+								: "bg-stone-50 text-stone-500 hover:bg-stone-100 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700",
 						)}
 					>
 						{o.label}
@@ -278,8 +278,8 @@ function YearPills({
 					className={cn(
 						"rounded-md px-2.5 py-1 text-xs font-medium transition-all",
 						value === y
-							? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
-							: "bg-stone-50 text-stone-500 hover:bg-stone-100",
+							? "bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:ring-amber-800"
+							: "bg-stone-50 text-stone-500 hover:bg-stone-100 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700",
 					)}
 				>
 					{y === "all" ? "All" : y}

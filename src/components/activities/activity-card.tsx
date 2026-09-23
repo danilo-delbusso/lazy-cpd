@@ -16,9 +16,11 @@ const spotlightColors: Record<string, string> = {
 };
 
 const borderColors: Record<string, string> = {
-	completed: "border-sky-300 hover:border-sky-400",
-	in_progress: "border-green-300 hover:border-green-400",
-	upcoming: "border-stone-200 hover:border-stone-300",
+	completed: "border-sky-300 hover:border-sky-400 dark:border-sky-800 dark:hover:border-sky-700",
+	in_progress:
+		"border-green-300 hover:border-green-400 dark:border-green-800 dark:hover:border-green-700",
+	upcoming:
+		"border-stone-200 hover:border-stone-300 dark:border-stone-700 dark:hover:border-stone-600",
 };
 
 export interface ActivityCardData {
@@ -58,7 +60,7 @@ export function ActivityCard({
 			<SpotlightCard
 				spotlightColor={spotlightColors[a.status] ?? spotlightColors.upcoming}
 				className={cn(
-					"relative flex h-full flex-col rounded-xl border bg-white/80 backdrop-blur-sm shadow-sm transition-all hover:shadow-md",
+					"relative flex h-full flex-col rounded-xl border bg-white/80 backdrop-blur-sm shadow-sm transition-all hover:shadow-md dark:bg-stone-900/80 dark:shadow-black/20",
 					borderColors[a.status] ?? borderColors.upcoming,
 				)}
 			>
@@ -69,16 +71,20 @@ export function ActivityCard({
 
 				<div className="flex gap-4 p-4 pb-2">
 					<div className="min-w-0 flex-1">
-						<p className="pr-24 font-medium text-stone-800">{a.title}</p>
+						<p className="pr-24 font-medium text-stone-800 dark:text-stone-100">{a.title}</p>
 						{showGoalTitle && a.goalTitle && (
-							<p className="mt-0.5 text-xs text-amber-600">{a.goalTitle}</p>
+							<p className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">{a.goalTitle}</p>
 						)}
 						{a.notes && (
-							<p className="mt-1.5 line-clamp-2 text-sm text-stone-500">{stripMarkdown(a.notes)}</p>
+							<p className="mt-1.5 line-clamp-2 text-sm text-stone-500 dark:text-stone-400">
+								{stripMarkdown(a.notes)}
+							</p>
 						)}
 					</div>
 					<div className="mt-6 shrink-0">
-						<span className="text-xs font-medium text-stone-400">{formatDate(a.fullDate)}</span>
+						<span className="text-xs font-medium text-stone-400 dark:text-stone-500">
+							{formatDate(a.fullDate)}
+						</span>
 					</div>
 				</div>
 
@@ -87,7 +93,7 @@ export function ActivityCard({
 						{a.tags?.map((tag) => (
 							<span
 								key={tag}
-								className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200"
+								className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-900"
 							>
 								{tag}
 							</span>

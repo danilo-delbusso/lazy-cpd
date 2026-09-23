@@ -29,7 +29,7 @@ export function WorkspaceToolbar({ goalId, goalTitle }: Readonly<WorkspaceToolba
 	}
 
 	return (
-		<div className="fixed inset-x-0 bottom-0 z-30 border-t border-stone-200 bg-white/95 backdrop-blur">
+		<div className="fixed inset-x-0 bottom-0 z-30 border-t border-stone-200 bg-white/95 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95">
 			<div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
 				<div className="flex items-center gap-3">
 					<Link href="/admin/goals">

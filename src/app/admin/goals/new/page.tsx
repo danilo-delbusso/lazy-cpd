@@ -24,7 +24,7 @@ export default function NewGoalPage() {
 
 	return (
 		<PageTransition className="mx-auto max-w-2xl px-6 py-8">
-			<h1 className="text-2xl font-bold text-gray-900">New Goal</h1>
+			<h1 className="text-2xl font-bold text-gray-900 dark:text-stone-100">New Goal</h1>
 			<div className="mt-6">
 				<GoalForm
 					mode="create"

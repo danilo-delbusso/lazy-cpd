@@ -2,10 +2,14 @@ import { type ButtonHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils/cn";
 
 const variants = {
-	primary: "bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500 shadow-amber-600/20",
-	secondary: "bg-stone-100 text-stone-900 hover:bg-stone-200 focus:ring-stone-400 shadow-none",
-	danger: "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-rose-600/20",
-	ghost: "text-stone-500 hover:bg-stone-100 hover:text-stone-900 focus:ring-stone-400 shadow-none",
+	primary:
+		"bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500 shadow-amber-600/20 dark:bg-amber-600 dark:hover:bg-amber-500",
+	secondary:
+		"bg-stone-100 text-stone-900 hover:bg-stone-200 focus:ring-stone-400 shadow-none dark:bg-stone-800 dark:text-stone-100 dark:hover:bg-stone-700",
+	danger:
+		"bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-rose-600/20 dark:bg-rose-600 dark:hover:bg-rose-500",
+	ghost:
+		"text-stone-500 hover:bg-stone-100 hover:text-stone-900 focus:ring-stone-400 shadow-none dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-stone-100",
 } as const;
 
 const sizes = {
@@ -27,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 				ref={ref}
 				disabled={disabled || loading}
 				className={cn(
-					"inline-flex items-center justify-center gap-2 rounded-lg font-semibold shadow-sm transition-all duration-150 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98]",
+					"inline-flex items-center justify-center gap-2 rounded-lg font-semibold shadow-sm transition-all duration-150 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98] dark:ring-offset-stone-900",
 					variants[variant],
 					sizes[size],
 					className,

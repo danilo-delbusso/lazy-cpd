@@ -57,15 +57,20 @@ export function Modal({
 						animate={{ opacity: 1, scale: 1 }}
 						exit={{ opacity: 0, scale: 0.95 }}
 						transition={{ duration: 0.15 }}
-						className="relative z-10 w-full max-w-md rounded-xl border border-stone-200 bg-white p-6 shadow-xl"
+						className="relative z-10 w-full max-w-md rounded-xl border border-stone-200 bg-white p-6 shadow-xl dark:border-stone-700 dark:bg-stone-900"
 						role="dialog"
 						aria-modal="true"
 						aria-labelledby="modal-title"
 					>
-						<h2 id="modal-title" className="text-lg font-semibold text-stone-900">
+						<h2
+							id="modal-title"
+							className="text-lg font-semibold text-stone-900 dark:text-stone-100"
+						>
 							{title}
 						</h2>
-						{description && <p className="mt-2 text-sm text-stone-500">{description}</p>}
+						{description && (
+							<p className="mt-2 text-sm text-stone-500 dark:text-stone-400">{description}</p>
+						)}
 						{children && <div className="mt-4">{children}</div>}
 
 						{onConfirm && (

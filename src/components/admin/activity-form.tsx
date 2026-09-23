@@ -107,7 +107,10 @@ export function ActivityForm({
 		<form action={handleSubmit} className="space-y-6">
 			<div>
 				<div>
-					<label htmlFor="title" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="title"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Title
 					</label>
 				</div>
@@ -115,21 +118,26 @@ export function ActivityForm({
 					id="title"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
-					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				/>
-				{errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+				{errors.title && (
+					<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title}</p>
+				)}
 			</div>
 
 			<div className="grid gap-6 sm:grid-cols-2">
 				<div>
-					<label htmlFor="goalId" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="goalId"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Goal
 					</label>
 					<select
 						id="goalId"
 						value={goalId}
 						onChange={(e) => setGoalId(e.target.value)}
-						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 					>
 						<option value="">Select a goal...</option>
 						{goals?.map((g) => (
@@ -138,11 +146,16 @@ export function ActivityForm({
 							</option>
 						))}
 					</select>
-					{errors.goalId && <p className="mt-1 text-sm text-red-600">{errors.goalId}</p>}
+					{errors.goalId && (
+						<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.goalId}</p>
+					)}
 				</div>
 
 				<div>
-					<label htmlFor="fullDate" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="fullDate"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Date
 					</label>
 					<input
@@ -150,22 +163,27 @@ export function ActivityForm({
 						type="date"
 						value={fullDate}
 						onChange={(e) => setFullDate(e.target.value)}
-						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 					/>
-					{errors.fullDate && <p className="mt-1 text-sm text-red-600">{errors.fullDate}</p>}
+					{errors.fullDate && (
+						<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.fullDate}</p>
+					)}
 				</div>
 			</div>
 
 			<div className="grid gap-6 sm:grid-cols-2">
 				<div>
-					<label htmlFor="status" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="status"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Status
 					</label>
 					<select
 						id="status"
 						value={status}
 						onChange={(e) => setStatus(e.target.value)}
-						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 					>
 						{activityStatusValues.map((s) => (
 							<option key={s} value={s}>
@@ -176,14 +194,17 @@ export function ActivityForm({
 				</div>
 
 				<div>
-					<label htmlFor="formatId" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="formatId"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Format
 					</label>
 					<select
 						id="formatId"
 						value={formatId}
 						onChange={(e) => setFormatId(e.target.value)}
-						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 					>
 						<option value="">Select format...</option>
 						{formats?.map((f) => (
@@ -192,13 +213,18 @@ export function ActivityForm({
 							</option>
 						))}
 					</select>
-					{errors.formatId && <p className="mt-1 text-sm text-red-600">{errors.formatId}</p>}
+					{errors.formatId && (
+						<p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.formatId}</p>
+					)}
 				</div>
 			</div>
 
 			<div>
 				<div>
-					<label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+					<label
+						htmlFor="notes"
+						className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+					>
 						Notes
 					</label>
 				</div>
@@ -212,7 +238,10 @@ export function ActivityForm({
 			</div>
 
 			<div>
-				<label htmlFor="references" className="block text-sm font-medium text-gray-700">
+				<label
+					htmlFor="references"
+					className="block text-sm font-medium text-gray-700 dark:text-stone-300"
+				>
 					References
 				</label>
 				<textarea
@@ -220,7 +249,7 @@ export function ActivityForm({
 					rows={2}
 					value={references}
 					onChange={(e) => setReferences(e.target.value)}
-					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 				/>
 			</div>
 

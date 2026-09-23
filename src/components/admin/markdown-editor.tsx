@@ -1,6 +1,7 @@
 "use client";
 
 import MDEditor from "@uiw/react-md-editor";
+import { useDarkMode } from "@/hooks/use-dark-mode";
 
 interface MarkdownEditorProps {
 	value: string;
@@ -15,8 +16,10 @@ export function MarkdownEditor({
 	placeholder = "Write markdown...",
 	height = 300,
 }: Readonly<MarkdownEditorProps>) {
+	const isDark = useDarkMode();
+
 	return (
-		<div data-color-mode="light">
+		<div data-color-mode={isDark ? "dark" : "light"}>
 			<MDEditor
 				value={value}
 				onChange={(val) => onChange(val ?? "")}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import { CommandPaletteLoader } from "@/components/layout/command-palette-loader";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
@@ -37,13 +38,15 @@ export default function RootLayout({
 			className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
 			suppressHydrationWarning
 		>
-			<body className="min-h-full text-stone-900">
-				<QueryProvider>
-					{children}
-					<CommandPaletteLoader />
-					<ConfirmDialog />
-					<ToastProvider />
-				</QueryProvider>
+			<body className="min-h-full text-stone-900 dark:text-stone-100">
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="cpd-theme">
+					<QueryProvider>
+						{children}
+						<CommandPaletteLoader />
+						<ConfirmDialog />
+						<ToastProvider />
+					</QueryProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	);

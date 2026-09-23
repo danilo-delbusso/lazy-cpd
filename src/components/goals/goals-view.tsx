@@ -12,9 +12,11 @@ import type { GoalStatus } from "@/lib/validations/goal";
 import type { GoalWithStats } from "@/types";
 
 const goalCardRing: Record<string, string> = {
-	open: "border-green-300 hover:border-green-400 hover:shadow-green-100/50",
-	upcoming: "border-stone-200 hover:border-stone-300 hover:shadow-stone-100/50",
-	completed: "border-sky-300 hover:border-sky-400 hover:shadow-sky-100/50",
+	open: "border-green-300 hover:border-green-400 hover:shadow-green-100/50 dark:border-green-800 dark:hover:border-green-700 dark:hover:shadow-none",
+	upcoming:
+		"border-stone-200 hover:border-stone-300 hover:shadow-stone-100/50 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:shadow-none",
+	completed:
+		"border-sky-300 hover:border-sky-400 hover:shadow-sky-100/50 dark:border-sky-800 dark:hover:border-sky-700 dark:hover:shadow-none",
 };
 
 const goalSpotlightColor: Record<string, string> = {
@@ -31,7 +33,7 @@ function GoalCard({ goal, onClick }: Readonly<{ goal: GoalWithStats; onClick: ()
 		<SpotlightCard
 			spotlightColor={goalSpotlightColor[goal.status] ?? goalSpotlightColor.upcoming}
 			className={cn(
-				"relative rounded-xl border bg-white/80 backdrop-blur-sm shadow-sm transition-all hover:shadow-md",
+				"relative rounded-xl border bg-white/80 backdrop-blur-sm shadow-sm transition-all hover:shadow-md dark:bg-stone-900/80 dark:hover:shadow-none",
 				goalCardRing[goal.status] ?? goalCardRing.upcoming,
 			)}
 		>
@@ -46,30 +48,32 @@ function GoalCard({ goal, onClick }: Readonly<{ goal: GoalWithStats; onClick: ()
 				transition={{ type: "spring", stiffness: 300 }}
 				className="group w-full cursor-pointer p-5 text-left"
 			>
-				<h3 className="pr-20 font-semibold text-stone-900 transition-colors group-hover:text-amber-700">
+				<h3 className="pr-20 font-semibold text-stone-900 transition-colors group-hover:text-amber-700 dark:text-stone-100 dark:group-hover:text-amber-400">
 					{goal.title}
 				</h3>
-				<p className="mt-2 line-clamp-2 text-sm text-stone-500">{goal.description}</p>
+				<p className="mt-2 line-clamp-2 text-sm text-stone-500 dark:text-stone-400">
+					{goal.description}
+				</p>
 
 				{goal.totalActivities > 0 && (
 					<div className="mt-4">
-						<div className="flex items-center justify-between text-xs text-stone-400">
+						<div className="flex items-center justify-between text-xs text-stone-400 dark:text-stone-500">
 							<span>{pct}%</span>
 							<span>{goal.totalActivities} activities</span>
 						</div>
-						<div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-stone-100">
+						<div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-stone-100 dark:bg-stone-800">
 							<motion.div
 								initial={{ width: 0 }}
 								animate={{ width: `${pct}%` }}
 								transition={{ duration: 0.8, ease: "easeOut" }}
-								className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400"
+								className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 dark:from-amber-600 dark:to-yellow-500"
 							/>
 						</div>
 					</div>
 				)}
 
 				{goal.firstDate && (
-					<p className="mt-3 text-xs text-stone-400">
+					<p className="mt-3 text-xs text-stone-400 dark:text-stone-500">
 						{formatDate(goal.firstDate)}
 						{goal.lastDate && goal.lastDate !== goal.firstDate && (
 							<> — {formatDate(goal.lastDate)}</>
@@ -82,7 +86,7 @@ function GoalCard({ goal, onClick }: Readonly<{ goal: GoalWithStats; onClick: ()
 						{goal.tags.map((tag) => (
 							<span
 								key={tag}
-								className="rounded-full bg-yellow-50 px-2.5 py-0.5 text-[11px] font-medium text-yellow-700 ring-1 ring-yellow-200"
+								className="rounded-full bg-yellow-50 px-2.5 py-0.5 text-[11px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-800"
 							>
 								{tag}
 							</span>
@@ -111,7 +115,7 @@ function renderGoalsContent({
 				{["a", "b", "c", "d", "e", "f"].map((id) => (
 					<div
 						key={`skel-${id}`}
-						className="h-48 animate-pulse rounded-xl border border-stone-200 bg-stone-50"
+						className="h-48 animate-pulse rounded-xl border border-stone-200 bg-stone-50 dark:border-stone-800 dark:bg-stone-900"
 					/>
 				))}
 			</div>
@@ -120,7 +124,7 @@ function renderGoalsContent({
 	if (filtered && filtered.length > 0) {
 		if (viewMode === "rows") {
 			return (
-				<div className="mt-6 flex flex-col gap-0 divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-200 bg-white/80 shadow-sm">
+				<div className="mt-6 flex flex-col gap-0 divide-y divide-stone-100 overflow-hidden rounded-xl border border-stone-200 bg-white/80 shadow-sm dark:divide-stone-800 dark:border-stone-800 dark:bg-stone-900/80">
 					{filtered.map((goal, i) => (
 						<GoalRow key={goal.id} goal={goal} index={i} onClick={() => onSelectGoal(goal.id)} />
 					))}
@@ -157,7 +161,7 @@ function renderGoalsContent({
 			</LayoutGroup>
 		);
 	}
-	return <div className="mt-16 text-center text-stone-400">No goals found</div>;
+	return <div className="mt-16 text-center text-stone-400 dark:text-stone-600">No goals found</div>;
 }
 
 export function GoalsView({

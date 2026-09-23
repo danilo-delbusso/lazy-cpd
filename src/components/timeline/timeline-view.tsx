@@ -23,19 +23,21 @@ function TimelineContent({
 }>) {
 	return (
 		<div className="relative mt-6">
-			<div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-amber-300 via-stone-200 to-stone-100 sm:left-6" />
+			<div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-amber-300 via-stone-200 to-stone-100 dark:from-amber-700 dark:via-stone-800 dark:to-stone-900 sm:left-6" />
 
 			{grouped.map((group) => (
 				<div key={group.label} className="mb-8">
 					<div className="relative mb-3 flex items-center">
-						<div className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700 ring-2 ring-amber-300 sm:h-12 sm:w-12 sm:text-sm">
+						<div className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700 ring-2 ring-amber-300 dark:bg-stone-800 dark:text-amber-300 dark:ring-amber-800 sm:h-12 sm:w-12 sm:text-sm">
 							<CountUp to={group.items.length} from={0} duration={0.8} />
 						</div>
-						<h3 className="ml-4 text-lg font-semibold text-stone-800">{group.label}</h3>
+						<h3 className="ml-4 text-lg font-semibold text-stone-800 dark:text-stone-100">
+							{group.label}
+						</h3>
 					</div>
 
 					{viewMode === "rows" ? (
-						<div className="ml-5 flex flex-col gap-0 divide-y divide-stone-100 border-l border-stone-100 pl-8 sm:ml-6 sm:pl-10">
+						<div className="ml-5 flex flex-col gap-0 divide-y divide-stone-100 border-l border-stone-100 pl-8 dark:divide-stone-800 dark:border-stone-800 sm:ml-6 sm:pl-10">
 							{group.items.map((a, i) => (
 								<ActivityRow
 									key={a.id}
@@ -56,7 +58,7 @@ function TimelineContent({
 							))}
 						</div>
 					) : (
-						<div className="ml-5 grid grid-cols-1 gap-2 border-l border-stone-100 pl-8 sm:ml-6 sm:grid-cols-2 sm:pl-10">
+						<div className="ml-5 grid grid-cols-1 gap-2 border-l border-stone-100 pl-8 dark:border-stone-800 sm:ml-6 sm:grid-cols-2 sm:pl-10">
 							{group.items.map((a, i) => (
 								<ActivityCard
 									key={a.id}
@@ -183,7 +185,7 @@ export function TimelineView({
 					{["a", "b", "c", "d", "e"].map((id) => (
 						<div
 							key={`tl-skel-${id}`}
-							className="h-20 animate-pulse rounded-lg border border-stone-200 bg-stone-50"
+							className="h-20 animate-pulse rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-800 dark:bg-stone-900"
 						/>
 					))}
 				</div>
@@ -198,7 +200,9 @@ export function TimelineView({
 				/>
 			)}
 			{!isLoading && grouped.length === 0 && (
-				<div className="mt-16 text-center text-stone-400">No activities found</div>
+				<div className="mt-16 text-center text-stone-400 dark:text-stone-600">
+					No activities found
+				</div>
 			)}
 
 			<ActivityBlade

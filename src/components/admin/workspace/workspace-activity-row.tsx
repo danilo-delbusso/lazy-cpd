@@ -118,26 +118,28 @@ export function WorkspaceActivityRow({
 	}
 
 	return (
-		<div className="overflow-hidden rounded-xl border border-stone-200 bg-white">
+		<div className="overflow-hidden rounded-xl border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900">
 			<button
 				type="button"
 				onClick={isNew ? undefined : onToggle}
 				className={cn(
 					"flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors",
-					!isNew && "hover:bg-stone-50",
+					!isNew && "hover:bg-stone-50 dark:hover:bg-stone-800/50",
 				)}
 			>
-				<span className="min-w-0 flex-1 truncate font-medium text-stone-900">
+				<span className="min-w-0 flex-1 truncate font-medium text-stone-900 dark:text-stone-100">
 					{activity.title || (isNew ? "New Activity" : "")}
 				</span>
 				<ActivityFormatBadge name={activity.format.name} color={activity.format.color} />
 				<ActivityStatusBadge status={activity.status as ActivityStatusValue} />
-				<span className="shrink-0 text-xs text-stone-400">{formatDate(activity.fullDate)}</span>
+				<span className="shrink-0 text-xs text-stone-400 dark:text-stone-500">
+					{formatDate(activity.fullDate)}
+				</span>
 				{!isNew && (
 					<svg
 						aria-hidden="true"
 						className={cn(
-							"h-4 w-4 shrink-0 text-stone-400 transition-transform",
+							"h-4 w-4 shrink-0 text-stone-400 transition-transform dark:text-stone-500",
 							isExpanded && "rotate-180",
 						)}
 						fill="none"
@@ -159,11 +161,11 @@ export function WorkspaceActivityRow({
 						transition={{ duration: 0.2 }}
 						className="overflow-hidden"
 					>
-						<div className="space-y-4 border-t border-stone-200 px-4 py-4">
+						<div className="space-y-4 border-t border-stone-200 px-4 py-4 dark:border-stone-800">
 							<div>
 								<label
 									htmlFor={`title-${activity.id}`}
-									className="block text-sm font-medium text-gray-700"
+									className="block text-sm font-medium text-gray-700 dark:text-stone-300"
 								>
 									Title
 								</label>
@@ -171,7 +173,7 @@ export function WorkspaceActivityRow({
 									id={`title-${activity.id}`}
 									value={title}
 									onChange={(e) => setTitle(e.target.value)}
-									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 								/>
 							</div>
 
@@ -179,7 +181,7 @@ export function WorkspaceActivityRow({
 								<div>
 									<label
 										htmlFor={`status-${activity.id}`}
-										className="block text-sm font-medium text-gray-700"
+										className="block text-sm font-medium text-gray-700 dark:text-stone-300"
 									>
 										Status
 									</label>
@@ -187,7 +189,7 @@ export function WorkspaceActivityRow({
 										id={`status-${activity.id}`}
 										value={status}
 										onChange={(e) => setStatus(e.target.value)}
-										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 									>
 										{activityStatusValues.map((s) => (
 											<option key={s} value={s}>
@@ -199,7 +201,7 @@ export function WorkspaceActivityRow({
 								<div>
 									<label
 										htmlFor={`format-${activity.id}`}
-										className="block text-sm font-medium text-gray-700"
+										className="block text-sm font-medium text-gray-700 dark:text-stone-300"
 									>
 										Format
 									</label>
@@ -207,7 +209,7 @@ export function WorkspaceActivityRow({
 										id={`format-${activity.id}`}
 										value={formatId}
 										onChange={(e) => setFormatId(e.target.value)}
-										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 									>
 										<option value="">Select format...</option>
 										{formats?.map((f) => (
@@ -220,7 +222,7 @@ export function WorkspaceActivityRow({
 								<div>
 									<label
 										htmlFor={`date-${activity.id}`}
-										className="block text-sm font-medium text-gray-700"
+										className="block text-sm font-medium text-gray-700 dark:text-stone-300"
 									>
 										Date
 									</label>
@@ -229,7 +231,7 @@ export function WorkspaceActivityRow({
 										type="date"
 										value={fullDate}
 										onChange={(e) => setFullDate(e.target.value)}
-										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+										className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 									/>
 								</div>
 							</div>
@@ -244,7 +246,7 @@ export function WorkspaceActivityRow({
 							<div>
 								<label
 									htmlFor={`references-${activity.id}`}
-									className="block text-sm font-medium text-gray-700"
+									className="block text-sm font-medium text-gray-700 dark:text-stone-300"
 								>
 									References
 								</label>
@@ -253,14 +255,14 @@ export function WorkspaceActivityRow({
 									rows={2}
 									value={references}
 									onChange={(e) => setReferences(e.target.value)}
-									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 								/>
 							</div>
 
 							<div>
 								<label
 									htmlFor={`tags-${activity.id}`}
-									className="block text-sm font-medium text-gray-700"
+									className="block text-sm font-medium text-gray-700 dark:text-stone-300"
 								>
 									Tags (comma-separated)
 								</label>
@@ -269,7 +271,7 @@ export function WorkspaceActivityRow({
 									value={tags}
 									onChange={(e) => setTags(e.target.value)}
 									placeholder="e.g. typescript, architecture, leadership"
-									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
 								/>
 							</div>
 

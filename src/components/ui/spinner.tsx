@@ -15,7 +15,7 @@ export function Spinner({ size = "md", className }: Readonly<SpinnerProps>) {
 	return (
 		<output>
 			<svg
-				className={cn("animate-spin text-blue-600", sizes[size], className)}
+				className={cn("animate-spin text-blue-600 dark:text-amber-500", sizes[size], className)}
 				viewBox="0 0 24 24"
 				fill="none"
 				aria-label="Loading"

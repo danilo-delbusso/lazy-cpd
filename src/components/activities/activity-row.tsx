@@ -13,9 +13,9 @@ const dotColors: Record<string, string> = {
 };
 
 const leftBorderColors: Record<string, string> = {
-	in_progress: "border-l-green-300",
-	completed: "border-l-sky-300",
-	upcoming: "border-l-stone-200",
+	in_progress: "border-l-green-300 dark:border-l-green-800",
+	completed: "border-l-sky-300 dark:border-l-sky-800",
+	upcoming: "border-l-stone-200 dark:border-l-stone-700",
 };
 
 interface ActivityRowProps {
@@ -44,7 +44,7 @@ export function ActivityRow({
 			whileHover={{ y: -1 }}
 			onClick={onClick}
 			className={cn(
-				"flex cursor-pointer items-center gap-3 border-l-4 bg-white/80 px-4 py-2.5 transition-all duration-150 hover:bg-stone-50/80",
+				"flex cursor-pointer items-center gap-3 border-l-4 bg-white/80 px-4 py-2.5 transition-all duration-150 hover:bg-stone-50/80 dark:bg-stone-900/80 dark:hover:bg-stone-800/80",
 				leftBorderColors[a.status] ?? leftBorderColors.upcoming,
 			)}
 		>
@@ -53,11 +53,13 @@ export function ActivityRow({
 				<span
 					className={cn("h-2 w-2 shrink-0 rounded-full", dotColors[a.status] ?? dotColors.upcoming)}
 				/>
-				<span className="line-clamp-2 text-sm font-medium text-stone-800 sm:line-clamp-1">
+				<span className="line-clamp-2 text-sm font-medium text-stone-800 dark:text-stone-100 sm:line-clamp-1">
 					{a.title}
 				</span>
 				{showGoalTitle && a.goalTitle && (
-					<span className="hidden shrink-0 text-xs text-amber-600 sm:inline">{a.goalTitle}</span>
+					<span className="hidden shrink-0 text-xs text-amber-600 dark:text-amber-400 sm:inline">
+						{a.goalTitle}
+					</span>
 				)}
 			</div>
 
@@ -67,19 +69,19 @@ export function ActivityRow({
 					{visibleTags.map((tag) => (
 						<span
 							key={tag}
-							className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200"
+							className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-medium text-yellow-700 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-400 dark:ring-yellow-900"
 						>
 							{tag}
 						</span>
 					))}
 					{overflowCount > 0 && (
-						<span className="rounded-full bg-yellow-50 px-1.5 py-0.5 text-[10px] font-medium text-yellow-600 ring-1 ring-yellow-200">
+						<span className="rounded-full bg-yellow-50 px-1.5 py-0.5 text-[10px] font-medium text-yellow-600 ring-1 ring-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-500 dark:ring-yellow-900">
 							+{overflowCount}
 						</span>
 					)}
 				</div>
 				<ActivityFormatBadge name={a.formatName} color={a.formatColor} />
-				<span className="w-20 shrink-0 text-right text-xs text-stone-400">
+				<span className="w-20 shrink-0 text-right text-xs text-stone-400 dark:text-stone-500">
 					{formatDate(a.fullDate)}
 				</span>
 			</div>
