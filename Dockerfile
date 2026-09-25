@@ -21,6 +21,13 @@ ENV NEXT_PUBLIC_GITHUB_URL=$NEXT_PUBLIC_GITHUB_URL
 ENV NEXT_PUBLIC_LINKEDIN_URL=$NEXT_PUBLIC_LINKEDIN_URL
 ENV NEXT_PUBLIC_CODEBERG_URL=$NEXT_PUBLIC_CODEBERG_URL
 
+# Cap the build's V8 heap. Same reasoning as the runtime ceiling below, but for
+# `next build`: unbounded, V8 sizes old space against a multi-GB default and the
+# build gets OOM-killed on a small host. Overridable so a roomier builder can
+# raise it.
+ARG BUILD_MAX_OLD_SPACE_MB=1536
+ENV NODE_OPTIONS="--max-old-space-size=${BUILD_MAX_OLD_SPACE_MB}"
+
 RUN bun run build
 
 # Stage 3: Production runtime
